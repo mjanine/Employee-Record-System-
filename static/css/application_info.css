@@ -1,0 +1,198 @@
+:root {
+    --bg-main: #F4F6F8;
+    --sidebar-bg: #EAEAEA;
+    --header-grey: #EBEBEB;
+    --accent-brown: #5C2D2D; /* The exact shade from your Save button */
+    --btn-grey: #D6D6D6;
+    --border-color: #C0C0C0;
+    --text-dark: #333;
+    --input-bg: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 20px;
+    margin: 15px;
+    border-radius: 20px;
+}
+
+.sidebar-top {
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.menu-item {
+    padding: 12px 15px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.menu-item.active {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Main Content Centering Logic */
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Centers the card horizontally */
+    align-items: center;     /* Centers the card vertically */
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Constrained Form Wrapper */
+.form-wrapper {
+    width: 100%;
+    max-width: 550px; /* Matches the narrow width in your reference image */
+}
+
+.form-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+/* Card Header matching the grey bar style */
+.card-header {
+    background-color: var(--header-grey);
+    padding: 15px 20px;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #333;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Groups and Inputs */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700; /* Bold labels like the image */
+    margin-bottom: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #BDBDBD;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+input::placeholder {
+    color: #BDBDBD;
+}
+
+/* 2-Column Grid for Name and Contact info */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Upload CV Section */
+.cv-section {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-upload {
+    background-color: var(--btn-grey);
+    border: 1px solid #BDBDBD;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+#fileNameDisplay {
+    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Footer Action Buttons */
+.form-actions {
+    display: flex;
+    justify-content: center; /* Centered buttons */
+    gap: 15px;
+    padding-top: 10px;
+}
+
+.btn {
+    width: 140px; /* Fixed width for symmetrical buttons */
+    padding: 12px 0;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-cancel {
+    background-color: var(--btn-grey);
+    color: #333;
+}
+
+.btn-save {
+    background-color: var(--accent-brown);
+    color: white;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 600px) {
+    .grid-2-col {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-wrapper {
+        max-width: 100%;
+    }
+}
