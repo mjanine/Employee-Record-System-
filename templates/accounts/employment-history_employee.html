@@ -1,0 +1,54 @@
+<style>
+    /* Timeline Layout */
+    .timeline-container { position: relative; padding-top: 10px; }
+    .timeline-item { display: flex; margin-bottom: 30px; position: relative; }
+
+    /* Vertical Line */
+    .timeline-item::before {
+        content: ''; position: absolute; left: 105px; top: 15px;
+        bottom: -30px; width: 1px; background: #d8d8d8;
+    }
+    .timeline-item:last-child::before { display: none; }
+
+    /* Date Styling */
+    .timeline-date {
+        width: 90px; color: #999; font-size: 12px;
+        text-align: right; padding-right: 15px; line-height: 1.4;
+    }
+
+    /* Markers */
+    .timeline-marker { width: 30px; display: flex; justify-content: center; z-index: 1; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 3px; border: 2px solid #fff; }
+    .dot.yellow { background-color: #f3e08c; } 
+    .dot.blue { background-color: #9abed7; }
+
+    /* Content Area */
+    .timeline-content { flex: 1; padding-left: 15px; }
+    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .history-details p { margin: 2px 0; color: #777; font-size: 13px; }
+    .history-details p strong { color: #444; }
+</style>
+
+<div class="info-card">
+    <h4 style="background: #efefef; margin: -20px -20px 20px -20px; padding: 12px 20px; border-bottom: 1px solid #d8d8d8; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; font-weight: 600;">
+        Employment History
+        <button onclick="openHistoryModal()" style="background: #e0e0e0; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: normal; color: #333;">Edit History</button>
+    </h4>
+    
+    <div class="timeline-container" id="mainHistoryTimeline"></div>
+</div>
+
+<div id="historyModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+    <div style="background: #fff; width: 650px; border-radius: 15px; overflow: hidden; font-family: sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+        <div style="padding: 15px 25px; border-bottom: 1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:bold;">Update Employment Records</span>
+            <button onclick="addNewHistoryRow()" style="background: #28a745; color: #fff; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 12px;">+ Add Event</button>
+        </div>
+        <div style="padding: 20px 25px; max-height: 400px; overflow-y: auto;" id="modalTimelineList">
+            </div>
+        <div style="padding: 15px 25px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee;">
+            <button onclick="closeHistoryModal()" style="padding: 10px 30px; border-radius: 8px; border: none; background: #ccc; cursor: pointer;">Cancel</button>
+            <button onclick="saveHistoryChanges()" style="padding: 10px 30px; border-radius: 8px; border: none; background: #7b3f3f; color: #fff; cursor: pointer;">Save</button>
+        </div>
+    </div>
+</div>
