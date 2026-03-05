@@ -1,48 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. SELECT ELEMENTS
     const sidebar = document.getElementById("sidebar");
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
     const menuItems = document.querySelectorAll(".menu-item");
+    
+    // Select CV Elements
     const uploadBtn = document.getElementById("uploadBtn");
     const cvInput = document.getElementById("cvInput");
     const fileNameDisplay = document.getElementById("fileNameDisplay");
 
-    console.log("JS Loaded. Sidebar state:", sidebar ? "Found" : "Not Found");
+    console.log("Script status: Initialized");
 
-    // 1. Sidebar Toggle Logic
-    if (closeBtn) {
-        closeBtn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevents click bubbling
-            console.log("Close button clicked");
+    // 2. SIDEBAR LOGIC (Safe Mode)
+    if (sidebar && closeBtn && logoToggle) {
+        closeBtn.addEventListener("click", () => {
             sidebar.classList.add("collapsed");
+            console.log("Sidebar Closed");
         });
-    }
 
-    if (logoToggle) {
         logoToggle.addEventListener("click", () => {
             if (sidebar.classList.contains("collapsed")) {
-                console.log("Opening sidebar");
                 sidebar.classList.remove("collapsed");
+                console.log("Sidebar Opened");
             }
         });
     }
 
-    // 2. Tooltips & Active States
-    menuItems.forEach(item => {
-        const span = item.querySelector("span");
-        if (span) item.setAttribute("data-text", span.innerText);
+    // 3. UPLOAD CV LOGIC (Safe Mode)
+    // Check if the button and the hidden input exist before adding listeners
+    if (uploadBtn && cvInput) {
+        uploadBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // Stop form from doing anything weird
+            console.log("Upload button clicked - triggering hidden input");
+            cvInput.click(); // This opens the file window
+        });
 
+        cvInput.addEventListener("change", () => {
+            if (cvInput.files && cvInput.files.length > 0) {
+                const name = cvInput.files[0].name;
+                console.log("File selected:", name);
+                if (fileNameDisplay) {
+                    fileNameDisplay.textContent = name;
+                }
+            }
+        });
+    } else {
+        console.error("CV Elements not found! Check IDs: uploadBtn, cvInput");
+    }
+
+    // 4. MENU ACTIVE STATES
+    menuItems.forEach(item => {
         item.addEventListener("click", () => {
             document.querySelector(".menu-item.active")?.classList.remove("active");
             item.classList.add("active");
         });
     });
-
-    // 3. File Upload
-    if (uploadBtn && cvInput) {
-        uploadBtn.addEventListener("click", () => cvInput.click());
-        cvInput.addEventListener("change", () => {
-            fileNameDisplay.textContent = cvInput.files[0] ? cvInput.files[0].name : "File_Name.pdf";
-        });
-    }
 });
