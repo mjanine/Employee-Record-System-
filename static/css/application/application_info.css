@@ -34,17 +34,17 @@ body {
 /* Glass Sidebar Styling */
 .sidebar {
     width: 280px;
-    height: 100%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 25px;
+    height: calc(100vh - 40px);
+    /* Lower opacity for the high-glass effect */
+    background: rgba(255, 255, 255, 0.08); 
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px; /* More rounded corners like the image */
+    padding: 25px 15px;
     display: flex;
     flex-direction: column;
-    transition: width 0.3s ease;
-    margin-right: 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar.collapsed { width: 90px; }
@@ -63,31 +63,64 @@ body {
 .menu-item {
     display: flex;
     align-items: center;
-    padding: 12px;
-    margin-bottom: 8px;
-    color: white;
-    text-decoration: none;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    color: rgba(255, 255, 255, 0.9);
     border-radius: 12px;
     cursor: pointer;
-    transition: 0.3s;
-    position: relative;
-    font-size: 0.9rem;
+    transition: 0.3s ease;
+}
+
+.icon-box {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-right: 12px;
+    transition: background 0.3s;
+}
+
+.icon-box i {
+    font-size: 1.1rem;
 }
 
 .menu-item i { width: 30px; font-size: 1.1rem; text-align: center; margin-right: 15px; }
 
 .menu-item.active {
-    background: var(--glass-active);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
 }
 
-.menu-item:hover { background: var(--glass-active); }
+.menu-item.active .icon-box {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
 
 .sidebar.collapsed .menu-item span { display: none; }
 
-hr { border: none; border-top: 1px solid var(--border-color); margin: 15px 0; }
+hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 15px 10px;
+}
 
-.close-btn { background: none; border: none; color: white; cursor: pointer; }
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.close-btn:hover { opacity: 1; }
 
 /* Main Content Adjustment */
 .main-content {
