@@ -11,117 +11,164 @@
 
     <div class="background"></div>
 
-    <div class="app-container">
-        <aside class="sidebar" id="sidebar">
-            <div class="top-section">
-                <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo">
-                    <div class="open-icon">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
+    <div class="sidebar" id="sidebar">
+
+        <!-- TOP -->
+        <div class="top-section">
+            <div class="logo-wrapper" id="logoToggle">
+                <img src="../../static/img/general/uph.png" class="logo">
+                <div class="open-icon">
+                    <i class="fas fa-chevron-right"></i>
                 </div>
-                <button class="close-btn" id="closeBtn">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
             </div>
 
-            <ul class="menu">
-                <li class="menu-item active">
-                    <div class="icon-box"><i class="fas fa-border-all"></i></div>
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+
+        <!-- MENU -->
+        <ul class="menu">
+
+            <li>
+                <a href="emp_dash.html" class="menu-item active">
+                    <i class="fas fa-border-all"></i>
                     <span>Dashboard</span>
-                </li>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-user"></i></div>
+                </a>
+            </li>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-user"></i>
                     <span>Profile</span>
-                </li>
-                <hr>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-user-edit"></i></div>
+                </a>
+            </li>
+
+            <hr>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-user-edit"></i>
                     <span>Position Change Request</span>
-                </li>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
+                </a>
+            </li>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
                     <span>Attendance</span>
-                </li>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-plane-departure"></i></div>
+                </a>
+            </li>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-plane-departure"></i>
                     <span>Leave Request</span>
-                </li>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-star"></i></div>
+                </a>
+            </li>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-star"></i>
                     <span>Performance Evaluation</span>
-                </li>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-folder-open"></i></div>
+                </a>
+            </li>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-folder-open"></i>
                     <span>Documents</span>
-                </li>
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-chalkboard-teacher"></i></div>
+                </a>
+            </li>
+
+            <li>
+                <a href="ENTER" class="menu-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
                     <span>Trainings</span>
-                </li>
-            </ul>
+                </a>
+            </li>
 
-            <div class="bottom-section">
-                <li class="menu-item">
-                    <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
-                    <span>Log Out</span>
-                </li>
-            </div>
-        </aside>
+        </ul>
 
-        <main class="main-content">
-            <div class="form-wrapper">
-                <form id="employeeForm">
-                    <section class="form-card">
-                        <div class="card-header">Applicant Information</div>
-                        <div class="card-body">
-                            <div class="grid-2-col">
-                                <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" placeholder="Enter first name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" placeholder="Enter last name" required>
-                                </div>
-                            </div>
-                            <div class="grid-2-col">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" placeholder="Enter a valid email address" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input type="tel" id="phone" placeholder="Enter phone number">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="dept">Department Applying To</label>
-                                <select id="dept" required>
-                                    <option value="" disabled selected>Select department...</option>
-                                    <option value="HR">Human Resources</option>
-                                    <option value="IT">Information Technology</option>
-                                </select>
-                            </div>
-                            <div class="cv-section">
-                                <label>Tell us about yourself</label>
-                                <div class="upload-container">
-                                    <button type="button" class="btn-upload" id="uploadBtn">Upload CV</button>
-                                    <span id="fileNameDisplay">File_Name.pdf</span>
-                                    <input type="file" id="cvInput" hidden>
-                                </div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="button" class="btn btn-cancel" id="btnCancel">Cancel</button>
-                                <button type="submit" class="btn btn-save">Save</button>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-            </div>
-        </main>
+        <!-- LOGOUT -->
+        <div class="bottom-section">
+            <a href="../login/login.html" class="menu-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Log Out</span>
+            </a>
+        </div>
+
     </div>
 
-    <script src="../../static/js/application/application_info.js"></script>
+    </div>
+
+       <main class="main-content">
+    <div class="form-wrapper">
+        <form id="employeeForm">
+            <section class="form-card">
+                <div class="card-header">Applicant Information</div>
+                <div class="card-body">
+                    <div class="grid-2-col">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" placeholder="Enter first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" placeholder="Enter last name" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2-col">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter a valid email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" placeholder="Enter phone number">
+                        </div>
+                    </div>
+
+                    <div class="grid-2-col">
+                        <div class="form-group">
+                            <label for="dept">Department Applying To</label>
+                            <select id="dept" required>
+                                <option value="" disabled selected>Select department...</option>
+                                <option value="HR">Human Resources</option>
+                                <option value="IT">Information Technology</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Position Applying For</label>
+                            <select id="position" required>
+                                <option value="" disabled selected>Select position...</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Staff">Staff</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="cv-section">
+                        <label>Tell us about yourself</label>
+                        <div class="upload-container">
+                            <button type="button" class="btn-upload" id="uploadBtn">Upload CV</button>
+                            <span id="fileNameDisplay">File_Name.pdf</span>
+                            <input type="file" id="cvInput" hidden>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" id="btnCancel">Cancel</button>
+                        <button type="submit" class="btn btn-save">Save</button>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</main>
+    </div>
+
+    <script src="../js/application/application_info.js"></script>
 </body>
 </html>
