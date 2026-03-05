@@ -8,8 +8,9 @@ console.log("application_info.js loaded successfully!");
 document.addEventListener('DOMContentLoaded', () => {
     // --- SIDEBAR ELEMENTS ---
     const sidebar = document.getElementById("sidebar");
-    const logoToggle = document.getElementById("logoToggle"); // The logo wrapper for opening
-    const closeBtn = document.getElementById("closeBtn");     // The chevron-left for closing
+    const logoToggle = document.getElementById("logoToggle");
+    const closeBtn = document.getElementById("closeBtn");
+    const menuItems = document.querySelectorAll(".menu-item");
 
     // --- FORM ELEMENTS ---
     const uploadBtn = document.getElementById('uploadBtn');
@@ -17,21 +18,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     const employeeForm = document.getElementById('employeeForm');
 
-    // 1. SIDEBAR TOGGLE LOGIC
+    // 1. SIDEBAR TOGGLE & TOOLTIP LOGIC
     if (sidebar && closeBtn && logoToggle) {
-        // Close Sidebar
+        
+        // Close button (only when expanded)
         closeBtn.addEventListener("click", () => {
             console.log("Closing sidebar...");
             sidebar.classList.add("collapsed");
         });
 
-        // Open Sidebar (Clicking the logo/wrapper)
+        // Open via logo click (only when collapsed)
         logoToggle.addEventListener("click", () => {
             if (sidebar.classList.contains("collapsed")) {
                 console.log("Opening sidebar...");
                 sidebar.classList.remove("collapsed");
             }
         });
+
+        // Tooltip text generation & Active State Switcher
+        menuItems.forEach(item => {
+            // Get text from the span and set it as data-text for the CSS tooltip
+            const span = item.querySelector("span");
+            if (span) {
+                const text = span.innerText;
+                item.setAttribute("data-text", text);
+            }
+
+            // Handle clicking menu items to change active state
+            item.addEventListener("click", () => {
+                const currentActive = document.querySelector(".menu-item.active");
+                if (currentActive) {
+                    currentActive.classList.remove("active");
+                }
+                item.classList.add("active");
+            });
+        });
+
     } else {
         console.error("Sidebar elements missing! Check your IDs: sidebar, logoToggle, closeBtn");
     }
@@ -53,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. FORM SUBMISSION (Optional Debugger)
+    // 3. FORM SUBMISSION
     if (employeeForm) {
         employeeForm.addEventListener('submit', (e) => {
             console.log("Form submitted! Add your backend API call here.");
