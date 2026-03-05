@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Profile</title>
-    <link rel="stylesheet" href="../../static/css/accounts/profile_view.css">
+<link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">    
+<link rel="stylesheet" href="../../static/css/accounts/profile_view.css">
 </head>
 <body>
 
@@ -42,9 +43,9 @@
         </div>
 
         <div class="tabs">
-            <button class="tab active" data-tab="department_employee">Department</button>
-            <button class="tab" data-tab="documents_employee">Documents</button>
-            <button class="tab" data-tab="employment-history_employee">Employment History</button>
+            <button class="tab active" data-tab="hr_department_employee">Department</button>
+            <button class="tab" data-tab="hr_documents_employee">Documents</button>
+            <button class="tab" data-tab="hr_employment-history_employee">Employment History</button>
         </div>
         
         <div id="tab-content-container" class="tab-content" style="flex: 1; overflow-y: auto;"></div>
@@ -289,7 +290,7 @@
             else statusDot.style.backgroundColor = "#bbb";
 
             document.getElementById('editProfileBtn').onclick = function() {
-                window.location.href = `profile_edit.html?id=${empData.id}&source=profile`;
+                window.location.href = `hr_profile_edit.html?id=${empData.id}&source=profile`;
             };
         }
 
@@ -307,7 +308,7 @@
                 .catch(err => console.error("Error loading tab:", err));
         }
 
-        loadTabContent('department_employee.html');
+        loadTabContent('hr_department_employee.html');
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 tabs.forEach(t => t.classList.remove('active'));
