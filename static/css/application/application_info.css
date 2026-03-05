@@ -22,9 +22,10 @@ body {
 .background {
     position: fixed;
     inset: 0;
-    background: url('../../img/general/bg.jpeg') no-repeat center center fixed;
+    background: url('../../img/general/bg.jpeg') no-repeat center/cover;
     z-index: -1;
-  
+  filter: blur(10px);
+    transform: scale(1.1); 
 }
 
 .sidebar {
