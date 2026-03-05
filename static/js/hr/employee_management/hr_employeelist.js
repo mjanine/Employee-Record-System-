@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${emp.pos}</td>
                 <td><span class="status ${statusClass}">${emp.status}</span></td>
                 <td>
-                    <a href="../../accounts/profile_view.html?id=${emp.id}" class="action-link">View</a> | 
-                    <a href="../../accounts/profile_edit.html?id=${emp.id}&source=list" class="action-link">Edit</a>
+                    <a href="../../accounts/hr_profile_view.html?id=${emp.id}" class="action-link">View</a> | 
+                    <a href="../../accounts/hr_profile_edit.html?id=${emp.id}&source=list" class="action-link">Edit</a>
                 </td>
             `;
             tableBody.appendChild(row);

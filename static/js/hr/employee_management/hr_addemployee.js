@@ -53,7 +53,7 @@ function saveEmployee() {
         
         // 5. Success and Redirect
         alert("Employee added successfully!");
-        window.location.href = 'list.html';
+        window.location.href = 'hr_employeelist.html';
         
     } catch (error) {
         console.error("Error saving to localStorage:", error);
