@@ -22,13 +22,13 @@ body {
     z-index: -1;
 }
 
-/* --- Sidebar Styling --- */
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: 20px;
     left: 20px;
     height: calc(100% - 40px);
-    width: 300px; 
+    width: 300px; /* widened */
     padding: 25px;
     border-radius: 20px;
     display: flex;
@@ -37,24 +37,30 @@ body {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    z-index: 1000;
+
     transition: width 0.35s ease;
 }
 
+/* Collapsed */
 .sidebar.collapsed {
     width: 90px;
 }
 
+/* Top */
 .top-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
+/* Logo aligned with icons */
 .logo-wrapper {
     width: 45px;
     height: 45px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
 
@@ -64,9 +70,11 @@ body {
     transition: 0.3s;
 }
 
+/* FIXED CENTERED OPEN ICON */
 .open-icon {
     position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,9 +83,16 @@ body {
     transition: 0.3s;
 }
 
-.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0; }
-.sidebar.collapsed .logo-wrapper:hover .open-icon { opacity: 1; }
+/* Show open icon only when collapsed + hover */
+.sidebar.collapsed .logo-wrapper:hover .logo {
+    opacity: 0;
+}
 
+.sidebar.collapsed .logo-wrapper:hover .open-icon {
+    opacity: 1;
+}
+
+/* Close button */
 .close-btn {
     background: none;
     border: none;
@@ -86,7 +101,16 @@ body {
     cursor: pointer;
 }
 
-.sidebar.collapsed .close-btn { display: none; }
+.sidebar.collapsed .close-btn {
+    display: none;
+}
+
+/* Menu */
+.menu a,
+.bottom-section a {
+    text-decoration: none;
+}
+
 
 .menu {
     list-style: none;
@@ -94,16 +118,16 @@ body {
     flex: 1;
 }
 
+/* Fixed icon layout */
 .menu-item {
     position: relative;
     display: flex;
     align-items: center;
     height: 48px;
     color: white;
-    text-decoration: none;
+    cursor: pointer;
     border-radius: 12px;
     transition: background 0.3s;
-    margin-bottom: 5px;
 }
 
 .menu-item i {
@@ -111,6 +135,7 @@ body {
     text-align: center;
 }
 
+/* Text absolute (prevents shifting) */
 .menu-item span {
     position: absolute;
     left: 60px;
@@ -118,18 +143,42 @@ body {
     transition: opacity 0.2s ease;
 }
 
+/* Hide text smoothly */
 .sidebar.collapsed .menu-item span {
     opacity: 0;
     pointer-events: none;
 }
 
-.menu-item:hover, .menu-item.active {
-    background: rgba(255,255,255,0.2);
+/* Hover */
+.menu-item:hover {
+    background: rgba(255,255,255,0.15);
 }
 
+.menu-item.active {
+    background: rgba(255,255,255,0.25);
+}
+
+/* Tooltip */
+.sidebar.collapsed .menu-item:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 80px;
+    background: rgba(20,20,20,0.95);
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+/* Divider */
 hr {
     border: 0.5px solid rgba(255,255,255,0.2);
-    margin: 15px 0;
+    margin: 10px 0;
+}
+
+/* Bottom logout spacing */
+.bottom-section {
+    margin-top: auto;
 }
 
 /* --- Main Content (The Centering Magic) --- */
