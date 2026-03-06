@@ -219,13 +219,15 @@ hr {
 .upload-btn:hover { background: #d4d4d4; }
 
 #file-name {
-    font-style: italic;
-    color: #666;
+font-style: italic;
+    color: #555;
     font-size: 0.9rem;
-    max-width: 250px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 200px; /* Limits width so it doesn't break the card */
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds '...' if the name is too long */
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* Footer Buttons */
