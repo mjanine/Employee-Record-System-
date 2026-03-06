@@ -1,0 +1,124 @@
+/* Lock Viewport Height */
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; 
+}
+
+/* Master Layout Container */
+.dashboard-viewport {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+}
+
+/* Sidebar behavior - Fixed shrink prevention */
+.sidebar {
+    flex-shrink: 0;
+    transition: width 0.4s ease;
+}
+
+/* Main Content: The Adjusted Centering Wrapper */
+.main-content {
+    flex: 1; 
+    display: flex;
+    /* Centers the modal in the area to the right of the sidebar */
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: all 0.4s ease;
+}
+
+/* The Modal Box */
+/* ... Keep top sections the same ... */
+
+/* The Modal Box */
+.selection-modal {
+    background: #ffffff;
+    padding: 60px;
+    border-radius: 35px;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 550px; 
+    z-index: 10;
+    
+    /* ADJUSTMENT: Pushing further to the right */
+    /* Current: 250px. Increase to 300px or 350px for more shift */
+    margin-left: 250px; 
+    
+    transition: all 0.3s ease;
+}
+
+/* Logic for when the sidebar is closed (Icons only) */
+#sidebar.close ~ .main-content .selection-modal {
+    /* Set this to the same value as above to keep position consistent */
+    margin-left: 250px; 
+}
+
+/* ... Keep bottom sections the same ... */
+
+.selection-modal h2 {
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    color: #1a1a1a;
+}
+
+.selection-modal p {
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 16px;
+}
+
+/* Choice Cards Layout */
+.modal-options {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+
+.opt-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 40px 20px;
+    border: 2px solid #f8f8f8;
+    border-radius: 25px;
+    text-decoration: none;
+    color: #4a1d1d;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.opt-card i {
+    font-size: 45px;
+}
+
+.opt-card span {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.opt-card:hover {
+    background: #4a1d1d;
+    color: white;
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(74, 29, 29, 0.2);
+}
+
+.modal-cancel {
+    color: #999;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+.modal-cancel:hover {
+    color: #4a1d1d;
+    text-decoration: underline;
+}
