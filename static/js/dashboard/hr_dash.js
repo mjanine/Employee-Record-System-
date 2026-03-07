@@ -45,7 +45,7 @@ adjustDashboard();
 const loggedUser = "Tatsu"; // Replace with dynamic login session later
 const usernameElement = document.getElementById("username");
 if(usernameElement){
-    usernameElement.textContent = loggedUser;
+    usernameElement.textContent = loggedUser.toUpperCase();
 }
 
 const quotes = [
@@ -144,3 +144,5 @@ if(canvas){
         startAngle += slice;
     });
 }
+
+

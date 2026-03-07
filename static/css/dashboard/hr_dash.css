@@ -180,166 +180,189 @@ hr {
 }
 
 .dashboard-wrapper{
-
-margin-left:340px;
-
-display:grid;
-
-grid-template-columns: 1fr 320px;
-
-gap:40px;
-
-padding:40px;
-
-color:white;
-
+    margin-left:340px;
+    display:grid;
+    grid-template-columns: 1fr minmax(280px, 380px);
+    gap:40px;
+    padding:40px;
+    color:white;
 }
 
-/* WELCOME */
-
-.welcome-section h1{
-
-font-size:70px;
-font-weight:800;
-
+.sidebar.collapsed ~ .dashboard-wrapper{
+margin-left:120px;
 }
 
-#welcome-section span{
+/* WELCOME SECTION */
 
-font-weight:900;
-
+.welcome-section{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
 }
 
-/* STATS ROW */
+/* LEFT SIDE */
+
+.welcome-left{
+    display:flex;
+    flex-direction:column;
+}
+
+/* DASHBOARD TITLE */
+
+.dashboard-title{
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:2px;
+    margin-bottom:15px;
+}
+
+/* WELCOME TEXT */
+
+.welcome-text{
+    font-size:70px;
+    font-weight:800;
+    line-height:1;
+}
+
+/* USERNAME */
+
+.welcome-name{
+    font-size:70px;
+    font-weight:900;
+    text-transform:uppercase;
+    line-height:1;
+}
+
+/* RIGHT SIDE QUOTE */
+
+.welcome-right{
+    max-width:420px;
+    margin-top: 55px;
+}
+
+.welcome-right p{
+    text-align:right;
+}
+
+#quote{
+    text-align:right;
+    font-size:18px;
+    opacity:0.9;
+}
+
+.quick-actions{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.quick-actions button{
+    background:rgba(255,255,255,0.15);
+    border:none;
+    padding:14px 22px;
+    border-radius:15px;
+    color:white;
+    cursor:pointer;
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.15);
+    font-weight:600;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns: 220px 220px 220px 260px;
+    grid-template-rows: 200px 200px;
+    gap:25px;
+    margin-top: 26px;
+}
 
 .stats-row{
-
-display:flex;
-
-gap:25px;
-
-margin-top:40px;
-
+    display:flex;
+    gap:25px;
+    margin-top:40px;
 }
 
 .stat{
+    width:220px;
+    height:200px;
 
-width:220px;
-height:200px;
+    display:flex;
+    flex-direction:column;
 
-display:flex;
-flex-direction:column;
-justify-content:center;
+    align-items:center;      /* horizontal center */
+    justify-content:center;  /* vertical center */
 
+    text-align:center;       /* center text */
 }
 
-/* CARDS */
+.stat h2{
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.stat p{
+    font-size:16px;
+    opacity:0.85;
+}
+
+
 
 .card{
-
-background:rgba(255,255,255,0.08);
-
-backdrop-filter:blur(25px);
-
-border-radius:25px;
-
-padding:25px;
-
-border:1px solid rgba(255,255,255,0.15);
-
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(25px);
+    border-radius:25px;
+    padding:25px;
+    border:1px solid rgba(255,255,255,0.15);
 }
 
-/* BOTTOM ROW */
 
 .bottom-row{
-
-display:flex;
-
-gap:25px;
-
-margin-top:25px;
-
+    display:flex;
+    gap:25px;
+    margin-top:25px;
 }
 
 .help{
+    grid-column:1 / span 3;
 
-flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
 
-display:flex;
+    font-size:20px;
+    cursor:pointer;
+}
 
-align-items:center;
-justify-content:center;
-
-font-size:18px;
-
-cursor:pointer;
-
-gap:10px;
-
+.help i{
+    font-size:32px;
 }
 
 .attendance{
-
-width:260px;
-
+    grid-column:4;
+    grid-row:1 / span 2;
 }
 
 /* RIGHT PANEL */
 
 .right-panel{
-
-display:flex;
-
-flex-direction:column;
-
-gap:20px;
-
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    width:100%;
 }
-
-/* QUICK ACTIONS */
-
-.quick-actions{
-
-display:flex;
-
-gap:15px;
-
-}
-
-.quick-actions button{
-
-background:rgba(255,255,255,0.15);
-
-border:none;
-
-padding:15px 20px;
-
-border-radius:15px;
-
-color:white;
-
-cursor:pointer;
-
-backdrop-filter:blur(10px);
-
-}
-
 /* NOTIFICATIONS */
 
 .notifications{
-
-height:500px;
-
+    height:500px;
+    width:100%;
 }
 
 .notif{
-
-background:rgba(0,0,0,0.3);
-
-padding:10px;
-
-border-radius:8px;
-
-margin-top:10px;
+    background:rgba(0,0,0,0.3);
+    padding:10px;
+    border-radius:8px;
+    margin-top:10px;
 
 }
