@@ -1,418 +1,119 @@
-
-        /* =========================================================
-
-           GLOBAL RESET (ALL PAGES)
-
-        ========================================================= */
-
-        * {
-
-            margin: 0;
-
-            padding: 0;
-
-            box-sizing: border-box;
-
-            font-family: Arial, sans-serif;
-
-            font-size: 13px;
-
-        }
-
-
-
-        html, body {
-
-            height: 100%;
-
-            overflow: hidden;
-
-            background: #e9e9e9;
-
-            color: #333;
-
-        }
-
-
-
-        /* =========================================================
-
-           GLOBAL LAYOUT
-
-        ========================================================= */
-
-        .container {
-
-            display: flex;
-
-            height: 100vh;
-
-            padding: 20px;
-
-            gap: 20px;
-
-        }
-
-
-
-        .sidebar {
-
-            width: 230px;
-
-            background-color: #dcdcdc;
-
-            border-radius: 20px;
-
-            padding: 20px;
-
-        }
-
-
-
-        .main {
-
-            flex: 1;
-
-            padding: 0px; /* Adjusted for inner container spacing */
-
-        }
-
-
-
-        /* =========================================================
-
-           SIDEBAR LINKS
-
-        ========================================================= */
-
-        .sidebar ul {
-
-            list-style: none;
-
-        }
-
-
-
-        .sidebar ul li {
-
-            margin-bottom: 12px;
-
-        }
-
-
-
-        .sidebar ul li a {
-
-            display: block;
-
-            padding: 8px 12px;
-
-            border-radius: 8px;
-
-            color: #333;
-
-            text-decoration: none;
-
-        }
-
-
-
-        .sidebar ul li a:hover {
-
-            background: #cfcfcf;
-
-        }
-
-
-
-        .sidebar ul li a.active {
-
-            background: #7b3f3f;
-
-            color: #fff;
-
-        }
-
-
-
-        /* =========================================================
-
-           FORM PAGE STYLES (NEW)
-
-        ========================================================= */
-
-        .content-card {
-
-            background: #fff;
-
-            border-radius: 25px;
-
-            padding: 30px;
-
-            border: 1px solid #ccc;
-
-            height: 100%;
-
-            display: flex;
-
-            flex-direction: column;
-
-        }
-
-
-
-        .form-grid {
-
-            display: grid;
-
-            grid-template-columns: 1.1fr 0.9fr; /* Left side slightly wider as per image */
-
-            gap: 20px;
-
-            flex-grow: 1;
-
-        }
-
-
-
-        .form-section-box {
-
-            border: 1px solid #b5b5b5;
-
-            border-radius: 20px;
-
-            overflow: hidden;
-
-            background: #fff;
-
-        }
-
-
-
-        .section-header {
-
-            background: #efefef;
-
-            padding: 12px 20px;
-
-            font-weight: bold;
-
-            border-bottom: 1px solid #ccc;
-
-        }
-
-
-
-        .section-body {
-
-            padding: 20px;
-
-        }
-
-
-
-        /* Photo Upload UI */
-
-        .photo-container {
-
-            text-align: center;
-
-            margin-bottom: 25px;
-
-        }
-
-
-
-        .photo-circle {
-
-            width: 90px;
-
-            height: 90px;
-
-            background: #5c1f1f; /* Maroon color from image profile icon */
-
-            border-radius: 50%;
-
-            margin: 0 auto 10px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            overflow: hidden;
-
-        }
-
-
-
-        .photo-circle svg {
-
-            width: 50px;
-
-            height: 50px;
-
-            fill: white;
-
-        }
-
-
-
-        .photo-label {
-
-            color: #999;
-
-            font-size: 11px;
-
-            display: block;
-
-        }
-
-
-
-        /* Input Grid Styling */
-
-        .inputs-row {
-
-            display: grid;
-
-            grid-template-columns: 1fr 1fr;
-
-            gap: 15px;
-
-        }
-
-
-
-        .input-item {
-
-            margin-bottom: 12px;
-
-        }
-
-
-
-        .input-item label {
-
-            display: block;
-
-            margin-bottom: 5px;
-
-            font-weight: 500;
-
-        }
-
-
-
-        .input-item input {
-
-            width: 100%;
-
-            padding: 8px 12px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 6px;
-
-            color: #333;
-
-        }
-
-
-
-        .input-item input::placeholder {
-
-            color: #bbb;
-
-        }
-
-
-
-        .full-width-item {
-
-            margin-bottom: 12px;
-
-        }
-
-
-
-        .full-width-item input {
-
-            width: 100%;
-
-            padding: 8px 12px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 6px;
-
-        }
-
-
-
-        .sub-header {
-
-            margin: 20px 0 15px 0;
-
-            font-weight: bold;
-
-            font-size: 14px;
-
-        }
-
-
-
-        /* Footer Buttons */
-
-        .form-footer {
-
-            display: flex;
-
-            justify-content: flex-end;
-
-            gap: 15px;
-
-            margin-top: 20px;
-
-        }
-
-
-
-        .btn {
-
-            padding: 10px 45px;
-
-            border-radius: 8px;
-
-            border: none;
-
-            cursor: pointer;
-
-            font-weight: 500;
-
-        }
-
-
-
-        .btn-cancel {
-
-            background: #dcdcdc;
-
-            color: #333;
-
-        }
-
-
-
-        .btn-save {
-
-            background: #5c1f1f;
-
-            color: white;
-
-        }
-
-
-
-        .btn-save:hover { background: #7b3f3f; }
+/* Master Layout Locks */
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; 
+}
+
+/* Partner's Layout Wrapper */
+.dashboard-viewport {
+    display: flex;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 20px; 
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+/* Card Styling with Partner's Refinement Logic */
+.content-card {
+    background: #ffffff;
+    border-radius: 25px;
+    padding: 30px 45px;
+    width: 100%;
+    max-width: 1180px; 
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    transition: max-width 0.4s ease-in-out; 
+}
+
+/* Sidebar Closed State logic */
+#sidebar.close ~ .main-content .content-card {
+    max-width: calc(100% - 110px);
+}
+
+.content-card h1 { 
+    font-size: 32px; 
+    margin: 0 0 25px 0; 
+    color: #1a1a1a; 
+}
+
+/* Scrollable Form Body with Partner's Scrollbar Style */
+.form-body { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding-right: 15px; 
+    margin-bottom: 10px; 
+}
+
+.form-body::-webkit-scrollbar { width: 6px; }
+.form-body::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
+
+/* Grid for the two section boxes */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 20px;
+}
+
+.form-section-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    height: fit-content;
+}
+
+.section-header {
+    background: #f8f8f8;
+    padding: 15px 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.section-body { padding: 20px; }
+
+/* Photo Upload Circle */
+.photo-container { text-align: center; margin-bottom: 20px; }
+.photo-circle {
+    width: 80px; height: 80px;
+    background: #4a1d1d;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+}
+.photo-circle svg { width: 40px; height: 40px; fill: white; }
+.photo-label { color: #888; font-size: 11px; }
+
+/* Inputs row (2 columns inside section) */
+.inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.input-item { margin-bottom: 12px; }
+.input-item label, .full-width-item label { 
+    display: block; margin-bottom: 6px; font-weight: 600; color: #555;
+}
+.input-item input, .input-item select, .full-width-item input {
+    width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px;
+}
+
+.sub-header { margin: 20px 0 10px 0; font-weight: bold; border-top: 1px solid #eee; padding-top: 15px; }
+
+/* Sticky Footer Buttons */
+.form-footer {
+    display: flex; justify-content: flex-end; gap: 15px;
+    padding-top: 20px; border-top: 1px solid #eee;
+}
+
+.btn { padding: 12px 35px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; }
+.btn-cancel { background: #eee; color: #333; }
+.btn-save { background: #4a1d1d; color: white; transition: 0.3s; }
+.btn-save:hover { background: #7b3f3f; }

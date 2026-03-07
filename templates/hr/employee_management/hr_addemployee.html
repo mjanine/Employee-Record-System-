@@ -3,111 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System - Add Employee</title>
+    <title>Add Employee | HR System</title>
     <link rel="shortcut icon" type="image/png" href="../../../static/img/general/uph.png">
+    
+    <link rel="stylesheet" href="../../../static/css/dashboard/hr_dash.css">
     <link rel="stylesheet" href="../../../static/css/hr/employee_management/hr_addemployee.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <aside class="sidebar">
-            </aside>
+    <div class="background"></div>
 
-        <main class="main">
+    <div class="dashboard-viewport">
+        <div class="sidebar" id="sidebar">
+            <div class="top-section">
+                <div class="logo-wrapper" id="logoToggle">
+                    <img src="../../../static/img/general/uph.png" class="logo">
+                    <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <ul class="menu">
+                <li><a href="../../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+                <li><a href="../../accounts/hr_profile_view.html" class="menu-item"><i class="fas fa-user"></i> <span>Profile</span></a></li>
+                <hr>
+                <li><a href="#" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+                <li><a href="hr_employeelist.html" class="menu-item active"><i class="fas fa-database"></i> <span>Employee Records</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-calendar"></i> <span>Attendance Monitoring</span></a></li>
+                <li><a href="../../leave/hr_applicationleave.html" class="menu-item"><i class="fas fa-briefcase"></i> <span>Leave Management</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-star"></i> <span>Performance Evaluation</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i> <span>Document Management</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i> <span>Reports / Analytics</span></a></li>
+            </ul>
+            <div class="bottom-section">
+                <a href="../../login/login.html" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> <span>Log Out</span></a>
+            </div>
+        </div>
+
+        <main class="main-content">
             <div class="content-card">
-                <form class="form-grid" id="addEmployeeForm">
-                    
-                    <section class="form-section-box">
-                        <div class="section-header">Basic Information</div>
-                        <div class="section-body">
-                            
-                            <div class="photo-container">
-                                <div class="photo-circle">
-                                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <h1>Add New Employee</h1>
+                
+                <div class="form-body">
+                    <form class="form-grid" id="addEmployeeForm">
+                        
+                        <section class="form-section-box">
+                            <div class="section-header">Basic Information</div>
+                            <div class="section-body">
+                                <div class="photo-container">
+                                    <div class="photo-circle">
+                                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                    </div>
+                                    <span class="photo-label">Upload Photo (Optional)</span>
                                 </div>
-                                <span class="photo-label">Upload Photo (Optional)</span>
-                            </div>
 
-                            <div class="inputs-row">
-                                <div class="input-item">
-                                    <label>First Name</label>
-                                    <input type="text" id="firstName" placeholder="Enter first name" required>
-                                </div>
-                                <div class="input-item">
-                                    <label>Last Name</label>
-                                    <input type="text" id="lastName" placeholder="Enter last name" required>
-                                </div>
-                                <div class="input-item">
-                                    <label>Employment I.D</label>
-                                    <input type="text" id="empID" placeholder="Enter Employment I.D" required>
-                                </div>
-                                <div class="input-item">
-                                    <label>Employment Status</label>
-                                    <select id="empStatus" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                        <option value="On Leave">On Leave</option>
-                                    </select>
-                                </div>
-                                <div class="input-item">
-                                    <label>Employment Type</label>
-                                    <input type="text" id="empType" placeholder="Enter Employment Type">
-                                </div>
-                                <div class="input-item">
-                                    <label>Department / Office</label>
-                                    <input type="text" id="dept" placeholder="Enter Department / Office" required>
-                                </div>
-                                <div class="input-item">
-                                    <label>Position/Rank</label>
-                                    <input type="text" id="pos" placeholder="Enter Position/Rank" required>
-                                </div>
-                                <div class="input-item">
-                                    <label>Date Hired</label>
-                                    <input type="date" id="dateHired" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                                <div class="inputs-row">
+                                    <div class="input-item">
+                                        <label>First Name</label>
+                                        <input type="text" id="firstName" placeholder="First Name" required>
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Last Name</label>
+                                        <input type="text" id="lastName" placeholder="Last Name" required>
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Employment I.D</label>
+                                        <input type="text" id="empID" placeholder="ID Number" required>
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Employment Status</label>
+                                        <select id="empStatus">
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                            <option value="On Leave">On Leave</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Employment Type</label>
+                                        <input type="text" id="empType" placeholder="Full-time / Part-time">
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Date Hired</label>
+                                        <input type="date" id="dateHired">
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Department / Office</label>
+                                        <input type="text" id="dept" placeholder="Enter Dept" required>
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Position / Rank</label>
+                                        <input type="text" id="pos" placeholder="Enter Position" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
 
-                    <section class="form-section-box">
-                        <div class="section-header">Personal Information</div>
-                        <div class="section-body">
-                            <div class="full-width-item">
-                                <label>Email Address</label>
-                                <input type="email" id="email" placeholder="Enter Email Address">
-                            </div>
-                            <div class="full-width-item">
-                                <label>Contact Number</label>
-                                <input type="text" id="contact" placeholder="Enter Contact Number">
-                            </div>
-                            <div class="full-width-item">
-                                <label>Address</label>
-                                <input type="text" id="address" placeholder="Enter Address">
-                            </div>
+                        <section class="form-section-box">
+                            <div class="section-header">Personal Information</div>
+                            <div class="section-body">
+                                <div class="full-width-item">
+                                    <label>Email Address</label>
+                                    <input type="email" id="email" placeholder="example@email.com">
+                                </div>
+                                <div class="full-width-item">
+                                    <label>Contact Number</label>
+                                    <input type="text" id="contact" placeholder="Enter number">
+                                </div>
+                                <div class="full-width-item">
+                                    <label>Home Address</label>
+                                    <input type="text" id="address" placeholder="Enter full address">
+                                </div>
 
-                            <h4 class="sub-header">Emergency Contact</h4>
-                            <div class="inputs-row">
-                                <div class="input-item">
-                                    <label>Emergency Contact Name</label>
-                                    <input type="text" id="emergencyName" placeholder="Enter Emergency Contact Name">
-                                </div>
-                                <div class="input-item">
-                                    <label>Emergency Contact Number</label>
-                                    <input type="text" id="emergencyPhone" placeholder="Enter Emergency Contact Number">
+                                <h4 class="sub-header">Emergency Contact</h4>
+                                <div class="inputs-row">
+                                    <div class="input-item">
+                                        <label>Contact Name</label>
+                                        <input type="text" id="emergencyName" placeholder="Name">
+                                    </div>
+                                    <div class="input-item">
+                                        <label>Contact Number</label>
+                                        <input type="text" id="emergencyPhone" placeholder="Number">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-                </form>
+                        </section>
+                    </form>
+                </div>
 
                 <div class="form-footer">
                     <button type="button" class="btn btn-cancel" onclick="window.location.href='hr_employeelist.html'">Cancel</button>
-                    <button type="button" class="btn btn-save" onclick="saveEmployee()">Save</button>
+                    <button type="button" class="btn btn-save" onclick="saveEmployee()">Save Employee</button>
                 </div>
             </div>
         </main>
     </div>
 
+    <script src="../../../static/js/dashboard/hr_dash.js"></script>
     <script src="../../../static/js/hr/employee_management/hr_addemployee.js"></script>
 </body>
 </html>

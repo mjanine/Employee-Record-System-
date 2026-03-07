@@ -5,6 +5,7 @@ function getReturnURL() {
     const source = params.get('source');
     const id = params.get('id');
     
+    // If the source was 'profile', go back to the profile view, else the list
     if (source === 'profile') {
         return `hr_profile_view.html?id=${id}`;
     } else {
@@ -38,8 +39,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let empData = employees.find(e => e.id === idToEdit);
     
-    if (!empData && idToEdit === "001") {
-        empData = { id: "001", fullName: "Dela Cruz, Juan", dept: "College of Computer Studies (CCS)", pos: "Instructor", status: "Active" };
+    // Fallback if record is missing but ID is known
+    if (!empData && idToEdit === "2024-001") {
+        empData = { id: "2024-001", fullName: "HR, Admin", dept: "HR Department", pos: "Administrator", status: "Active" };
     }
 
     if (empData) {

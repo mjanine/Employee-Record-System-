@@ -1,155 +1,41 @@
-/* =========================================================
-   GLOBAL RESET (ALL PAGES)
-========================================================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-}
-
-html, body {
+/* Master Layout Constraints */
+body, html {
     height: 100%;
-    overflow: hidden;
-    background: #e9e9e9;
-    color: #333;
+    margin: 0;
+    overflow: hidden; 
 }
 
-/* =========================================================
-   GLOBAL LAYOUT
-========================================================= */
-.container {
+.dashboard-viewport {
     display: flex;
     height: 100vh;
     padding: 20px;
-    gap: 20px;
+    box-sizing: border-box;
+    gap: 20px; 
 }
 
-.sidebar {
-    width: 230px;
-    background-color: #dcdcdc;
-    border-radius: 20px;
-    padding: 20px;
-}
-
-.main {
+.main-content {
     flex: 1;
-    padding: 20px;
-}
-
-/* =========================================================
-   SIDEBAR LINKS
-========================================================= */
-.sidebar ul {
-    list-style: none;
-}
-
-.sidebar ul li {
-    margin-bottom: 12px;
-}
-
-.sidebar ul li a {
-    display: block;
-    padding: 8px 12px;
-    border-radius: 8px;
-    color: #333;
-    text-decoration: none;
-}
-
-.sidebar ul li a:hover {
-    background: #cfcfcf;
-}
-
-.sidebar ul li a.active {
-    background: #7b3f3f;
-    color: #fff;
-}
-
-/* =========================================================
-   LIST PAGE
-========================================================= */
-.header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    justify-content: flex-end;
+    height: 100%;
 }
 
-.search-add {
-    display: flex;
-    gap: 10px;
-}
-
-.search-add input {
-    padding: 6px 10px;
-    width: 250px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.add-btn {
-    background-color: #7b3f3f;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-/* Add this new rule for View and Edit links */
-.action-link {
-    color: #7b3f3f; /* Matches the background color of .add-btn for consistency */
-    text-decoration: none; /* Removes underline */
-}
-
-.action-link:hover {
-    text-decoration: underline; /* Optional: Add underline on hover for usability */
-}
-
-table {
+/* Sidebar Hover/Toggle Expansion logic */
+.profile-page-container {
     width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
+    max-width: 1180px; 
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    box-sizing: border-box;
+    transition: max-width 0.4s ease-in-out; 
 }
 
-thead {
-    background-color: #333;
-    color: #fff;
+#sidebar.close ~ .main-content .profile-page-container {
+    max-width: calc(100% - 110px);
 }
 
-thead th {
-    padding: 10px;
-    text-align: left;
-}
-
-tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.status {
-    padding: 3px 8px;
-    border-radius: 12px;
-    display: inline-block; /* Added: Allows width control */
-    min-width: 80px; /* Added: Ensures uniform width for "Active" and "Inactive" */
-    text-align: center; /* Added: Centers text within the span */
-}
-
-.status.active { background-color: #8ddf9b; }
-.status.inactive { background-color: #f5a9a9; }
-.status.on_leave { background-color: #f3e08c; }
-
-/* =========================================================
-   PROFILE PAGE
-========================================================= */
-
+/* Profile Content Styles */
 .profile-card {
     background: #f3f3f3;
     border-radius: 20px;
@@ -161,143 +47,117 @@ tbody tr:nth-child(even) {
     margin-bottom: 25px;
 }
 
-/* LEFT SIDE */
-.profile-left {
-    display: flex;
-    gap: 30px;
-}
-
-.profile-img {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-info h2 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.role {
-    color: #777;
-    margin-bottom: 4px;
-}
-
-.employee-id {
-    color: #999;
-    margin-bottom: 20px;
-}
-
-.employment-details p {
-    margin: 6px 0;
-    color: #444;
-}
+.profile-left { display: flex; gap: 30px; }
+.profile-img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; }
+.profile-info h2 { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+.role { color: #777; margin-bottom: 4px; font-size: 14px; }
+.employee-id { color: #999; margin-bottom: 20px; }
+.employment-details p { margin: 8px 0; color: #444; }
 
 .status-dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    background: #2ecc71;
-    border-radius: 50%;
-    margin: 0 6px;
+    display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 6px;
 }
 
-/* RIGHT SIDE */
-.profile-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-/* Edit Button aligned with name */
+.profile-right { display: flex; flex-direction: column; align-items: flex-end; }
 .edit-btn {
-    background: #e3e3e3;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 2px;
-    margin-bottom: 48px; /* aligns contact with employment status */
+    background: #4a1d1d; color: white; border: none; padding: 8px 18px; border-radius: 8px;
+    cursor: pointer; margin-bottom: 40px; font-weight: 600;
 }
+.edit-btn:hover { background: #7b3f3f; }
 
-.edit-btn:hover {
-    background: #d5d5d5;
-}
+.contact-info { width: 260px; text-align: right; }
+.contact-info h4 { margin-bottom: 12px; font-weight: bold; color: #333; }
+.contact-info p { margin: 6px 0; color: #555; }
 
-.contact-info {
-    width: 260px;
-}
-
-.contact-info h4 {
-    margin-bottom: 12px;
-    font-weight: bold;
-}
-
-.contact-info p {
-    margin: 6px 0;
-    color: #555;
-}
-
-/* =========================================================
-   PROFILE TABS
-========================================================= */
+/* Tabs Logic */
 .tabs {
-    display: flex;
-    border-bottom: 1px solid #ccc;
-    background: #f3f3f3;
-    border-radius: 20px 20px 0 0;
-    padding-left: 10px;
+    display: flex; border-bottom: 1px solid #ccc; background: #f3f3f3;
+    border-radius: 20px 20px 0 0; padding-left: 10px;
 }
-
-.tab {
-    padding: 14px 25px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}
-
-.tab.active {
-    border-bottom: 3px solid #7b3f3f;
-    color: #7b3f3f;
-    font-weight: bold;
-}
+.tab { padding: 14px 25px; border: none; background: transparent; cursor: pointer; font-weight: 500; }
+.tab.active { border-bottom: 3px solid #7b3f3f; color: #7b3f3f; font-weight: bold; }
 
 .tab-content {
-    background: #f3f3f3;
-    padding: 25px;
-    border-radius: 0 0 20px 20px;
-    border: 1px solid #d8d8d8;
-    border-top: none;
+    background: #f3f3f3; padding: 25px; border-radius: 0 0 20px 20px;
+    border: 1px solid #d8d8d8; border-top: none; flex: 1; overflow-y: auto;
 }
 
 /* =========================================================
-   PROFILE INFO CARD
+   DEPARTMENT TAB GRID STYLING
 ========================================================= */
+.dept-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: 20px;
+    padding: 10px 0;
+}
+
 .info-card {
     background: #fafafa;
     border-radius: 12px;
     border: 1px solid #e2e2e2;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .info-card h4 {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
+    color: #4a1d1d;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
 }
 
 .info-row {
     display: flex;
     justify-content: space-between;
-    padding: 12px 0;
-    border-top: 1px solid #eee;
+    padding: 8px 0;
+    border-top: 1px solid #f0f0f0;
 }
 
-.info-row:first-of-type {
-    border-top: none;
+.info-row:first-of-type { border-top: none; }
+
+.info-label { color: #888; font-weight: 500; }
+.info-value { color: #333; font-weight: 600; }
+
+/* =========================================================
+   MODAL ACTION BUTTONS (CENTERED TEXT FIX)
+========================================================= */
+#documentModal button {
+    display: inline-flex;      /* Snap text to center */
+    align-items: center;       
+    justify-content: center;   
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    line-height: 1;            /* Remove extra vertical spacing */
+    transition: background 0.3s ease;
 }
+
+#saveBtn { background: #7b3f3f; color: #fff; }
+#saveBtn:hover { background: #5a2e2e; }
+
+#deleteBtn { background: #D9D9D9; color: #cc0000; }
+#deleteBtn:hover { background: #c7c7c7; }
+
+/* Grey buttons (Cancel / Edit records) */
+#documentModal button:not(#saveBtn):not(#deleteBtn) {
+    background: #D9D9D9; color: #333;
+}
+#documentModal button:not(#saveBtn):not(#deleteBtn):hover {
+    background: #c7c7c7;
+}
+
+/* Document Tab Action Links */
+.action-link {
+    color: #7b3f3f;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+.action-link:hover { text-decoration: underline; }
