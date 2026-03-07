@@ -103,7 +103,68 @@
     </div>
 
     </div>
+    <div class="main-content" id="mainContent">
+    <div class="header-container">
+        <h1>Applications Management</h1>
+        <div class="tab-buttons">
+            <button class="tab-btn active">New Employee Applications</button>
+            <button class="tab-btn">Position Change Requests</button>
+        </div>
+    </div>
 
+    <div class="search-filter-section">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search by Name / ID / Department / Position">
+        </div>
+        <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+    </div>
+
+    <div class="active-filters">
+        <span class="filter-tag">Sample Filter <i class="fas fa-times"></i></span>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Full Name</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th>Submitted</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>Dela Cruz, Juan</td>
+                    <td>CCS</td>
+                    <td>Instructor</td>
+                    <td>02/12/2026</td>
+                    <td>Stage 2 of 4</td>
+                    <td><span class="status-pill pending">Pending - HR Evaluator</span></td>
+                    <td class="actions">
+                        <a href="#">View</a>
+                        <div class="dropdown">
+                            <button class="update-btn">Update <i class="fas fa-caret-down"></i></button>
+                            <div class="dropdown-content">
+                                <a href="#" class="approve">Approve</a>
+                                <a href="#" class="reject">Reject</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="status-pill pending-dept">Pending - Dept. Head</span></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="status-pill rejected">Rejected</span></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="status-pill approved">Approved</span></td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
     <script src="../../static/js/new_employee/new_employee.js"></script>
 </body>
 </html>
