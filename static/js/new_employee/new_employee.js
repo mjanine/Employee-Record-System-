@@ -132,3 +132,37 @@ document.querySelector(".modal-reject")?.addEventListener("click", () => {
         closeViewModal();
     }
 });
+/* --- Position Change Request Modal Logic --- */
+
+const posModal = document.getElementById("positionChangeModal");
+const posBtn = document.getElementById("posRequestBtn");
+const posClose = document.getElementById("posClose");
+const cancelReq = document.getElementById("cancelRequest");
+
+if (posBtn && posModal) {
+    // Open the Log New Request Modal
+    posBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        posModal.style.display = "flex";
+    });
+
+    // Close Modal when 'X' is clicked
+    if (posClose) {
+        posClose.addEventListener("click", () => {
+            posModal.style.display = "none";
+        });
+    }
+
+    // Close Modal when 'Cancel' button is clicked
+    if (cancelReq) {
+        cancelReq.addEventListener("click", () => {
+            posModal.style.display = "none";
+        });
+    }
+}
+
+// Update the global click listener to handle the new modal
+window.addEventListener("click", (e) => {
+    if (e.target === modal) closeViewModal(); // Your existing logic
+    if (e.target === posModal) posModal.style.display = "none"; // New logic
+});
