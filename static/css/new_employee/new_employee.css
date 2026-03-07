@@ -174,54 +174,62 @@ body {
 /* --- Table Design --- */
 .table-container {
     background: white;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-radius: 8px; /* Slightly sharper corners to match image */
+    border: 1px solid #ccc;
+    box-shadow: none; /* Removed shadow for flatter look */
     overflow: hidden;
+    margin-top: 10px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
 }
-
 thead th {
-    background: #3d3d3d; /* Dark grey header */
-    color: white;
-    padding: 14px 15px;
+    background: #333333; /* Darker grey to match image */
+    color: #ffffff;
+    padding: 12px 15px;
     text-align: left;
-    font-weight: 400;
-    font-size: 0.9rem;
+    font-weight: 500;
+    font-size: 0.95rem;
 }
-
 tbody td {
-    padding: 14px 15px;
+    padding: 12px 15px;
     font-size: 0.9rem;
     color: #333;
+    height: 50px; /* Consistent row height */
 }
 
-/* Zebra Striping */
+/* Zebra Striping: Alternating light grey rows */
 tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #f0f0f0;
 }
 
 /* --- Status Pills --- */
 .status-pill {
     padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 500;
     display: inline-block;
     text-align: center;
-    min-width: 140px;
+    min-width: 160px;
 }
 
 /* Specific Pill Colors from Image */
-.pending-hr { background-color: #fdf2d2; color: #7d651a; } /* HR Evaluator / Dept Head */
+.pending-hr { 
+    background-color: #f7e9c3; 
+    color: #4d3d0f; 
+}
 .pending-sd { background-color: #fdf2d2; color: #7d651a; }
-.rejected { background-color: #f8d7da; color: #721c24; }
-.approved { background-color: #d4edda; color: #155724; }
-
+.rejected { 
+    background-color: #f4c2c2; 
+    color: #7a1f1f; 
+}
+.approved { 
+    background-color: #c9f7c9; 
+    color: #1b4d1b; 
+}
 /* --- Actions Column --- */
 .actions {
     display: flex;
@@ -230,9 +238,10 @@ tbody tr:nth-child(even) {
 }
 
 .view-link {
-    color: #632b2b;
+    color: #8c2d2d; /* Specific maroon for the text */
     text-decoration: none;
     font-size: 0.9rem;
+    margin-right: 10px;
 }
 
 .view-link:hover { text-decoration: underline; }
@@ -240,7 +249,7 @@ tbody tr:nth-child(even) {
 .update-link {
     background: none;
     border: none;
-    color: #632b2b;
+    color: #8c2d2d;
     font-weight: 500;
     cursor: pointer;
     font-size: 0.9rem;
@@ -258,10 +267,10 @@ tbody tr:nth-child(even) {
     right: 0;
     background-color: white;
     min-width: 110px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
     border: 1px solid #eee;
     z-index: 10;
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 5px 0;
 }
 
