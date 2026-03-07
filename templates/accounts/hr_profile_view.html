@@ -3,325 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Profile</title>
-<link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">    
-<link rel="stylesheet" href="../../static/css/accounts/hr_profile_view.css">
+    <title>Employee Record View | HR System</title>
+    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    
+    <link rel="stylesheet" href="../../static/css/dashboard/hr_dash.css">
+    <link rel="stylesheet" href="../../static/css/accounts/hr_profile_view.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
-<div class="container">
-    <div class="sidebar"></div>
-    <div class="main">
-        <div class="profile-card">
-            <div class="profile-left">
-                <img src="../../static/img/sample-profile-pic.jfif" class="profile-img" alt="Profile Picture">
-                <div class="profile-info">
-                    <h2 id="profName">Loading...</h2>
-                    <p class="role" id="profRoleHeader">---</p>
-                    <p class="employee-id" id="profID">Employee ID: ---</p>
+    <div class="background"></div>
 
-                    <div class="employment-details">
-                        <p><strong>Employment Status</strong> 
-                            <span id="statusDot" class="status-dot"></span> <span id="profStatusText">---</span>
-                        </p>
-                        <p><strong>Position</strong> <span id="profPos">---</span></p>
-                        <p><strong>Department</strong> <span id="profDept">---</span></p>
-                        <p><strong>Employment Type</strong> <span id="profType">---</span></p>
-                        <p><strong>Date Hired</strong> <span id="profDateHired">---</span></p>
+    <div class="dashboard-viewport">
+        <div class="sidebar" id="sidebar">
+            <div class="top-section">
+                <div class="logo-wrapper" id="logoToggle">
+                    <img src="../../static/img/general/uph.png" class="logo">
+                    <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <ul class="menu">
+                <li><a href="../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+<li>
+    <a href="../accounts/hr_profile_view.html?id=2024-001" class="menu-item">
+        <i class="fas fa-user"></i> <span>Profile</span>
+    </a>
+</li>                <hr>
+                <li><a href="#" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+                <li><a href="../hr/employee_management/hr_employeelist.html" class="menu-item active"><i class="fas fa-database"></i> <span>Employee Records</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-calendar"></i> <span>Attendance Monitoring</span></a></li>
+                <li><a href="../leave/hr_leaveselect.html" class="menu-item"><i class="fas fa-briefcase"></i> <span>Leave Management</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-star"></i> <span>Performance Evaluation</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i> <span>Document Management</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i> <span>Reports / Analytics</span></a></li>
+            </ul>
+            <div class="bottom-section">
+                <a href="../login/login.html" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> <span>Log Out</span></a>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="profile-page-container">
+                <div class="profile-card">
+                    <div class="profile-left">
+                        <img src="../../static/img/sample-profile-pic.jfif" class="profile-img" alt="Profile Picture" id="profImage">
+                        <div class="profile-info">
+                            <h2 id="profName">Loading...</h2>
+                            <p class="role" id="profRoleHeader">---</p>
+                            <p class="employee-id" id="profID">Employee ID: ---</p>
+
+                            <div class="employment-details">
+                                <p><strong>Status</strong> <span id="statusDot" class="status-dot"></span> <span id="profStatusText">---</span></p>
+                                <p><strong>Position</strong> <span id="profPos">---</span></p>
+                                <p><strong>Department</strong> <span id="profDept">---</span></p>
+                                <p><strong>Employment Type</strong> <span id="profType">---</span></p>
+                                <p><strong>Date Hired</strong> <span id="profDateHired">---</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                        <button class="edit-btn" id="editProfileBtn">Edit Record</button>
+                        <div class="contact-info">
+                            <h4>Contact Information</h4>
+                            <p>📧 <span id="profEmail">---</span></p>
+                            <p>📞 <span id="profContact">---</span></p>
+                            <p>📍 <span id="profAddress">---</span></p>
+                        </div>
                     </div>
                 </div>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="hr_department_employee">Department</button>
+                    <button class="tab" data-tab="hr_documents_employee">Documents</button>
+                    <button class="tab" data-tab="hr_employment-history_employee">Employment History</button>
+                </div>
+                
+                <div id="tab-content-container" class="tab-content" style="flex: 1; overflow-y: auto;"></div>
             </div>
-            <div class="profile-right">
-                <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
-                <div class="contact-info">
-                    <h4>Contact Information</h4>
-                    <p>📧 <span id="profEmail">---</span></p>
-                    <p>📞 <span id="profContact">---</span></p>
-                    <p>📍 <span id="profAddress">---</span></p>
+        </main>
+    </div>
+
+    <div id="documentModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); align-items: center; justify-content: center;">
+        <div style="background-color: #fff; width: 750px; border-radius: 15px; padding: 35px; position: relative; box-shadow: 0 4px 25px rgba(0,0,0,0.15); font-family: sans-serif;">
+            
+            <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 0; width: 100%; align-items: flex-start;">
+                <div style="background: #E8E8E8; padding: 6px 25px; border-radius: 50px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; text-align: left; margin-bottom: -1px;">
+                    <span id="modalDocName" style="font-size: 13px; color: #333; font-weight: 600;">Document Name</span>
+                </div>
+                <div style="background: #fff; padding: 6px 25px; border-radius: 50px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; text-align: left;">
+                    <span id="modalFileName" style="color: #666; font-size: 12px;">filename.pdf</span>
+                </div>
+            </div>
+
+            <div id="modalPreviewWrapper" style="width: 100%; height: 380px; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; background: #f9f9f9; display: flex; justify-content: center; align-items: center; margin-bottom: 25px;">
+                </div>
+
+            <input type="file" id="fileLibraryInput" style="display: none;" accept=".pdf, .png, .jpg, .jpeg, .doc, .docx" onchange="handleFileSelection(this)">
+
+            <div style="display: flex; justify-content: space-between; width: 100%;">
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="document.getElementById('fileLibraryInput').click()" style="background: #D9D9D9; color: #333; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                        Edit records
+                    </button>
+                    <button id="deleteBtn" onclick="handleDelete()" style="background: #D9D9D9; color: #cc0000; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: none;">
+                        Delete
+                    </button>
+                </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button id="saveBtn" onclick="saveDocumentChanges()" style="background: #7b3f3f; color: #fff; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: none;">
+                        Save
+                    </button>
+                    <button onclick="closeModal()" style="background: #D9D9D9; color: #333; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;">
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
-
-        <div class="tabs">
-            <button class="tab active" data-tab="hr_department_employee">Department</button>
-            <button class="tab" data-tab="hr_documents_employee">Documents</button>
-            <button class="tab" data-tab="hr_employment-history_employee">Employment History</button>
-        </div>
-        
-        <div id="tab-content-container" class="tab-content" style="flex: 1; overflow-y: auto;"></div>
     </div>
-</div>
 
-<div id="documentModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); align-items: center; justify-content: center;">
-    <div style="background-color: #fff; width: 750px; border-radius: 15px; padding: 35px; position: relative; box-shadow: 0 4px 25px rgba(0,0,0,0.15); font-family: sans-serif;">
-        
-        <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 0; width: 100%; align-items: flex-start;">
-            <div style="background: #E8E8E8; padding: 6px 25px; border-radius: 50px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; text-align: left; margin-bottom: -1px;">
-                <span id="modalDocName" style="font-size: 13px; color: #333; font-weight: 600;">Document Name</span>
-            </div>
-            <div style="background: #fff; padding: 6px 25px; border-radius: 50px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; text-align: left;">
-                <span id="modalFileName" style="color: #666; font-size: 12px;">filename.pdf</span>
-            </div>
-        </div>
-
-        <div id="modalPreviewWrapper" style="width: 100%; height: 380px; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; background: #f9f9f9; display: flex; justify-content: center; align-items: center; margin-bottom: 25px;">
-        </div>
-
-        <input type="file" id="fileLibraryInput" style="display: none;" accept=".pdf, .png, .jpg, .jpeg, .doc, .docx" onchange="handleFileSelection(this)">
-
-        <div style="display: flex; justify-content: space-between; width: 100%;">
-            <div style="display: flex; gap: 10px;">
-                <button onclick="document.getElementById('fileLibraryInput').click()" style="background: #D9D9D9; color: #333; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center;">
-                    Edit records
-                </button>
-                <button id="deleteBtn" onclick="handleDelete()" style="background: #D9D9D9; color: #cc0000; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: none; align-items: center; justify-content: center;">
-                    Delete
-                </button>
-            </div>
-            
-            <div style="display: flex; gap: 12px;">
-                <button id="saveBtn" onclick="saveDocumentChanges()" style="background: #7b3f3f; color: #fff; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: none; align-items: center; justify-content: center;">
-                    Save
-                </button>
-                <button onclick="closeModal()" style="background: #D9D9D9; color: #333; border: none; width: 130px; height: 40px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center;">
-                    Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    let currentDocRow = null; 
-    let pendingFile = null;
-
-    // --- EMPLOYMENT HISTORY DATA ---
-    let employmentHistory = [
-        { date: "January 14, 2025", type: "Status Change", from: "Active", to: "On Leave", color: "yellow" },
-        { date: "January 14, 2020", type: "Department Transfer", from: "Registrar", to: "College of Computer Studies (CCS)", color: "blue" }
-    ];
-
-    function updateDocumentCount() {
-        const countDisplay = document.getElementById('docCountText');
-        if (!countDisplay) return;
-        const rows = document.querySelectorAll('table tbody tr');
-        let uploaded = 0;
-        rows.forEach(row => {
-            if (row.cells[2].innerText.trim().toLowerCase() !== "missing") {
-                uploaded++;
-            }
-        });
-        countDisplay.innerText = `${uploaded} of ${rows.length} required documents uploaded`;
-    }
-
-    window.openModal = function(docName, fileName, type, url, element) {
-        currentDocRow = element ? element.closest('tr') : null; 
-        const modal = document.getElementById('documentModal');
-        const wrapper = document.getElementById('modalPreviewWrapper');
-        const deleteBtn = document.getElementById('deleteBtn');
-        const saveBtn = document.getElementById('saveBtn');
-        
-        document.getElementById('modalDocName').innerText = docName;
-        document.getElementById('modalFileName').innerText = fileName;
-        saveBtn.style.display = 'none';
-        
-        deleteBtn.style.display = (fileName !== "---") ? "flex" : "none";
-        modal.style.display = 'flex';
-        wrapper.innerHTML = ""; 
-
-        if (fileName === "---") {
-            wrapper.innerHTML = `<div style="text-align:center; color:#999;"><p>No document attached.</p></div>`;
-        } else if (type === 'pdf') {
-            wrapper.innerHTML = `<iframe src="${url}" width="100%" height="100%" style="border:none;"></iframe>`;
-        } else {
-            wrapper.innerHTML = `<img src="${url}" style="max-height: 90%; max-width: 90%; object-fit: contain;">`;
-        }
-    }
-
-    function handleFileSelection(input) {
-        const file = input.files[0];
-        if (file) {
-            pendingFile = file;
-            const reader = new FileReader();
-            document.getElementById('modalFileName').innerText = file.name;
-            document.getElementById('saveBtn').style.display = 'flex';
-            
-            reader.onload = function(e) {
-                const wrapper = document.getElementById('modalPreviewWrapper');
-                if (file.type === "application/pdf") {
-                    wrapper.innerHTML = `<iframe src="${e.target.result}" width="100%" height="100%" style="border:none;"></iframe>`;
-                } else {
-                    wrapper.innerHTML = `<img src="${e.target.result}" style="max-height: 90%; max-width: 90%; object-fit: contain;">`;
-                }
-            }
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function saveDocumentChanges() {
-        if (currentDocRow && pendingFile) {
-            const cells = currentDocRow.getElementsByTagName('td');
-            const fileExt = pendingFile.name.split('.').pop().toUpperCase();
-            const fileUrl = URL.createObjectURL(pendingFile);
-            const fileType = pendingFile.type.includes('pdf') ? 'pdf' : 'image';
-
-            cells[1].innerText = fileExt;
-            cells[2].innerHTML = `<span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 5px;"></span>Valid`;
-            cells[3].innerText = new Date().toLocaleDateString();
-
-            const actionCell = cells[4];
-            actionCell.innerHTML = `<span onclick="openModal('${cells[0].innerText}', '${pendingFile.name}', '${fileType}', '${fileUrl}', this)" style="color: #7b3f3f; font-weight: bold; cursor: pointer;">View</span>`;
-            
-            closeModal();
-            pendingFile = null;
-            updateDocumentCount();
-        }
-    }
-
-    function handleDelete() {
-        if (confirm("Delete this document?") && currentDocRow) {
-            const cells = currentDocRow.getElementsByTagName('td');
-            cells[1].innerText = "---";
-            cells[2].innerHTML = `<span style="display: inline-block; width: 8px; height: 8px; background: #dc3545; border-radius: 50%; margin-right: 5px;"></span>Missing`;
-            cells[3].innerText = "---";
-            cells[4].innerHTML = `<span onclick="openModal('${cells[0].innerText}', '---', '', '', this)" style="color: #7b3f3f; font-weight: bold; cursor: pointer; text-decoration: underline;">Add file</span>`;
-            
-            closeModal();
-            updateDocumentCount();
-        }
-    }
-
-    window.closeModal = function() {
-        document.getElementById('documentModal').style.display = 'none';
-        document.getElementById('modalPreviewWrapper').innerHTML = "";
-    }
-
-    // --- EMPLOYMENT HISTORY MODAL LOGIC ---
-    window.openHistoryModal = function() {
-        renderHistoryModalRows();
-        document.getElementById('historyModal').style.display = 'flex';
-    };
-
-    window.closeHistoryModal = function() {
-        document.getElementById('historyModal').style.display = 'none';
-    };
-
-    function renderHistoryModalRows() {
-        const container = document.getElementById('modalTimelineList');
-        if(!container) return;
-        container.innerHTML = "";
-        employmentHistory.forEach((item, index) => {
-            const row = document.createElement('div');
-            row.style.cssText = "display:flex; gap:10px; border-bottom:1px solid #eee; padding:10px 0; align-items:center;";
-            row.innerHTML = `
-                <input type="text" value="${item.date}" id="edit-date-${index}" style="width:100px; font-size:12px;">
-                <input type="text" value="${item.type}" id="edit-type-${index}" style="flex:1; font-weight:bold;">
-                <input type="text" value="${item.from}" id="edit-from-${index}" style="width:80px;">
-                <input type="text" value="${item.to}" id="edit-to-${index}" style="width:80px;">
-                <button onclick="removeHistoryRow(${index})" style="color:red; background:none; border:none; cursor:pointer;">✕</button>
-            `;
-            container.appendChild(row);
-        });
-    }
-
-    window.addNewHistoryRow = function() {
-        employmentHistory.unshift({ date: "New Date", type: "New Event", from: "---", to: "---", color: "blue" });
-        renderHistoryModalRows();
-    };
-
-    window.removeHistoryRow = function(index) {
-        employmentHistory.splice(index, 1);
-        renderHistoryModalRows();
-    };
-
-    window.saveHistoryChanges = function() {
-        employmentHistory = employmentHistory.map((item, index) => ({
-            date: document.getElementById(`edit-date-${index}`).value,
-            type: document.getElementById(`edit-type-${index}`).value,
-            from: document.getElementById(`edit-from-${index}`).value,
-            to: document.getElementById(`edit-to-${index}`).value,
-            color: item.color
-        }));
-        updateMainHistoryUI();
-        closeHistoryModal();
-    };
-
-    function updateMainHistoryUI() {
-        const container = document.getElementById('mainHistoryTimeline');
-        if (!container) return;
-        container.innerHTML = employmentHistory.map(item => `
-            <div class="timeline-item">
-                <div class="timeline-date">${item.date}</div>
-                <div class="timeline-marker"><span class="dot ${item.color}"></span></div>
-                <div class="timeline-content">
-                    <div class="history-header"><strong>${item.type}</strong></div>
-                    <div class="history-details">
-                        <p>From: <strong>${item.from}</strong></p>
-                        <p>To: <strong>${item.to}</strong></p>
-                    </div>
-                </div>
-            </div>`).join('');
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const params = new URLSearchParams(window.location.search);
-        const empID = params.get('id');
-        const employees = JSON.parse(localStorage.getItem('addedEmployees')) || [];
-        const empData = employees.find(e => e.id === empID);
-
-        if (empData) {
-            document.getElementById('profName').textContent = empData.fullName;
-            document.getElementById('profRoleHeader').textContent = empData.pos;
-            document.getElementById('profID').textContent = "Employee ID: " + empData.id;
-            document.getElementById('profStatusText').textContent = empData.status;
-            document.getElementById('profPos').textContent = empData.pos;
-            document.getElementById('profDept').textContent = empData.dept;
-            document.getElementById('profType').textContent = empData.empType || "N/A";
-            document.getElementById('profDateHired').textContent = empData.dateHired || "N/A";
-            document.getElementById('profEmail').textContent = empData.email || "N/A";
-            document.getElementById('profContact').textContent = empData.contact || "N/A";
-            document.getElementById('profAddress').textContent = empData.address || "N/A";
-
-            const statusDot = document.getElementById('statusDot');
-            const status = empData.status ? empData.status.toLowerCase() : "";
-            if (status === "active") statusDot.style.backgroundColor = "#8ddf9b";
-            else if (status === "inactive") statusDot.style.backgroundColor = "#f5a9a9";
-            else if (status === "on leave") statusDot.style.backgroundColor = "#f3e08c";
-            else statusDot.style.backgroundColor = "#bbb";
-
-            document.getElementById('editProfileBtn').onclick = function() {
-                window.location.href = `hr_profile_edit.html?id=${empData.id}&source=profile`;
-            };
-        }
-
-        const tabs = document.querySelectorAll('.tab');
-        const tabContentContainer = document.getElementById('tab-content-container');
-        
-        function loadTabContent(file) {
-            fetch(file)
-                .then(r => r.text())
-                .then(d => {
-                    tabContentContainer.innerHTML = d;
-                    if(file.includes('history')) updateMainHistoryUI();
-                    updateDocumentCount();
-                })
-                .catch(err => console.error("Error loading tab:", err));
-        }
-
-        loadTabContent('hr_department_employee.html');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                loadTabContent(`${tab.getAttribute('data-tab')}.html`);
-            });
-        });
-    });
-
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('documentModal')) closeModal();
-        if (event.target == document.getElementById('historyModal')) closeHistoryModal();
-    }
-</script>
+    <script src="../../static/js/dashboard/hr_dash.js"></script>
+    <script src="../../static/js/accounts/hr_profile_view.js"></script>
 </body>
 </html>
