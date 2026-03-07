@@ -1,95 +1,94 @@
-/* --- Sidebar & UI Initialization --- */
+/* --- UI Elements --- */
 const sidebar = document.getElementById("sidebar");
 const logoToggle = document.getElementById("logoToggle");
 const closeBtn = document.getElementById("closeBtn");
 const modal = document.getElementById("viewModal");
 const closeModal = document.getElementById("modalClose");
 
+/* --- Slide Elements --- */
+const nextBtn = document.getElementById("nextSlide");
+const prevBtn = document.getElementById("prevSlide");
+const slide1 = document.getElementById("slide1");
+const slide2 = document.getElementById("slide2");
+
 /**
- * Sidebar Toggle Logic
- * Handles collapsing the sidebar and showing/hiding icons
+ * Sidebar Logic
  */
 closeBtn.addEventListener("click", () => {
     sidebar.classList.add("collapsed");
 });
 
 logoToggle.addEventListener("click", () => {
-    // Only expands if it is currently collapsed
     if (sidebar.classList.contains("collapsed")) {
         sidebar.classList.remove("collapsed");
     }
 });
 
-/**
- * Menu Item Active State & Tooltips
- * Sets the active class and creates data-text attributes for collapsed tooltips
- */
+// Tooltip support for collapsed sidebar
 document.querySelectorAll(".menu-item").forEach(item => {
-    const spanText = item.querySelector("span") ? item.querySelector("span").innerText : "";
+    const spanText = item.querySelector("span")?.innerText || "";
     item.setAttribute("data-text", spanText);
-    
-    item.addEventListener("click", function() {
-        document.querySelector(".menu-item.active")?.classList.remove("active");
-        this.classList.add("active");
-    });
 });
 
-/* --- Modal (Frame View) Logic --- */
+/**
+ * Slide Navigation (Frame View)
+ * Toggles between Applicant Info and Document Preview
+ */
+function showSlide(slideNumber) {
+    if (slideNumber === 1) {
+        slide1.classList.add("active");
+        slide2.classList.remove("active");
+    } else {
+        slide1.classList.remove("active");
+        slide2.classList.add("active");
+    }
+}
+
+nextBtn.addEventListener("click", () => showSlide(2));
+prevBtn.addEventListener("click", () => showSlide(1));
 
 /**
- * Open Modal
- * Triggered by clicking any "View" link in the table
+ * Modal Control
  */
 document.querySelectorAll(".view-link").forEach(link => {
     link.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent page jump
-        
-        // Optional: You can add logic here to grab the ID from the row 
-        // and update the modal content dynamically before showing it.
-        
+        e.preventDefault();
+        showSlide(1); // Always reset to Slide 1 when opening
         modal.style.display = "flex";
     });
 });
 
-/**
- * Close Modal
- * Handles clicking the 'X', clicking the background overlay, or pressing 'Esc'
- */
-closeModal.addEventListener("click", () => {
+const closeViewModal = () => {
     modal.style.display = "none";
-});
+};
 
+closeModal.addEventListener("click", closeViewModal);
+
+// Close on outside click or Escape key
 window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.style.display = "none";
-    }
+    if (e.target === modal) closeViewModal();
 });
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal.style.display === "flex") {
-        modal.style.display = "none";
+        closeViewModal();
     }
 });
 
-/* --- Table Dropdown Logic --- */
-
 /**
- * Quick Action Buttons (Approve/Reject)
- * Simple feedback for the modal buttons
+ * Action Buttons (Approve/Reject)
  */
 document.querySelector(".modal-approve")?.addEventListener("click", () => {
-    if(confirm("Are you sure you want to approve this application?")) {
-        alert("Application Approved!");
-        modal.style.display = "none";
+    if(confirm("Confirm approval for this applicant?")) {
+        alert("Status updated to Approved.");
+        closeViewModal();
     }
 });
 
 document.querySelector(".modal-reject")?.addEventListener("click", () => {
-    if(confirm("Are you sure you want to reject this application?")) {
-        const reason = prompt("Please provide a reason for rejection:");
-        if (reason) {
-            alert("Application Rejected.");
-            modal.style.display = "none";
-        }
+    const reason = prompt("Enter reason for rejection:");
+    if (reason !== null) {
+        alert("Application Rejected.");
+        closeViewModal();
     }
 });

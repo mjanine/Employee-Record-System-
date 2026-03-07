@@ -134,8 +134,11 @@
         
         <div class="modal-body">
             <div class="info-approval-container">
-                <div class="info-section">
-                    <div class="pagination">1 / 2 <i class="fas fa-caret-right"></i></div>
+               <div class="info-section">
+                <div id="slide1" class="modal-slide active">
+                    <div class="pagination">
+                       1 / 2 <i class="fas fa-caret-right" id="nextSlide" style="cursor:pointer;"></i>
+                    </div>
                     <div class="info-grid">
                         <div class="info-label">Application ID</div><div class="info-value">001</div>
                         <div class="info-label">Email</div><div class="info-value email">juan.delacruz@email.com</div>
@@ -143,7 +146,19 @@
                         <div class="info-label">Department Applying To</div><div class="info-value">College of Computer Studies</div>
                         <div class="info-label">Position Applying For</div><div class="info-value">Instructor</div>
                         <div class="info-label">Remarks from Head</div><div class="info-value">Good</div>
-                    </div>
+                     </div>
+               </div>
+               <div id="slide2" class="modal-slide">
+                <div class="pagination">
+                    <i class="fas fa-caret-left" id="prevSlide" style="cursor:pointer;"></i> 2 / 2
+                </div>
+                <div class="document-preview-container">
+                 <div class="doc-toolbar">
+                    <i class="fas fa-search"></i>
+                 </div>
+                <img src="../../static/img/general/application_sample.png" alt="Document Preview" class="doc-image">
+                 </div>
+                </div>
                 </div>
 
                 <div class="right-panel">

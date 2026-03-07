@@ -505,3 +505,41 @@ hr {
     border-radius: 8px;
     border: 1px solid #ccc;
 }
+
+/* Slide Visibility */
+.modal-slide {
+    display: none;
+}
+.modal-slide.active {
+    display: block;
+}
+
+/* Document Preview Styling */
+.document-preview-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 250px;
+    overflow-y: auto;
+    position: relative;
+    background: #fff;
+}
+
+.doc-toolbar {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+    z-index: 5;
+}
+
+.doc-image {
+    width: 100%;
+    display: block;
+    padding: 10px;
+}
+
+/* Cursor pointers for pagination */
+.pagination i:hover {
+    color: #8c2d2d;
+}
