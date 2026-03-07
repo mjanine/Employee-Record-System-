@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Dashboard</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard | UPHSD</title>
     <link rel="stylesheet" href="../../static/css/new_employee/new_employee.css">
-
-    <!-- Icons -->
+    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -14,157 +13,80 @@
     <div class="background"></div>
 
     <div class="sidebar" id="sidebar">
-
-        <!-- TOP -->
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo">
-                <div class="open-icon">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
+                <img src="../../static/img/general/uph.png" class="logo" alt="UPHSD Logo">
+                <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
-
-            <button class="close-btn" id="closeBtn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+            <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
-        <!-- MENU -->
         <ul class="menu">
-
-            <li>
-                <a href="emp_dash.html" class="menu-item active">
-                    <i class="fas fa-border-all"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-
+            <li><a href="emp_dash.html" class="menu-item active"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
             <hr>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Position Change Request</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Attendance</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-plane-departure"></i>
-                    <span>Leave Request</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-star"></i>
-                    <span>Performance Evaluation</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Documents</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Trainings</span>
-                </a>
-            </li>
-
+            <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Evaluation</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Documents</span></a></li>
         </ul>
 
-        <!-- LOGOUT -->
         <div class="bottom-section">
             <a href="../login/login.html" class="menu-item logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
+                <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
             </a>
         </div>
-
     </div>
 
-    </div>
     <div class="main-content" id="mainContent">
-    <div class="header-container">
-        <h1>Applications Management</h1>
-        <div class="tab-buttons">
-            <button class="tab-btn active">New Employee Applications</button>
-            <button class="tab-btn">Position Change Requests</button>
+        <div class="header-container">
+            <h1>Applications Management</h1>
+            <div class="tab-buttons">
+                <button class="tab-btn active">New Employee Applications</button>
+                <button class="tab-btn">Position Change Requests</button>
+            </div>
+        </div>
+
+        <div class="search-filter-section">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search by Name / ID / Department / Position">
+            </div>
+            <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Application ID</th>
+                        <th>Full Name</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th>Submitted</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Dela Cruz, Juan</td>
+                        <td>CCS</td>
+                        <td>Instructor</td>
+                        <td>03/07/2026</td>
+                        <td><span class="status-pill pending">Pending - HR</span></td>
+                        <td class="actions">
+                            <a href="#" class="view-link">View</a>
+                            <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="search-filter-section">
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search by Name / ID / Department / Position">
-        </div>
-        <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
-    </div>
-
-    <div class="active-filters">
-        <span class="filter-tag">Sample Filter <i class="fas fa-times"></i></span>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Application ID</th>
-                    <th>Full Name</th>
-                    <th>Department</th>
-                    <th>Position</th>
-                    <th>Submitted</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>Dela Cruz, Juan</td>
-                    <td>CCS</td>
-                    <td>Instructor</td>
-                    <td>02/12/2026</td>
-                    <td>Stage 2 of 4</td>
-                    <td><span class="status-pill pending">Pending - HR Evaluator</span></td>
-                    <td class="actions">
-                        <a href="#">View</a>
-                        <div class="dropdown">
-                            <button class="update-btn">Update <i class="fas fa-caret-down"></i></button>
-                            <div class="dropdown-content">
-                                <a href="#" class="approve">Approve</a>
-                                <a href="#" class="reject">Reject</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="status-pill pending-dept">Pending - Dept. Head</span></td><td></td></tr>
-                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="status-pill rejected">Rejected</span></td><td></td></tr>
-                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td><span class="status-pill approved">Approved</span></td><td></td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
     <script src="../../static/js/new_employee/new_employee.js"></script>
 </body>
 </html>
