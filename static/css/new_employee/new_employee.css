@@ -461,6 +461,20 @@ hr {
     background: #fdfdfd;
 }
 
+.timeline-box h3 {
+    background-color: #e9e9e9;
+    margin: -15px -15px 10px -15px;
+    padding: 8px 15px;
+    border-radius: 13px 13px 0 0;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.status-timeline-content {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
 .pagination { text-align: right; font-size: 0.85rem; margin-bottom: 5px; }
 
 .info-grid {

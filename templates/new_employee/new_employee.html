@@ -161,29 +161,37 @@
                 </div>
                 </div>
 
-                <div class="right-panel">
-                    <div class="timeline-box">
-                        <h3>Approval Timeline</h3>
-                        <div class="timeline-status-banner">
-                            <i class="fas fa-exclamation-circle"></i> Pending - For Dept. Head Approval
-                        </div>
-                        <div class="timeline-list">
-                            <div class="timeline-item"><span>HR Evaluator</span> <span class="status-ok"><i class="fas fa-check-square"></i> Approved - Feb 18</span></div>
-                            <div class="timeline-item"><span>Dept. Head</span> <span class="status-pending"><i class="fas fa-hourglass-half"></i> Pending</span></div>
-                            <div class="timeline-item"><span>HR Head</span> <span>-</span></div>
-                            <div class="timeline-item"><span>SD</span> <span>-</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="quick-actions">
-                        <h3>Actions</h3>
-                        <div class="action-btns">
-                            <button class="modal-approve">Approve</button>
-                            <button class="modal-reject">Reject</button>
-                        </div>
-                    </div>
+               <div class="right-panel">
+                 <div class="timeline-box">
+                     <h3>Approval Timeline</h3>
+                        <div class="timeline-status-banner" id="statusBanner">
+                         <i class="fas fa-exclamation-circle"></i> Pending - For HR Approval
                 </div>
+                    <div class="timeline-list" id="timelineList">
+                    <div class="timeline-item"><span>HR Evaluator</span> <span class="status-ok"><i class="fas fa-check-square"></i> Approved - Feb 18</span></div>
+                    <div class="timeline-item"><span>Dept. Head</span> <span class="status-pending"><i class="fas fa-hourglass-half"></i> Pending</span></div>
+                    <div class="timeline-item"><span>HR Head</span> <span>-</span></div>
+                    <div class="timeline-item"><span>SD</span> <span>-</span></div>
+                 </div>
             </div>
+
+                <div class="timeline-box" id="statusTimelineBox" style="display: none; margin-top: 15px;">
+                    <h3>Status Timeline</h3>
+                <div class="status-timeline-content" style="padding: 10px; font-size: 0.9rem;">
+                <div style="font-weight: bold;">Submitted</div>
+                <div id="submissionTimestamp" style="color: #555;"></div>
+                </div>
+             </div>
+    
+            <div class="quick-actions">
+                <h3>Actions</h3>
+                 <div class="action-btns">
+                    <button class="modal-approve">Approve</button>
+                    <button class="modal-reject">Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
 
             <div class="remarks-input-section">
                 <label>Add Remarks</label>

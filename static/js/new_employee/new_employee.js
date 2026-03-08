@@ -1,184 +1,131 @@
-/* --- UI Elements Initialization --- */
+document.addEventListener("DOMContentLoaded", () => {
+    // --- UI Elements ---
+    const sidebar = document.getElementById("sidebar");
+    const logoToggle = document.getElementById("logoToggle");
+    const closeBtn = document.getElementById("closeBtn");
 
-// Sidebar
-const sidebar = document.getElementById("sidebar");
-const logoToggle = document.getElementById("logoToggle");
-const closeBtn = document.getElementById("closeBtn");
+    const viewModal = document.getElementById("viewModal");
+    const posModal = document.getElementById("positionChangeModal");
+    const posForm = document.getElementById("positionChangeForm");
 
-// Tab Buttons
-const newEmpTabBtn = document.getElementById("newEmpTabBtn");
-const posChangeTabBtn = document.getElementById("posChangeTabBtn");
+    // Dynamic Display Elements
+    const statusBanner = document.querySelector(".timeline-status-banner");
+    const timelineList = document.querySelector(".timeline-list");
+    const positionSelect = document.querySelector('#positionChangeForm select');
+    
+    // Status Timeline Elements (New)
+    const statusTimelineBox = document.getElementById("statusTimelineBox");
+    const submissionTimestamp = document.getElementById("submissionTimestamp");
 
-// Applicant View Modal (Applications Management)
-const viewModal = document.getElementById("viewModal");
-const closeModal = document.getElementById("modalClose");
-const nextBtn = document.getElementById("nextSlide");
-const prevBtn = document.getElementById("prevSlide");
-const slide1 = document.getElementById("slide1");
-const slide2 = document.getElementById("slide2");
-
-// Log New Request Modal (Position Change Request)
-const posModal = document.getElementById("positionChangeModal");
-const posClose = document.getElementById("posClose"); 
-const cancelReq = document.getElementById("cancelRequest");
-const posForm = document.getElementById("positionChangeForm");
-
-// Table & Search
-const searchInput = document.querySelector('.search-input-wrapper input');
-const tableRows = document.querySelectorAll('tbody tr');
-
-// Position Change Elements
-const positionSelect = document.querySelector('#positionChangeForm select');
-const timelineList = document.querySelector('.timeline-list');
-const statusBanner = document.querySelector('.timeline-status-banner');
-
-/* --- Sidebar Logic --- */
-if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-        sidebar.classList.add("collapsed");
-    });
-}
-
-if (logoToggle) {
-    logoToggle.addEventListener("click", () => {
-        if (sidebar.classList.contains("collapsed")) {
-            sidebar.classList.remove("collapsed");
-        }
-    });
-}
-
-/* --- Search Functionality --- */
-if (searchInput) {
-    searchInput.addEventListener('keyup', function() {
-        const searchTerm = this.value.toLowerCase().trim();
-        tableRows.forEach((row) => {
-            const text = row.innerText.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? "" : "none";
+    /* --- Sidebar Logic --- */
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
+    }
+    if (logoToggle) {
+        logoToggle.addEventListener("click", () => {
+            if (sidebar.classList.contains("collapsed")) sidebar.classList.remove("collapsed");
         });
-    });
-}
-
-/* --- Position Change Logic (Timeline Update) --- */
-if (positionSelect) {
-    positionSelect.addEventListener('change', function() {
-        const newPosition = this.value; 
-        
-        // 1. Update the Status Banner text
-        if (statusBanner) {
-            statusBanner.innerHTML = `<i class="fas fa-exclamation-circle"></i> Pending - For ${newPosition} Approval`;
-        }
-
-        // 2. Update the Timeline List labels
-        if (timelineList) {
-            timelineList.innerHTML = `
-                <div class="timeline-item">
-                    <span>HR Evaluator</span> 
-                    <span class="status-ok"><i class="fas fa-check-square"></i> Approved - Feb 18</span>
-                </div>
-                <div class="timeline-item">
-                    <span>${newPosition}</span> 
-                    <span class="status-pending"><i class="fas fa-hourglass-half"></i> Pending</span>
-                </div>
-                <div class="timeline-item">
-                    <span>HR Head</span> 
-                    <span>-</span>
-                </div>
-                <div class="timeline-item">
-                    <span>SD</span> 
-                    <span>-</span>
-                </div>
-            `;
-        }
-    });
-}
-
-/* --- Modal Navigation & Logic --- */
-
-const closeAllModals = () => {
-    if (viewModal) viewModal.style.display = "none";
-    if (posModal) posModal.style.display = "none";
-};
-
-// Applicant View Slide Control 
-function showSlide(slideNumber) {
-    if (slideNumber === 1) {
-        slide1.classList.add("active");
-        slide2.classList.remove("active");
-    } else {
-        slide1.classList.remove("active");
-        slide2.classList.add("active");
     }
-}
 
-if (nextBtn) nextBtn.addEventListener("click", () => showSlide(2));
-if (prevBtn) prevBtn.addEventListener("click", () => showSlide(1));
+    /* --- Modal Navigation & Display --- */
+    const openViewModal = () => {
+        if (viewModal) {
+            showSlide(1); 
+            viewModal.style.display = "flex";
+        }
+    };
 
-document.querySelectorAll(".view-link").forEach(link => {
-    link.addEventListener("click", (e) => {
+    const openPosModal = () => {
+        if (posModal) posModal.style.display = "flex";
+    };
+
+    const closeAllModals = () => {
+        if (viewModal) viewModal.style.display = "none";
+        if (posModal) posModal.style.display = "none";
+    };
+
+    // Event Listeners for Opening/Closing
+    document.querySelectorAll(".view-link").forEach(link => link.addEventListener("click", (e) => {
         e.preventDefault();
-        showSlide(1); 
-        viewModal.style.display = "flex";
-    });
-});
+        openViewModal();
+    }));
 
-/* --- Tab Switching & Log Request Logic --- */
-
-function setActiveTab(clickedBtn, otherBtn) {
-    clickedBtn.classList.add("active");
-    clickedBtn.classList.remove("secondary");
-    otherBtn.classList.add("secondary");
-    otherBtn.classList.remove("active");
-}
-
-const openPosModal = () => {
-    if (posModal) {
-        posModal.style.display = "flex";
-    }
-};
-
-if (posChangeTabBtn) {
-    posChangeTabBtn.addEventListener("click", (e) => {
+    document.getElementById("posChangeTabBtn")?.addEventListener("click", (e) => {
         e.preventDefault();
-        setActiveTab(posChangeTabBtn, newEmpTabBtn);
         openPosModal();
     });
-}
 
-if (newEmpTabBtn) {
-    newEmpTabBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        setActiveTab(newEmpTabBtn, posChangeTabBtn);
-    });
-}
+    document.getElementById("modalClose")?.addEventListener("click", closeAllModals);
+    document.getElementById("posClose")?.addEventListener("click", closeAllModals);
+    document.getElementById("cancelRequest")?.addEventListener("click", closeAllModals);
 
-/* --- Form & Modal Close Logic --- */
-
-if (closeModal) closeModal.addEventListener("click", closeAllModals);
-if (posClose) posClose.addEventListener("click", closeAllModals);
-if (cancelReq) cancelReq.addEventListener("click", closeAllModals);
-
-if (posForm) {
-    posForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        alert("Success: The position change request has been logged.");
-        closeAllModals();
-        posForm.reset();
-        
-        // Reset timeline to default state after successful submission
-        if (statusBanner) statusBanner.innerHTML = `<i class="fas fa-exclamation-circle"></i> Pending - For HR Approval`;
-    });
-}
-
-/* --- Global Listeners --- */
-
-window.addEventListener("click", (e) => {
-    if (e.target === viewModal || e.target === posModal) {
-        closeAllModals();
+    /* --- Slide Control (Pagination) --- */
+    function showSlide(n) {
+        const s1 = document.getElementById("slide1");
+        const s2 = document.getElementById("slide2");
+        if (n === 1) {
+            s1?.classList.add("active");
+            s2?.classList.remove("active");
+        } else {
+            s1?.classList.remove("active");
+            s2?.classList.add("active");
+        }
     }
-});
 
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-        closeAllModals();
+    document.getElementById("nextSlide")?.addEventListener("click", () => showSlide(2));
+    document.getElementById("prevSlide")?.addEventListener("click", () => showSlide(1));
+
+    /* --- Position Change & Status Timeline Logic --- */
+    if (posForm) {
+        posForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // 1. Generate Timestamp (Format: April 03, 2026 - 10:12 A.M.)
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+                               .replace("AM", "A.M.").replace("PM", "P.M.");
+            
+            const fullTimestamp = `${dateStr} - ${timeStr}`;
+
+            // 2. Update Status Timeline in View Modal
+            if (statusTimelineBox && submissionTimestamp) {
+                submissionTimestamp.innerText = fullTimestamp;
+                statusTimelineBox.style.display = "block"; 
+            }
+
+            // 3. Update Approval Timeline Based on Selection
+            const selectedPos = positionSelect.value;
+            if (statusBanner) {
+                statusBanner.innerHTML = `<i class="fas fa-exclamation-circle"></i> Pending - For ${selectedPos} Approval`;
+            }
+
+            if (timelineList) {
+                timelineList.innerHTML = `
+                    <div class="timeline-item">
+                        <span>HR Evaluator</span> 
+                        <span class="status-ok"><i class="fas fa-check-square"></i> Approved - Feb 18</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span>${selectedPos}</span> 
+                        <span class="status-pending"><i class="fas fa-hourglass-half"></i> Pending</span>
+                    </div>
+                    <div class="timeline-item"><span>HR Head</span> <span>-</span></div>
+                    <div class="timeline-item"><span>SD</span> <span>-</span></div>
+                `;
+            }
+
+            alert("Success: The position change request has been logged.");
+            closeAllModals();
+        });
     }
+
+    // Global Close Listeners
+    window.addEventListener("click", (e) => {
+        if (e.target === viewModal || e.target === posModal) closeAllModals();
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeAllModals();
+    });
 });
