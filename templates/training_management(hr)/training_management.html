@@ -15,14 +15,14 @@
     <nav class="sidebar" id="sidebar">
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo" alt="UPH Logo">
+                <img src="../../static/img/general/uph.png" class="logo">
                 <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
             <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
         <ul class="menu">
-            <li><a href="../dashboards/emp_dash.html" class="menu-item active"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+            <li><a href="emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
             <hr>
             <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
@@ -30,7 +30,7 @@
             <li><a href="#" class="menu-item"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Documents</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+            <li><a href="#" class="menu-item active"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
         </ul>
 
         <div class="bottom-section">
@@ -40,7 +40,7 @@
         </div>
     </nav>
 
-    <main class="main-content" id="mainContent">
+    <main class="main-content">
         <div class="content-card">
             <h1>Training Management</h1>
 
@@ -54,9 +54,7 @@
             </div>
 
             <div class="filter-tags">
-                <div class="tags-group">
-                    <span class="tag">Sample Filter <i class="fas fa-times"></i></span>
-                </div>
+                <span class="tag">Sample Filter <i class="fas fa-times"></i></span>
             </div>
 
             <div class="table-container">
@@ -100,11 +98,11 @@
             <form id="addTrainingForm">
                 <div class="form-group">
                     <label>Training Name</label>
-                    <input type="text" id="newTrainingName" required placeholder="Enter training title">
+                    <input type="text" id="newTrainingName" required>
                 </div>
                 <div class="form-group">
                     <label>Category</label>
-                    <input type="text" id="newCategory" required placeholder="e.g., Academic">
+                    <input type="text" id="newCategory" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -116,7 +114,6 @@
                         <select id="newMode">
                             <option value="Onsite">Onsite</option>
                             <option value="Online">Online</option>
-                            <option value="Hybrid">Hybrid</option>
                         </select>
                     </div>
                 </div>
