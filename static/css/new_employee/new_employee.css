@@ -131,17 +131,8 @@ body {
 }
 
 .search-input-wrapper {
+    flex-grow: 1;
     position: relative;
-    display: flex;
-    align-items: center;
-}
-
-#tableSearch {
-    padding-right: 40px; /* Make space for the X button on the right */
-}
-
-#clearSearch:hover {
-    color: #632b2b; /* Change to your theme color on hover */
 }
 
 .search-input-wrapper i {
@@ -166,11 +157,7 @@ body {
     border-color: #632b2b; /* Matches your theme color */
 }
 
-#noResultsRow td {
-    background-color: #fdfdfd;
-    border-bottom: none;
-    font-size: 1rem;
-}
+
 
 .filter-main-btn {
     padding: 0 25px;

@@ -52,9 +52,8 @@
         <div class="search-filter-section">
             <div class="search-bar-container">
                 <div class="search-input-wrapper">
-                    <i class="fas fa-search" id="searchIcon"></i>
-                    <input type="text" id="tableSearch" placeholder="Search by ID / Position / Status">
-                    <i class="fas fa-times" id="clearSearch" style="display: none; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #999;"></i>
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="tableSearch" placeholder="Search by Name / ID / Department / Position">
                 </div>
                 <button class="filter-main-btn"><i class="fas fa-filter"></i> Filter</button>
             </div>
@@ -68,6 +67,8 @@
                 <thead>
                     <tr>
                         <th>Application ID</th>
+                        <th>Full Name</th>
+                        <th>Department</th>
                         <th>Position</th>
                         <th>Submitted</th>
                         <th>Progress</th>
@@ -78,6 +79,8 @@
                 <tbody id="applicationTableBody">
                     <tr>
                         <td>001</td>
+                        <td>Dela Cruz, Juan</td>
+                        <td>CCS</td>
                         <td>Instructor</td>
                         <td>02/12/2026</td>
                         <td>Stage 2 of 4</td>
@@ -95,6 +98,8 @@
                     </tr>
                     <tr>
                         <td>002</td>
+                        <td>Santos, Maria</td>
+                        <td>CBA</td>
                         <td>Professor</td>
                         <td>02/15/2026</td>
                         <td>Stage 1 of 4</td>
@@ -108,6 +113,8 @@
                     </tr>
                     <tr>
                         <td>003</td>
+                        <td>Reyes, Ricardo</td>
+                        <td>COE</td>
                         <td>Registrar</td>
                         <td>02/10/2026</td>
                         <td>Completed</td>
@@ -115,7 +122,7 @@
                         <td class="actions"><a href="#" class="view-link">View</a></td>
                     </tr>
                     <tr id="noResultsRow" style="display: none;">
-                        <td colspan="6" style="text-align: center; padding: 30px; color: #888; font-style: italic;">
+                        <td colspan="8" style="text-align: center; padding: 30px; color: #888; font-style: italic;">
                             No applications match your search.
                         </td>
                     </tr>
