@@ -1,56 +1,57 @@
-/* GLOBAL STYLES */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 body {
     height: 100vh;
-    background-color: #f4f7f6;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
+/* Background */
 .background {
     position: fixed;
     inset: 0;
     background: url('../../img/general/bg.jpeg') no-repeat center/cover;
-    background-color: #d1d1d1;
     filter: blur(10px);
     transform: scale(1.1); 
     z-index: -1;
 }
 
-/* SIDEBAR STYLES */
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: 20px;
     left: 20px;
     height: calc(100% - 40px);
-    width: 300px;
+    width: 300px; /* widened */
     padding: 25px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
     transition: width 0.35s ease;
-    z-index: 100;
 }
 
+/* Collapsed */
 .sidebar.collapsed {
     width: 90px;
 }
 
+/* Top */
 .top-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
+/* Logo aligned with icons */
 .logo-wrapper {
     width: 45px;
     height: 45px;
@@ -67,16 +68,29 @@ body {
     transition: 0.3s;
 }
 
+/* FIXED CENTERED OPEN ICON */
 .open-icon {
     position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
     color: white;
     transition: 0.3s;
 }
 
-.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0; }
-.sidebar.collapsed .logo-wrapper:hover .open-icon { opacity: 1; }
+/* Show open icon only when collapsed + hover */
+.sidebar.collapsed .logo-wrapper:hover .logo {
+    opacity: 0;
+}
 
+.sidebar.collapsed .logo-wrapper:hover .open-icon {
+    opacity: 1;
+}
+
+/* Close button */
 .close-btn {
     background: none;
     border: none;
@@ -85,25 +99,41 @@ body {
     cursor: pointer;
 }
 
-.sidebar.collapsed .close-btn { display: none; }
+.sidebar.collapsed .close-btn {
+    display: none;
+}
 
-.menu { list-style: none; margin-top: 30px; flex: 1; }
+/* Menu */
+.menu a,
+.bottom-section a {
+    text-decoration: none;
+}
 
+
+.menu {
+    list-style: none;
+    margin-top: 30px;
+    flex: 1;
+}
+
+/* Fixed icon layout */
 .menu-item {
     position: relative;
     display: flex;
     align-items: center;
     height: 48px;
     color: white;
-    text-decoration: none;
     cursor: pointer;
     border-radius: 12px;
     transition: background 0.3s;
-    margin-bottom: 5px;
 }
 
-.menu-item i { width: 50px; text-align: center; }
+.menu-item i {
+    width: 50px;
+    text-align: center;
+}
 
+/* Text absolute (prevents shifting) */
 .menu-item span {
     position: absolute;
     left: 60px;
@@ -111,11 +141,43 @@ body {
     transition: opacity 0.2s ease;
 }
 
-.sidebar.collapsed .menu-item span { opacity: 0; pointer-events: none; }
-.menu-item:hover { background: rgba(255,255,255,0.15); }
-.menu-item.active { background: rgba(255,255,255,0.25); }
+/* Hide text smoothly */
+.sidebar.collapsed .menu-item span {
+    opacity: 0;
+    pointer-events: none;
+}
 
-hr { border: 0.5px solid rgba(255,255,255,0.2); margin: 10px 0; }
+/* Hover */
+.menu-item:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.menu-item.active {
+    background: rgba(255,255,255,0.25);
+}
+
+/* Tooltip */
+.sidebar.collapsed .menu-item:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 80px;
+    background: rgba(20,20,20,0.95);
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+/* Divider */
+hr {
+    border: 0.5px solid rgba(255,255,255,0.2);
+    margin: 10px 0;
+}
+
+/* Bottom logout spacing */
+.bottom-section {
+    margin-top: auto;
+}
 
 /* MAIN CONTENT STYLES */
 .main-content {
