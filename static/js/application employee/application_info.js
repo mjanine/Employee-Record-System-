@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
     const menuItems = document.querySelectorAll(".menu-item");
+    const logoutBtn = document.querySelector(".logout"); // Added for logout
 
     // CV Elements
     const cvInput = document.getElementById("cv-upload");
@@ -16,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. SIDEBAR LOGIC
     if (sidebar && closeBtn && logoToggle) {
-
         // Collapse sidebar
         closeBtn.addEventListener("click", () => {
             sidebar.classList.add("collapsed");
@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. CV UPLOAD LOGIC
     if (cvInput && fileNameDisplay) {
         cvInput.addEventListener("change", (e) => {
-
             if (e.target.files && e.target.files.length > 0) {
                 const name = e.target.files[0].name;
                 fileNameDisplay.textContent = name;
@@ -43,15 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 fileNameDisplay.textContent = "File_Name.pdf";
             }
-
         });
-    } else {
-        console.error("CV Upload elements missing. Check IDs: cv-upload, file-name");
     }
 
     // 4. MENU ACTIVE STATES & TOOLTIP TEXT
     menuItems.forEach(item => {
-
         const span = item.querySelector("span");
 
         if (span) {
@@ -60,17 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         item.addEventListener("click", () => {
+            // Prevent 'active' highlight if it's the logout button
+            if (item.classList.contains("logout")) return;
 
             const currentActive = document.querySelector(".menu-item.active");
-
             if (currentActive) {
                 currentActive.classList.remove("active");
             }
-
             item.classList.add("active");
-
         });
-
     });
 
     // 5. FORM SUBMISSION
@@ -78,6 +71,20 @@ document.addEventListener("DOMContentLoaded", () => {
         applicantForm.addEventListener("submit", (e) => {
             e.preventDefault();
             alert("Application Saved Successfully!");
+        });
+    }
+
+    // 6. LOGOUT LOGIC (Added)
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // Stop the link from following the URL immediately
+            
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                console.log("User confirmed logout.");
+                // Update this path to your actual login page location
+                window.location.href = "../login/login.html";
+            }
         });
     }
 
