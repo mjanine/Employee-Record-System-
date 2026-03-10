@@ -86,7 +86,7 @@
                         <td>Instructor</td>
                         <td>02/12/2026</td>
                         <td>Stage 2 of 4</td>
-                        <td><span class="status-pill pending-eval">Pending - HR Evaluator</span></td>
+                        <td><span class="status-pill pending-hr">Pending - HR Evaluator</span></td>
                         <td class="actions">
                             <a href="#" class="view-link">View</a>
                             <div class="dropdown">
@@ -96,19 +96,6 @@
                                     <a href="#" style="color: red;">Reject</a>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>002</td>
-                        <td>Santos, Maria</td>
-                        <td>CAS</td>
-                        <td>Assistant Professor</td>
-                        <td>02/15/2026</td>
-                        <td>Stage 3 of 4</td>
-                        <td><span class="status-pill pending-head">Pending - Dept. Head</span></td>
-                        <td class="actions">
-                            <a href="#" class="view-link">View</a>
-                            <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
                         </td>
                     </tr>
                     <tr id="noResultsRow" style="display: none;">
@@ -123,87 +110,79 @@
 
     <div id="viewModal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header-banner">
+            <div class="modal-header">
                 <span class="applicant-name">Dela Cruz, Juan</span>
                 <button class="modal-close" id="modalClose">&times;</button>
             </div>
             
             <div class="modal-body">
-                <div class="split-layout">
-                    <div class="left-container">
-                        <div id="slide1" class="slide-box active">
-                            <div class="slide-nav">
+                <div class="info-approval-container">
+                    <div class="info-section">
+                        <div id="slide1" class="modal-slide active">
+                            <div class="pagination">
                                1 / 2 <i class="fas fa-caret-right" id="nextSlide" style="cursor:pointer;"></i>
                             </div>
-                            <div class="data-grid">
-                                <div class="data-row"><strong>Application ID</strong> <span>001</span></div>
-                                <div class="data-row"><strong>Email</strong> <span class="link-text">juan.delacruz@email.com</span></div>
-                                <div class="data-row"><strong>Phone Number</strong> <span>0945 023 4524</span></div>
-                                <div class="data-row"><strong>Department Applying To</strong> <span>College of Computer Studies</span></div>
-                                <div class="data-row"><strong>Position Applying For</strong> <span>Instructor</span></div>
-                                <div class="data-row"><strong>Remarks from Head</strong> <span>Good</span></div>
+                            <div class="info-grid">
+                                <div class="info-label">Application ID</div><div class="info-value">001</div>
+                                <div class="info-label">Email</div><div class="info-value email">juan.delacruz@email.com</div>
+                                <div class="info-label">Phone Number</div><div class="info-value">0945 023 4524</div>
+                                <div class="info-label">Department Applying To</div><div class="info-value">College of Computer Studies</div>
+                                <div class="info-label">Position Applying For</div><div class="info-value">Instructor</div>
+                                <div class="info-label">Remarks from Head</div><div class="info-value">Good</div>
                             </div>
                         </div>
 
-                        <div id="slide2" class="slide-box">
-                            <div class="slide-nav">
+                        <div id="slide2" class="modal-slide">
+                            <div class="pagination">
                                 <i class="fas fa-caret-left" id="prevSlide" style="cursor:pointer;"></i> 2 / 2
                             </div>
-                            <div class="doc-view-container">
-                                <div class="doc-header"><i class="fas fa-search"></i></div>
-                                <div class="image-wrapper">
-                                    <img src="../../static/img/general/application_sample.png" alt="Form Preview">
-                                </div>
+                            <div class="document-preview-container">
+                                <div class="doc-toolbar"><i class="fas fa-search"></i></div>
+                                <img src="../../static/img/general/application_sample.png" class="doc-image" alt="Application Form">
                             </div>
                         </div>
                     </div>
 
-                    <div class="right-container">
-                        <div class="boxed-section timeline-card">
+                    <div class="right-panel">
+                        <div class="timeline-box">
                             <h3>Approval Timeline</h3>
-                            <div class="status-alert-banner">
+                            <div class="timeline-status-banner" id="statusBanner">
                                 <i class="fas fa-exclamation-circle"></i> Pending - For Dept. Head Approval
                             </div>
                             <div class="timeline-list">
-                                <div class="timeline-row">
-                                    <span>HR Evaluator</span> 
-                                    <span class="text-success"><i class="fas fa-check-square"></i> Approved - Feb 18</span>
-                                </div>
-                                <div class="timeline-row">
-                                    <span>Dept. Head</span> 
-                                    <span class="text-warning"><i class="fas fa-hourglass-half"></i> Pending</span>
-                                </div>
-                                <div class="timeline-row"><span>HR Head</span> <span>-</span></div>
-                                <div class="timeline-row"><span>SD</span> <span>-</span></div>
+                                <div class="timeline-item"><span>HR Evaluator</span> <span style="color: green;"><i class="fas fa-check-square"></i> Approved - Feb 18</span></div>
+                                <div class="timeline-item"><span>Dept. Head</span> <span style="color: #856404;"><i class="fas fa-hourglass-half"></i> Pending</span></div>
+                                <div class="timeline-item"><span>HR Head</span> <span>-</span></div>
+                                <div class="timeline-item"><span>SD</span> <span>-</span></div>
                             </div>
                         </div>
 
-                        <div class="boxed-section actions-card">
+                        <div class="quick-actions">
                             <h3>Actions</h3>
-                            <div class="modal-btn-group">
-                                <button class="btn-modal-approve">Approve</button>
-                                <button class="btn-modal-reject">Reject</button>
+                            <div class="action-btns">
+                                <button class="modal-approve" style="background: #d4edda; color: #155724;">Approve</button>
+                                <button class="modal-reject" style="background: #f8d7da; color: #721c24;">Reject</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="boxed-section remarks-footer">
-                    <h3>Add Remarks</h3>
-                    <input type="text" id="remarksInput" placeholder="Remarks">
+                <div class="remarks-input-section">
+                    <label>Add Remarks</label>
+                    <input type="text" id="remarksInput" placeholder="Enter remarks here...">
                 </div>
             </div>
         </div>
     </div>
 
     <div id="positionChangeModal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-header-banner">
-                <span class="applicant-name">Log New Request</span>
+        <div class="modal-content" style="width: 500px;">
+            <div class="modal-header">
+                <span class="applicant-name" style="width: 100%;">Log New Request</span>
                 <button class="modal-close" id="posClose">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="positionChangeForm">
+                <form id="positionChangeForm" class="log-request-grid">
                     <div class="form-group">
                         <label>Employee Name</label>
                         <div class="search-input-wrapper">
@@ -211,7 +190,7 @@
                             <input type="text" placeholder="Search employee...">
                         </div>
                     </div>
-                    <div class="form-group" style="margin-top: 15px;">
+                    <div class="form-group">
                         <label>Requested Position</label>
                         <select class="form-control">
                             <option value="" disabled selected>Select position...</option>
@@ -219,9 +198,9 @@
                             <option value="Department Head">Department Head</option>
                         </select>
                     </div>
-                    <div class="modal-btn-group" style="margin-top: 25px;">
-                        <button type="button" class="btn-modal-reject" id="cancelRequest">Cancel</button>
-                        <button type="submit" class="btn-modal-approve" style="background: #632b2b; color: white;">Save Request</button>
+                    <div class="modal-footer action-btns">
+                        <button type="button" class="modal-reject" id="cancelRequest">Cancel</button>
+                        <button type="submit" class="modal-approve" style="background: #632b2b; color: white;">Save Request</button>
                     </div>
                 </form>
             </div>
