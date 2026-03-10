@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // --- UI Elements ---
     const sidebar = document.getElementById("sidebar");
+    const mainContent = document.getElementById("mainContent"); // Targeted for expansion
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
 
@@ -36,21 +37,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Toggle "No Results" row
             if (noResultsRow) {
                 noResultsRow.style.display = visibleCount === 0 ? "" : "none";
             }
         });
     }
 
-    // --- Sidebar Logic ---
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
+    // --- Sidebar & Main Content Logic ---
+    // This handles the transition for both the sidebar and the content area
+    if (closeBtn && sidebar && mainContent) {
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.add("collapsed");
+            mainContent.classList.add("sidebar-collapsed");
+        });
     }
-    if (logoToggle) {
+
+    if (logoToggle && sidebar && mainContent) {
         logoToggle.addEventListener("click", () => {
             if (sidebar.classList.contains("collapsed")) {
                 sidebar.classList.remove("collapsed");
+                mainContent.classList.remove("sidebar-collapsed");
             }
         });
     }
@@ -74,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Close Buttons
-    document.querySelectorAll(".modal-close, #cancelRequest").forEach(btn => {
+    document.querySelectorAll(".modal-close, #cancelRequest, #posClose, #modalClose").forEach(btn => {
         btn.addEventListener("click", closeAllModals);
     });
 
@@ -115,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
         posForm.addEventListener("submit", (e) => {
             e.preventDefault();
             
-            // Generate Timestamp
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
             const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
