@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const newEmpTabBtn = document.getElementById("newEmpTabBtn");
     const posChangeTabBtn = document.getElementById("posChangeTabBtn");
 
+    const statusBanner = document.querySelector(".timeline-status-banner");
+    const statusTimelineBox = document.getElementById("statusTimelineBox");
+    const submissionTimestamp = document.getElementById("submissionTimestamp");
+
     // --- Search Functionality ---
     if (searchInput) {
         searchInput.addEventListener("keyup", () => {
@@ -39,15 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- Sidebar Toggle & Expansion Logic ---
-    // Closes the sidebar when the chevron-left is clicked
+    // --- Sidebar Logic ---
     if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            sidebar.classList.add("collapsed");
-        });
+        closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
     }
-
-    // Re-opens/Expands the sidebar when clicking the logo/wrapper while collapsed
     if (logoToggle) {
         logoToggle.addEventListener("click", () => {
             if (sidebar.classList.contains("collapsed")) {
@@ -58,17 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Modal Management ---
     const openModal = (modal) => {
-        if (modal) {
-            modal.style.display = "flex";
-            document.body.style.overflow = "hidden"; // Prevent background scroll
-        }
+        if (modal) modal.style.display = "flex";
     };
 
     const closeAllModals = () => {
-        [viewModal, posModal].forEach(m => { 
-            if (m) m.style.display = "none"; 
-        });
-        document.body.style.overflow = ""; // Restore scroll
+        [viewModal, posModal].forEach(m => { if (m) m.style.display = "none"; });
     };
 
     // View Modal Trigger
@@ -81,15 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Close Buttons
-    document.querySelectorAll(".modal-close, #cancelRequest, #modalClose, #posClose").forEach(btn => {
+    document.querySelectorAll(".modal-close, #cancelRequest").forEach(btn => {
         btn.addEventListener("click", closeAllModals);
-    });
-
-    // Close on clicking the darkened overlay
-    window.addEventListener("click", (e) => {
-        if (e.target.classList.contains('modal-overlay')) {
-            closeAllModals();
-        }
     });
 
     // --- Tab Switching ---
@@ -101,10 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (newEmpTabBtn && posChangeTabBtn) {
-        newEmpTabBtn.addEventListener("click", () => {
-            setActiveTab(newEmpTabBtn, posChangeTabBtn);
-        });
-
+        newEmpTabBtn.addEventListener("click", () => setActiveTab(newEmpTabBtn, posChangeTabBtn));
         posChangeTabBtn.addEventListener("click", () => {
             setActiveTab(posChangeTabBtn, newEmpTabBtn);
             openModal(posModal);
@@ -127,13 +110,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nextSlide")?.addEventListener("click", () => showSlide(2));
     document.getElementById("prevSlide")?.addEventListener("click", () => showSlide(1));
 
-    // --- Form Submission (Mock) ---
+    // --- Form Submission (Position Change) ---
     if (posForm) {
         posForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            // You can add your AJAX call here to save to MySQL
-            console.log("Position Change Data Submitted");
+            
+            // Generate Timestamp
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+            
+            if (submissionTimestamp && statusTimelineBox) {
+                submissionTimestamp.innerText = `${dateStr} - ${timeStr}`;
+                statusTimelineBox.style.display = "block";
+            }
+
+            const selectedPos = posForm.querySelector('select').value;
+            if (statusBanner && selectedPos) {
+                statusBanner.innerHTML = `<i class="fas fa-exclamation-circle"></i> Pending - For ${selectedPos} Approval`;
+            }
+
+            alert("Success: Position change request logged.");
             closeAllModals();
         });
     }
+
+    // Global Close (Click Outside or Esc Key)
+    window.addEventListener("click", (e) => {
+        if (e.target === viewModal || e.target === posModal) closeAllModals();
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeAllModals();
+    });
 });
