@@ -2,19 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trainings | Employee Dashboard</title>
-    <link rel="stylesheet" href="../static/css/training_management/emp_training.css">
+    <title>Trainings</title>
+    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <link rel="stylesheet" href="../../static/css/training_management/emp_training.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
     <div class="background"></div>
 
-    <nav class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <i class="fas fa-university"></i>
+                <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
+                <div class="open-icon">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
             <button class="close-btn" id="closeBtn">
                 <i class="fas fa-chevron-left"></i>
@@ -22,75 +25,135 @@
         </div>
 
         <ul class="menu">
-            <li><a href="#" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
-            <li><a href="#" class="menu-item active"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+            <li><a href="emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
+            <hr>
+            <li><a href="../new_employee/new_employee.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+            <li><a href="../hr/employee_management/hr_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-calendar-alt"></i><span>Attendance Monitoring</span></a></li>
+            <li><a href="../leave/hr_leaveselect.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Document Management</span></a></li>
+            <li><a href="../training_management/hr_training.html" class="menu-item active"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
         </ul>
 
         <div class="bottom-section">
-            <a href="#" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
+            <a href="../login/login.html" class="menu-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Log Out</span>
+            </a>
         </div>
-    </nav>
+    </div>
 
-    <main class="main-content" id="mainContent">
+    <div class="main-content" id="mainContent">
         <div class="content-card">
-            <h1 class="page-title">Trainings</h1>
             
+            <div class="card-top-row">
+                <h1 class="page-title">Trainings</h1>
+            </div>
+
+            <div class="search-bar-container">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="trainingSearch" placeholder="Search for training modules...">
+                </div>
+            </div>
+
             <div class="trainings-layout">
-                <section class="trainings-grid-wrap">
+                
+                <div class="trainings-grid-wrap">
                     <div class="trainings-grid">
                         
                         <div class="training-card">
-                            <div class="card-info">
-                                <div class="training-card-title">Outcomes-Based Education Workshop</div>
-                                <div class="training-card-date">March 12, 2026 • 8:00 AM</div>
+                            <div>
+                                <div class="training-card-title">Advanced Data Security & Privacy</div>
+                                <div class="training-card-category">IT & Security</div>
+                                <div class="training-card-date">April 12, 2026 • 9:00 AM</div>
                                 <div class="training-card-tags">
-                                    <span class="tag tag-mode">Onsite</span>
-                                    <span class="tag tag-slots">Open</span>
+                                    <span class="tag tag-mode">Online</span>
+                                    <span class="tag tag-slots">12 slots left</span>
                                 </div>
                             </div>
-                            <div class="card-action">
-                                <button class="btn-view open-details">View Details</button>
+                            <div class="training-card-footer">
+                                <button class="btn-register">Register</button>
                             </div>
                         </div>
 
+                        <div class="training-card">
+                            <div>
+                                <div class="training-card-title">Effective Workplace Communication</div>
+                                <div class="training-card-category">Human Resources</div>
+                                <div class="training-card-date">April 18, 2026 • 1:00 PM</div>
+                                <div class="training-card-tags">
+                                    <span class="tag tag-mode">Face-to-Face</span>
+                                    <span class="tag tag-slots">5 slots left</span>
+                                </div>
+                            </div>
+                            <div class="training-card-footer">
+                                <button class="btn-register">Register</button>
+                            </div>
                         </div>
-                </section>
 
-                <aside class="my-trainings-panel">
-                    <h3>My Trainings</h3>
-                    <div class="my-training-item">
-                        <strong>Company Onboarding</strong>
-                        <span class="status-completed">Completed</span>
+                        <div class="training-card">
+                            <div>
+                                <div class="training-card-title">Leadership Basics for New Managers</div>
+                                <div class="training-card-category">Management</div>
+                                <div class="training-card-date">April 22, 2026 • 10:00 AM</div>
+                                <div class="training-card-tags">
+                                    <span class="tag tag-mode">Online</span>
+                                    <span class="tag tag-full">Full</span>
+                                </div>
+                            </div>
+                            <div class="training-card-footer">
+                                <button class="btn-register btn-register--disabled" disabled>Closed</button>
+                            </div>
+                        </div>
+
+                        <div class="training-card">
+                            <div>
+                                <div class="training-card-title">Workplace Ergonomics & Health</div>
+                                <div class="training-card-category">Health & Safety</div>
+                                <div class="training-card-date">May 05, 2026 • 2:00 PM</div>
+                                <div class="training-card-tags">
+                                    <span class="tag tag-mode">Hybrid</span>
+                                    <span class="tag tag-slots">20 slots left</span>
+                                </div>
+                            </div>
+                            <div class="training-card-footer">
+                                <button class="btn-register">Register</button>
+                            </div>
+                        </div>
+
                     </div>
-                </aside>
-            </div>
-        </div>
-    </main>
+                </div>
 
-    <div id="detailModal" class="modal-overlay">
-        <div class="detail-card">
-            <button class="close-modal" id="closeModal">&times;</button>
-            
-            <header class="detail-header-box">
-                <h2>Outcomes-Based Education Workshop</h2>
-                <div class="detail-meta">Teaching | Onsite | March 12, 2026</div>
-                <span class="status-badge-open">Open</span>
-            </header>
+                <div class="my-trainings-panel">
+                    <div class="my-trainings-title">My Trainings</div>
+                    
+                    <div class="my-training-item">
+                        <div class="my-training-name">Company Onboarding</div>
+                        <div class="my-training-date">March 1, 2026</div>
+                        <span class="status-badge completed">Completed</span>
+                    </div>
 
-            <div class="info-table-container">
-                <div class="info-table-title">Training Information</div>
-                <table class="info-table">
-                    <tr><td class="label">Description</td><td class="value">College of Computer Studies</td></tr>
-                    <tr><td class="label">Trainer/Provider</td><td class="value">CCS - 201</td></tr>
-                    <tr><td class="label">Location/Link</td><td class="value">Main building 2nd floor</td></tr>
-                    <tr><td class="label">Max Participants</td><td class="value">ccs.admin@email.com</td></tr>
-                    <tr><td class="label">Slots Filled</td><td class="value">+ 63 987 654 3210</td></tr>
-                </table>
+                    <div class="my-training-item">
+                        <div class="my-training-name">Fire Safety Seminar</div>
+                        <div class="my-training-date">March 15, 2026</div>
+                        <span class="status-badge cancelled">Cancelled</span>
+                    </div>
+
+                    <div class="my-training-item">
+                        <div class="my-training-name">Agile Methodology Workshop</div>
+                        <div class="my-training-date">March 28, 2026</div>
+                        <span class="status-badge open">Upcoming</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <script src="../static/js/training_management/emp_training.js"></script>
+    <script src="../../static/js/training_management/emp_training.js"></script>
 </body>
 </html>
