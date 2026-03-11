@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Training Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Management | UPHSD</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
     <link rel="stylesheet" href="../../static/css/training_management/hr_training.css">
-
-    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -14,115 +13,194 @@
     <div class="background"></div>
 
     <div class="sidebar" id="sidebar">
-
-        <!-- TOP -->
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo">
-                <div class="open-icon">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
+                <img src="../../static/img/general/uph.png" class="logo" alt="UPHSD Logo">
+                <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
-
-            <button class="close-btn" id="closeBtn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+            <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
-        <!-- MENU -->
-       <ul class="menu">
-                <li><a href="../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
-                <li><a href="../accounts/hr_profile_view.html?id=2024-001" class="menu-item"><i class="fas fa-user"></i> <span>Profile</span></a></li>
-                <hr>
-                <li><a href="../new_employee/new_employee.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
-                <li><a href="../hr/employee_management/hr_employeelist.html" class="menu-item"><i class="fas fa-database"></i> <span>Employee Records</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-calendar"></i> <span>Attendance Monitoring</span></a></li>
-                            <li><a href="../leave/hr_leaveselect.html" class="menu-item active"><i class="fas fa-briefcase"></i> <span>Leave Management</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-star"></i> <span>Performance Evaluation</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i> <span>Document Management</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span></a></li>
-                <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i> <span>Reports / Analytics</span></a></li>
-            </ul>
+        <ul class="menu">
+            <li><a href="../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+            <li><a href="../accounts/hr_profile_view.html?id=2024-001" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
+            <hr>
+            <li><a href="../new_employee/new_employee.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+            <li><a href="../hr/employee_management/hr_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-calendar-alt"></i><span>Attendance Monitoring</span></a></li>
+            <li><a href="../leave/hr_leaveselect.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Document Management</span></a></li>
+            <li><a href="#" class="menu-item active"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
+        </ul>
 
-        <!-- LOGOUT -->
         <div class="bottom-section">
             <a href="../login/login.html" class="menu-item logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
+                <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
             </a>
         </div>
-
     </div>
 
-    </div>
-   <div class="main-content">
-    <h1 class="page-title">Training Management</h1>
+    <div class="main-content" id="mainContent">
 
-    <div class="table-container">
-        <div class="search-bar-container">
-            <div class="search-input-wrapper">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search">
-            </div>
-            <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+        <div class="header-container">
+            <h1>Training Management</h1>
         </div>
 
-        <div class="filter-actions-row">
-            <div class="active-filters">
-                <span class="filter-tag">Sample Filter <i class="fas fa-times"></i></span>
+        <div class="search-filter-section">
+            <div class="search-bar-container">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="tableSearch" placeholder="Search by Training Name / ID / Category">
+                </div>
+                <button class="filter-main-btn"><i class="fas fa-filter"></i> Filter</button>
             </div>
-            <button class="btn-add-training">+ Add Training</button>
+            <div class="filter-actions-row">
+                <div class="active-filters">
+                    <span class="filter-tag">Sample Filter <i class="fas fa-times"></i></span>
+                </div>
+                <button class="btn-add-training" id="addTrainingBtn">+ Add Training</button>
+            </div>
         </div>
 
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th style="border-top-left-radius: 10px;">Training ID</th>
-                    <th>Training Name</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                    <th>Mode</th>
-                    <th>Slots</th>
-                    <th>Status</th>
-                    <th style="border-top-right-radius: 10px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>001</td>
-                    <td class="training-name">Outcomes-Based Education Workshop</td>
-                    <td>Teaching</td>
-                    <td>03/12/2026</td>
-                    <td>Onsite</td>
-                    <td>25 / 30</td>
-                    <td><span class="status-badge open">Open</span></td>
-                    <td class="action-links">
-                        <a href="#" class="view">View</a>
-                        <a href="#" class="edit">Edit</a>
-                        <a href="#" class="close-act">Close</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td><td></td><td></td><td></td><td></td><td></td>
-                    <td><span class="status-badge full">Full</span></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td><td></td><td></td><td></td><td></td><td></td>
-                    <td><span class="status-badge completed">Completed</span></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td><td></td><td></td><td></td><td></td><td></td>
-                    <td><span class="status-badge cancelled">Cancelled</span></td>
-                    <td></td>
-                </tr>
-                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Training ID</th>
+                        <th>Training Name</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Mode</th>
+                        <th>Slots</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="trainingTableBody">
+                    <tr>
+                        <td>001</td>
+                        <td>Outcomes-Based Education Workshop</td>
+                        <td>Teaching</td>
+                        <td>03/12/2026</td>
+                        <td>Onsite</td>
+                        <td>25 / 30</td>
+                        <td><span class="status-badge open">Open</span></td>
+                        <td class="action-links">
+                            <a href="#">View</a>
+                            <a href="#">Edit</a>
+                            <a href="#">Close</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>Research Writing Seminar</td>
+                        <td>Research</td>
+                        <td>03/20/2026</td>
+                        <td>Online</td>
+                        <td>30 / 30</td>
+                        <td><span class="status-badge full">Full</span></td>
+                        <td class="action-links">
+                            <a href="#">View</a>
+                            <a href="#">Edit</a>
+                            <a href="#">Close</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td>Faculty Development Program</td>
+                        <td>Development</td>
+                        <td>02/28/2026</td>
+                        <td>Onsite</td>
+                        <td>20 / 20</td>
+                        <td><span class="status-badge completed">Completed</span></td>
+                        <td class="action-links">
+                            <a href="#">View</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>004</td>
+                        <td>Safety & Emergency Response Training</td>
+                        <td>Safety</td>
+                        <td>03/05/2026</td>
+                        <td>Onsite</td>
+                        <td>15 / 25</td>
+                        <td><span class="status-badge cancelled">Cancelled</span></td>
+                        <td class="action-links">
+                            <a href="#">View</a>
+                        </td>
+                    </tr>
+                    <tr id="noResultsRow" style="display: none;">
+                        <td colspan="8" style="text-align: center; padding: 30px; color: #888; font-style: italic;">
+                            No trainings match your search.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+
+    <!-- Add Training Modal -->
+    <div id="addTrainingModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Add New Training</span>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addTrainingForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Training Name</label>
+                        <input type="text" placeholder="Enter training name">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select>
+                            <option value="" disabled selected>Select category...</option>
+                            <option>Teaching</option>
+                            <option>Research</option>
+                            <option>Development</option>
+                            <option>Safety</option>
+                            <option>Administrative</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-group">
+                        <label>Mode</label>
+                        <select>
+                            <option value="" disabled selected>Select mode...</option>
+                            <option>Onsite</option>
+                            <option>Online</option>
+                            <option>Hybrid</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Slots</label>
+                        <input type="number" placeholder="e.g. 30" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Venue / Platform</label>
+                        <input type="text" placeholder="e.g. Room 101 / Zoom">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description / Remarks</label>
+                        <textarea placeholder="Enter training details or remarks..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <div class="modal-footer-btns">
+                            <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                            <button type="submit" class="btn-save">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="../../static/js/training_management/hr_training.js"></script>
 </body>
 </html>
