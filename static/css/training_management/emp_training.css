@@ -37,33 +37,15 @@ body {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: width 0.35s ease, top 0.35s ease, left 0.35s ease,
-                height 0.35s ease, border-radius 0.35s ease,
-                background 0.35s ease, backdrop-filter 0.35s ease,
-                border 0.35s ease, padding 0.35s ease;
+    transition: width 0.35s ease;
 }
 
-/* Collapsed: flush left strip like Leave Management reference */
-.sidebar.collapsed {
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 90px;
-    border-radius: 0;
-    background: #5b1f1f;
-    backdrop-filter: none;
-    border: none;
-    padding: 20px 0;
-}
+.sidebar.collapsed { width: 90px; }
 
 .top-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.sidebar.collapsed .top-section {
-    justify-content: center;
 }
 
 .logo-wrapper {
@@ -130,7 +112,6 @@ body {
 .menu-item i {
     width: 50px;
     text-align: center;
-    flex-shrink: 0;
 }
 
 .menu-item span {
@@ -147,16 +128,6 @@ body {
 
 .menu-item:hover { background: rgba(255,255,255,0.15); }
 .menu-item.active { background: rgba(255,255,255,0.25); }
-
-/* Center icons when collapsed */
-.sidebar.collapsed .menu-item {
-    justify-content: center;
-    padding: 0;
-}
-
-.sidebar.collapsed .menu-item i {
-    width: auto;
-}
 
 .sidebar.collapsed .menu-item:hover::after {
     content: attr(data-text);
@@ -190,7 +161,7 @@ hr {
 }
 
 .sidebar.collapsed ~ .main-content {
-    margin-left: 100px;
+    margin-left: 110px;
 }
 
 /* --- White Content Card --- */
