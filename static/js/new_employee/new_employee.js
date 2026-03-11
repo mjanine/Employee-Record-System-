@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById("sidebar");
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
+    const mainContent = document.getElementById("mainContent");
 
     const searchInput = document.getElementById("tableSearch");
     const tableBody = document.getElementById("applicationTableBody");
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Toggle "No Results" row
             if (noResultsRow) {
                 noResultsRow.style.display = visibleCount === 0 ? "" : "none";
             }
@@ -45,12 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Sidebar Logic ---
     if (closeBtn) {
-        closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.add("collapsed");
+            if (mainContent) mainContent.style.marginLeft = "110px";
+        });
     }
+
     if (logoToggle) {
         logoToggle.addEventListener("click", () => {
             if (sidebar.classList.contains("collapsed")) {
                 sidebar.classList.remove("collapsed");
+                if (mainContent) mainContent.style.marginLeft = "320px";
             }
         });
     }
@@ -114,12 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (posForm) {
         posForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            
-            // Generate Timestamp
+
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
             const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-            
+
             if (submissionTimestamp && statusTimelineBox) {
                 submissionTimestamp.innerText = `${dateStr} - ${timeStr}`;
                 statusTimelineBox.style.display = "block";

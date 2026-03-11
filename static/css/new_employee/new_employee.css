@@ -753,3 +753,7 @@ hr {
 
 #cancelRequest:hover { background-color: #c0c0c0; }
 #positionChangeForm .modal-approve:hover { background-color: #4a2222; }
+
+.sidebar.collapsed ~ .main-content {
+    margin-left: 110px;
+}
