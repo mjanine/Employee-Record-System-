@@ -86,14 +86,20 @@ body {
 
 /* --- White Content Card --- */
 .content-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 35px;
-    flex: 1;
-    overflow-y: auto;
+     background: #ffffff;
+    /* Updated to 35px to match your reference */
+    border-radius: 35px; 
+    /* Padding adjusted for consistent breathing room */
+    padding: 25px 40px; 
+    width: 100%;
+    /* Standardized max-width */
+    max-width: 1180px; 
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    height: 100%; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    transition: max-width 0.4s ease-in-out; 
 }
 
 /* --- Card Top Row (Title left, Tabs right) --- */
