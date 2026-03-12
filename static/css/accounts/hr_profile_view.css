@@ -1,4 +1,3 @@
-/* Master Layout Constraints */
 body, html {
     height: 100%;
     margin: 0;
@@ -20,7 +19,6 @@ body, html {
     height: 100%;
 }
 
-/* Sidebar Hover/Toggle Expansion logic */
 .profile-page-container {
     width: 100%;
     max-width: 1180px; 
@@ -35,7 +33,6 @@ body, html {
     max-width: calc(100% - 110px);
 }
 
-/* Profile Content Styles */
 .profile-card {
     background: #f3f3f3;
     border-radius: 20px;
@@ -69,7 +66,6 @@ body, html {
 .contact-info h4 { margin-bottom: 12px; font-weight: bold; color: #333; }
 .contact-info p { margin: 6px 0; color: #555; }
 
-/* Tabs Logic */
 .tabs {
     display: flex; border-bottom: 1px solid #ccc; background: #f3f3f3;
     border-radius: 20px 20px 0 0; padding-left: 10px;
@@ -82,12 +78,9 @@ body, html {
     border: 1px solid #d8d8d8; border-top: none; flex: 1; overflow-y: auto;
 }
 
-/* =========================================================
-   DEPARTMENT TAB GRID STYLING
-========================================================= */
 .dept-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 20px;
     padding: 10px 0;
 }
@@ -122,11 +115,8 @@ body, html {
 .info-label { color: #888; font-weight: 500; }
 .info-value { color: #333; font-weight: 600; }
 
-/* =========================================================
-   MODAL ACTION BUTTONS (CENTERED TEXT FIX)
-========================================================= */
 #documentModal button {
-    display: inline-flex;      /* Snap text to center */
+    display: inline-flex;      
     align-items: center;       
     justify-content: center;   
     text-align: center;
@@ -135,7 +125,7 @@ body, html {
     font-weight: 600;
     font-size: 13px;
     border: none;
-    line-height: 1;            /* Remove extra vertical spacing */
+    line-height: 1;            
     transition: background 0.3s ease;
 }
 
@@ -145,7 +135,6 @@ body, html {
 #deleteBtn { background: #D9D9D9; color: #cc0000; }
 #deleteBtn:hover { background: #c7c7c7; }
 
-/* Grey buttons (Cancel / Edit records) */
 #documentModal button:not(#saveBtn):not(#deleteBtn) {
     background: #D9D9D9; color: #333;
 }
@@ -153,7 +142,6 @@ body, html {
     background: #c7c7c7;
 }
 
-/* Document Tab Action Links */
 .action-link {
     color: #7b3f3f;
     text-decoration: none;
@@ -162,7 +150,6 @@ body, html {
 }
 .action-link:hover { text-decoration: underline; }
 
-/* 1. Reset & Global Layout */
 * {
     margin: 0;
     padding: 0;
@@ -175,7 +162,6 @@ body {
     overflow: hidden;
 }
 
-/* 2. Blurred Fixed Background */
 .background {
     position: fixed;
     inset: 0;
@@ -185,7 +171,6 @@ body {
     z-index: -1;
 }
 
-/* 3. Glassmorphism Sidebar Container */
 .sidebar {
     position: fixed;
     top: 20px;
@@ -203,12 +188,10 @@ body {
     transition: width 0.35s ease;
 }
 
-/* Collapsed State */
-.sidebar.collapsed {
+.sidebar.close {
     width: 90px;
 }
 
-/* 4. Top Section (Logo & Toggle) */
 .top-section {
     display: flex;
     align-items: center;
@@ -231,7 +214,6 @@ body {
     transition: 0.3s;
 }
 
-/* Centered Icon Logic (Hover Effects) */
 .open-icon {
     position: absolute;
     width: 100%;
@@ -244,11 +226,11 @@ body {
     transition: 0.3s;
 }
 
-.sidebar.collapsed .logo-wrapper:hover .logo {
+.sidebar.close .logo-wrapper:hover .logo {
     opacity: 0;
 }
 
-.sidebar.collapsed .logo-wrapper:hover .open-icon {
+.sidebar.close .logo-wrapper:hover .open-icon {
     opacity: 1;
 }
 
@@ -260,11 +242,10 @@ body {
     cursor: pointer;
 }
 
-.sidebar.collapsed .close-btn {
+.sidebar.close .close-btn {
     display: none;
 }
 
-/* 5. Navigation Menu Items */
 .menu {
     list-style: none;
     margin-top: 30px;
@@ -291,7 +272,6 @@ body {
     text-align: center;
 }
 
-/* Text span anchored to prevent shifting */
 .menu-item span {
     position: absolute;
     left: 60px;
@@ -299,8 +279,7 @@ body {
     transition: opacity 0.2s ease;
 }
 
-/* Smooth text hiding for collapsed state */
-.sidebar.collapsed .menu-item span {
+.sidebar.close .menu-item span {
     opacity: 0;
     pointer-events: none;
 }
@@ -313,8 +292,7 @@ body {
     background: rgba(255,255,255,0.25);
 }
 
-/* Tooltip for collapsed icons */
-.sidebar.collapsed .menu-item:hover::after {
+.sidebar.close .menu-item:hover::after {
     content: attr(data-text);
     position: absolute;
     left: 80px;
@@ -325,7 +303,6 @@ body {
     font-size: 14px;
 }
 
-/* 6. Footer Divider & Bottom Section */
 hr {
     border: 0.5px solid rgba(255,255,255,0.2);
     margin: 10px 0;
