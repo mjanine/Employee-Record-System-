@@ -17,68 +17,24 @@
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
                 <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
-                <div class="open-icon">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
+                <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
-            <button class="close-btn" id="closeBtn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+            <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
         <ul class="menu">
-            <li>
-                <a href="emp_dash.html" class="menu-item">
-                    <i class="fas fa-border-all"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-
+            <li><a href="emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
             <hr>
-
-            <li>
-                <a href="#" class="menu-item active">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Attendance</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-plane-departure"></i>
-                    <span>Leave Request</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-star"></i>
-                    <span>Performance</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Documents</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Trainings</span>
-                </a>
-            </li>
+            <li><a href="#" class="menu-item active"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Documents</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
         </ul>
 
         <div class="bottom-section">
-            <a href="../login/login.html" class="menu-item logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
-            </a>
+            <a href="../login/login.html" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
         </div>
     </div>
 
@@ -89,19 +45,16 @@
         </div>
 
         <div class="dashboard-grid">
-            
             <div class="content-card attendance-section">
                 <div class="card-header">
                     <h2>Attendance</h2>
                     <span class="date-now">Monday, February 8 | 8:14 AM</span>
                 </div>
                 <p class="status-text">Let's get it started</p>
-                
                 <div class="stats-row">
                     <p id="workingTime">Working for: 0h</p>
                     <p id="timeInDisplay">Time In: --</p>
                 </div>
-                
                 <button class="btn-clock-in" id="clockBtn">Clock in</button>
             </div>
 
@@ -160,11 +113,80 @@
             </div>
 
             <div class="footer-actions">
-                <button class="btn-history">View Full History</button>
+                <button class="btn-history" id="openHistory">View Full History</button>
             </div>
         </div>
-
     </main>
+
+    <div id="historyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="employee-name-tab">Dela Cruz, Juan</div>
+                <span class="close-modal" id="closeHistory">&times;</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="history-controls">
+                    <div class="view-switches">
+                        <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
+                        <button class="view-btn" id="monthlyViewBtn">Monthly View</button>
+                    </div>
+                    <div class="history-date-nav">
+                        <i class="fas fa-chevron-left"></i>
+                        <span id="historyDateRange">February 4 - 10</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="history-grid">
+                    <div class="history-table-container">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Time In</th>
+                                    <th>Time Out</th>
+                                    <th>Total Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td>February 4, 2026</td>
+                                    <td>Monday</td>
+                                    <td>8:03 AM</td>
+                                    <td>5:02 PM</td>
+                                    <td>8h 59m</td>
+                                    <td><span class="status-pill present">Present</span></td>
+                                </tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="history-sidebar">
+                        <div class="details-card">
+                            <h3>Employee Details</h3>
+                            <div class="sidebar-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="details-list">
+                                <p><strong>Employee ID</strong> <span>001</span></p>
+                                <p><strong>Position</strong> <span>Instructor</span></p>
+                                <p><strong>Department</strong> <span>College of Computer Studies</span></p>
+                                <p><strong>Employment Type</strong> <span>Full-Time</span></p>
+                            </div>
+                        </div>
+                        <div class="total-hours-card">
+                            Total Hours This Week: <span id="totalHoursVal">XX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="../../static/js/attendance/emp_attendance.js"></script>
 </body>
