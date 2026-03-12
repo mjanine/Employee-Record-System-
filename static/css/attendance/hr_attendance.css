@@ -3,12 +3,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-     font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
     height: 100vh;
-    overflow: hidden; /* Prevents full-page scrolling; only the white container scrolls */
+    overflow: hidden;
+    background-color: #1a1a1a; /* Fallback */
 }
 
 /* The Red Gradient Background */
@@ -21,42 +22,51 @@ body {
     z-index: -1;
 }
 
-
-/* --- 2. SIDEBAR (GLASSMORPHISM) --- */
+/* --- 2. SIDEBAR (MAROON GLASSMORPHISM) --- */
 .sidebar {
     position: fixed;
     top: 20px;
     left: 20px;
     height: calc(100% - 40px);
-    width: 300px; /* widened */
-    padding: 25px;
-    border-radius: 20px;
+    width: 300px;
+    padding: 30px 20px;
+    border-radius: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.08);
+    /* Deep Maroon Gradient matched to the uploaded image */
+    background: linear-gradient(180deg, #8b2318 0%, #5a120a 100%);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-
-    transition: width 0.35s ease;
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
 }
 
 .sidebar.collapsed {
     width: 90px;
+    padding: 30px 15px;
 }
 
+/* Logo Section */
 .top-section {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    
+    justify-content: center;
+    margin-bottom: 40px;
+    position: relative;
 }
 
 .logo-wrapper {
-    width: 45px;
-    height: 45px;
+    width: 65px;
+    height: 65px;
     position: relative;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo-wrapper:hover {
+    transform: scale(1.05);
 }
 
 .logo {
@@ -73,105 +83,143 @@ body {
     justify-content: center;
     opacity: 0;
     color: white;
+    font-size: 20px;
 }
 
-.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0; }
+.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0.2; }
 .sidebar.collapsed .logo-wrapper:hover .open-icon { opacity: 1; }
 
 .close-btn {
+    position: absolute;
+    right: -5px;
     background: none;
     border: none;
-    color: white;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 18px;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
+.close-btn:hover { color: white; }
 .sidebar.collapsed .close-btn { display: none; }
 
-.menu { list-style: none; flex: 1; margin-top: 10px; }
+/* Menu List */
+.menu { 
+    list-style: none; 
+    flex: 1; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Hide scrollbar for menu */
+.menu::-webkit-scrollbar { width: 0px; }
 
 .menu-item {
     position: relative;
     display: flex;
     align-items: center;
-    height: 48px;
-    color: white;
+    height: 52px;
+    color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    border-radius: 12px;
-    margin-bottom: 5px;
-    transition: 0.3s;
+    border-radius: 16px;
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
 }
 
-.menu-item i { width: 50px; text-align: center; font-size: 18px; }
+.menu-item i { 
+    min-width: 50px; 
+    text-align: center; 
+    font-size: 19px; 
+}
 
 .menu-item span {
     position: absolute;
-    left: 60px;
+    left: 55px;
     white-space: nowrap;
+    font-size: 14.5px;
+    font-weight: 500;
     transition: opacity 0.2s;
-    font-size: 14px;
 }
 
 .sidebar.collapsed .menu-item span { opacity: 0; pointer-events: none; }
 
-.menu-item:hover, .menu-item.active {
-    background: rgba(255, 255, 255, 0.2);
+/* Hover & Active States */
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
 }
 
-hr { border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0; }
+.menu-item.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-.bottom-section { margin-top: auto; }
+hr { 
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); 
+    margin: 15px 10px; 
+}
 
-/* Tooltip for collapsed sidebar */
+/* Bottom Section / Logout */
+.bottom-section { 
+    margin-top: auto; 
+    padding-top: 10px;
+}
+
+.logout {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.logout:hover {
+    background: rgba(255, 70, 70, 0.2);
+    color: #ff8a8a;
+}
+
+/* Tooltip for collapsed mode */
 .sidebar.collapsed .menu-item:hover::after {
     content: attr(data-text);
     position: absolute;
-    left: 80px;
-    background: rgba(20,20,20,0.95);
+    left: 85px;
+    background: rgba(20, 20, 20, 0.9);
     color: white;
-    padding: 8px 14px;
-    border-radius: 8px;
+    padding: 8px 15px;
+    border-radius: 10px;
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 13px;
     z-index: 1000;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-
-/* --- 3. MAIN CONTENT & WHITE CONTAINER --- */
+/* --- 3. MAIN CONTENT AREA --- */
 .main-content {
-    /* 300px sidebar + 20px left margin + 20px gap */
     margin-left: 340px; 
     height: 100vh;
-    padding: 20px 20px 20px 0; /* Leaves a 20px gap around the white container */
+    padding: 20px 20px 20px 0;
     transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Adjust layout when sidebar shrinks */
 .sidebar.collapsed ~ .main-content {
-    margin-left: 130px; /* 90px sidebar + 20px left + 20px gap */
+    margin-left: 130px;
 }
 
-/* The solid white dashboard area */
 .white-container {
-    background: #fdfdfd; /* Clean off-white */
+    background: #fdfdfd;
     width: 100%;
     height: 100%;
     border-radius: 25px;
     padding: 35px 40px;
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
-/* Custom Scrollbar for the white container */
+/* Custom Scrollbar */
 .white-container::-webkit-scrollbar { width: 8px; }
 .white-container::-webkit-scrollbar-track { background: transparent; }
 .white-container::-webkit-scrollbar-thumb { background: #d1d1d1; border-radius: 10px; }
 .white-container::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
 
-
 /* --- 4. DASHBOARD COMPONENTS --- */
-
-/* Header */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -180,30 +228,32 @@ hr { border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0; }
 }
 
 .dashboard-header h1 { 
-    color: #1a1a1a; /* Dark text for the white background */
-    font-size: 30px; 
+    color: #1a1a1a; 
+    font-size: 28px; 
     font-weight: 700; 
 }
 
-/* Search Bar */
 .search-pill {
-    background: white;
-    padding: 10px 20px;
+    background: #f1f1f1;
+    padding: 12px 20px;
     border-radius: 30px;
-    width: 400px;
+    width: 380px;
     display: flex;
     align-items: center;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    border: 1px solid transparent;
+    transition: border 0.3s;
 }
 
-.search-pill i { color: #888; }
+.search-pill:focus-within {
+    border-color: #8b2318;
+    background: white;
+}
+
 .search-pill input {
-    border: none; outline: none; margin-left: 10px; width: 100%; font-size: 14px; color: #333;
+    border: none; outline: none; background: transparent; margin-left: 10px; width: 100%; font-size: 14px;
 }
 
-
-/* --- 5. STATS CARDS --- */
+/* Stats */
 .stats-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -213,126 +263,56 @@ hr { border: 0.5px solid rgba(255,255,255,0.1); margin: 15px 0; }
 
 .stat-card {
     background: white;
-    padding: 18px 20px;
+    padding: 20px;
     border-radius: 20px;
-    border: 1px solid #dcdcdc; /* Subtle border from your image */
-    height: 100px;
+    border: 1px solid #e8e8e8;
+    height: 110px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s;
 }
 
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
+.stat-card:hover { transform: translateY(-3px); }
+.stat-card .label { font-size: 13px; color: #666; font-weight: 600; }
+.stat-card .value { font-size: 28px; font-weight: 700; color: #111; text-align: right; }
 
-.stat-card .label { font-size: 14px; color: #555; font-weight: 500; line-height: 1.2; }
-.stat-card .value { font-size: 26px; font-weight: 700; color: #111; text-align: right; }
-
-
-/* --- 6. FILTERS & NAVIGATION --- */
-.controls-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.filter-tag {
-    background: white;
-    border: 1px solid #ccc;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 14px;
-    color: #333;
-    cursor: pointer;
-    display: flex; align-items: center; gap: 8px;
-}
-.filter-tag:hover { background: #f5f5f5; }
-
-.action-buttons { display: flex; align-items: center; }
-
-.btn-action {
-    background: white;
-    border: 1px solid #ccc;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #333;
-    margin-left: 10px;
-    cursor: pointer;
-    display: flex; align-items: center; gap: 6px;
-}
-.btn-action:hover { background: #f0f0f0; }
-
-.pagination {
-    display: flex; align-items: center; gap: 12px; margin-left: 20px;
-    font-weight: 600; font-size: 15px; color: #222; cursor: pointer;
-}
-
-
-/* --- 7. ATTENDANCE TABLE --- */
+/* Table Section */
 .table-card {
     background: white;
     border-radius: 20px;
     overflow: hidden;
-    border: 1px solid #dcdcdc;
+    border: 1px solid #e0e0e0;
 }
 
 .attendance-table { width: 100%; border-collapse: collapse; }
-
 .attendance-table th {
-    background: #333;
-    color: #f8f9fa;
+    background: #222;
+    color: #fff;
     text-align: left;
-    padding: 14px 15px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+    padding: 15px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .attendance-table td {
-    border: 1px solid #eee;
-    padding: 12px 15px;
-    vertical-align: top;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 15px;
+    font-size: 14px;
 }
 
-/* User Identity Cell */
-.user-cell { display: flex; align-items: center; gap: 12px; }
-.avatar {
-    width: 40px; height: 40px;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: #888; background: #f9f9f9;
-}
-.user-info .name { display: block; font-weight: 700; font-size: 13px; color: #111; }
-.user-info .title { display: block; font-size: 11px; color: #777; margin-bottom: 2px;}
-.dept-badge {
-    display: inline-block; background: #cde4ff; color: #0056b3;
-    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px;
-}
-
-
-/* --- 8. STATUS PILLS --- */
-.day-num { font-size: 13px; color: #555; margin-bottom: 8px; display: block; }
-
+/* Status Pills */
 .pill {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    border-radius: 20px;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 12px;
     font-size: 11px;
     font-weight: 700;
-    white-space: nowrap;
 }
 
-/* Accurately matched to your uploaded table image */
-.pill-green { background: #dcfce7; color: #166534; }  /* Present / Active */
-.pill-tan { background: #fef3c7; color: #92400e; }    /* Late / Partial Hours */
-.pill-purple { background: #f3e8ff; color: #6b21a8; } /* Leave */
-.pill-red { background: #fee2e2; color: #991b1b; }    /* Absent */
+.pill-green { background: #e6fffa; color: #047857; }
+.pill-tan { background: #fffbeb; color: #92400e; }
+.pill-purple { background: #f5f3ff; color: #5b21b6; }
