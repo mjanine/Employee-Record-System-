@@ -1,32 +1,34 @@
+/* --- GLOBAL RESET & BASE STYLES --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
     height: 100vh;
-    overflow: hidden;
+    overflow: hidden; /* Prevents double scrollbars */
+    background-color: #a8321d; /* Deep Red/Burgundy from your image */
 }
 
-/* Background */
+/* Background Blur (optional, if you still want the image underneath) */
 .background {
     position: fixed;
     inset: 0;
     background: url('../../img/general/bg.jpeg') no-repeat center/cover;
     filter: blur(10px);
     transform: scale(1.1); 
-    z-index: -1;
+    z-index: -2;
 }
 
-/* Sidebar */
+/* --- SIDEBAR STYLES --- */
 .sidebar {
     position: fixed;
     top: 20px;
     left: 20px;
     height: calc(100% - 40px);
-    width: 300px; /* widened */
+    width: 300px;
     padding: 25px;
     border-radius: 20px;
     display: flex;
@@ -35,44 +37,35 @@ body {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
-
+    z-index: 100;
     transition: width 0.35s ease;
 }
 
-/* Collapsed */
 .sidebar.collapsed {
     width: 90px;
 }
 
-/* Top */
 .top-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-/* Logo aligned with icons */
 .logo-wrapper {
     width: 45px;
     height: 45px;
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
 }
 
 .logo {
     width: 100%;
     border-radius: 50%;
-    transition: 0.3s;
 }
 
-/* FIXED CENTERED OPEN ICON */
 .open-icon {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,16 +74,9 @@ body {
     transition: 0.3s;
 }
 
-/* Show open icon only when collapsed + hover */
-.sidebar.collapsed .logo-wrapper:hover .logo {
-    opacity: 0;
-}
+.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0; }
+.sidebar.collapsed .logo-wrapper:hover .open-icon { opacity: 1; }
 
-.sidebar.collapsed .logo-wrapper:hover .open-icon {
-    opacity: 1;
-}
-
-/* Close button */
 .close-btn {
     background: none;
     border: none;
@@ -99,16 +85,7 @@ body {
     cursor: pointer;
 }
 
-.sidebar.collapsed .close-btn {
-    display: none;
-}
-
-/* Menu */
-.menu a,
-.bottom-section a {
-    text-decoration: none;
-}
-
+.sidebar.collapsed .close-btn { display: none; }
 
 .menu {
     list-style: none;
@@ -116,195 +93,207 @@ body {
     flex: 1;
 }
 
-/* Fixed icon layout */
 .menu-item {
     position: relative;
     display: flex;
     align-items: center;
     height: 48px;
     color: white;
-    cursor: pointer;
+    text-decoration: none;
     border-radius: 12px;
-    transition: background 0.3s;
+    margin-bottom: 5px;
+    transition: 0.3s;
 }
 
-.menu-item i {
-    width: 50px;
-    text-align: center;
-}
+.menu-item i { width: 50px; text-align: center; }
 
-/* Text absolute (prevents shifting) */
 .menu-item span {
     position: absolute;
     left: 60px;
     white-space: nowrap;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s;
 }
 
-/* Hide text smoothly */
-.sidebar.collapsed .menu-item span {
-    opacity: 0;
-    pointer-events: none;
+.sidebar.collapsed .menu-item span { opacity: 0; pointer-events: none; }
+
+.menu-item:hover, .menu-item.active {
+    background: rgba(255, 255, 255, 0.2);
 }
 
-/* Hover */
-.menu-item:hover {
-    background: rgba(255,255,255,0.15);
-}
+hr { border: 0.5px solid rgba(255,255,255,0.2); margin: 15px 0; }
 
-.menu-item.active {
-    background: rgba(255,255,255,0.25);
-}
-
-/* Tooltip */
-.sidebar.collapsed .menu-item:hover::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 80px;
-    background: rgba(20,20,20,0.95);
-    padding: 8px 14px;
-    border-radius: 8px;
-    white-space: nowrap;
-    font-size: 14px;
-}
-
-/* Divider */
-hr {
-    border: 0.5px solid rgba(255,255,255,0.2);
-    margin: 10px 0;
-}
-
-/* Bottom logout spacing */
-.bottom-section {
-    margin-top: auto;
-}
-
-/* Main Layout Logic */
-.main-content {
-    margin-left: 320px; /* Sidebar width + gap */
-    padding: 30px;
-    transition: margin-left 0.35s ease;
+/* --- MAIN CONTAINER (THE RED WRAPPER) --- */
+.main-container {
+    margin-left: 340px; /* Sidebar width + 20px gap */
     height: 100vh;
+    padding: 30px;
     overflow-y: auto;
+    transition: margin-left 0.35s ease;
+}
+
+.sidebar.collapsed ~ .main-container {
+    margin-left: 130px;
+}
+
+/* --- CONTENT CARDS --- */
+.content-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.header-banner h1 {
+    font-size: 1.8rem;
     color: #333;
 }
 
-.sidebar.collapsed ~ .main-content {
-    margin-left: 110px;
-}
-
-/* Header */
-.header-banner {
-    background: rgba(255, 255, 255, 0.6);
-    padding: 20px 30px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    backdrop-filter: blur(5px);
-}
-
-/* Grid Layout */
+/* --- DASHBOARD GRID --- */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1.6fr 1fr;
     gap: 25px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
-}
-
-/* Attendance Card */
 .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
+    margin-bottom: 5px;
 }
+
+.date-now { font-size: 0.9rem; color: #666; font-style: italic; }
+.status-text { color: #888; margin-bottom: 20px; font-size: 0.95rem; }
+
+.stats-row { margin-bottom: 15px; }
+.stats-row p { font-size: 0.9rem; color: #444; margin-bottom: 5px; }
 
 .btn-clock-in {
     width: 100%;
-    padding: 12px;
-    background: #2d5a27;
+    padding: 14px;
+    background: #2d5a27; /* Dark Green */
     color: white;
     border: none;
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 15px;
+    transition: background 0.3s;
 }
 
-/* Profile Card */
-.profile-info {
+.btn-clock-in:hover { background: #3a7532; }
+
+/* Profile Preview Card */
+.profile-flex { display: flex; gap: 20px; align-items: center; }
+.avatar-box img { 
+    width: 110px; 
+    height: 110px; 
+    border-radius: 50%; 
+    background: #f0f7ff;
+    object-fit: cover;
+}
+
+.profile-details h3 { font-size: 1.3rem; margin-bottom: 5px; }
+.profile-details p { color: #666; font-size: 0.9rem; }
+.emp-id { margin-top: 5px; color: #aaa !important; }
+
+.btn-secondary {
+    margin-top: 12px;
+    padding: 8px 18px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fdfdfd;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* --- WEEKLY SUMMARY TABLE --- */
+.summary-header {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
-.avatar-container img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #e0f2ff;
+.week-picker {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 600;
 }
 
-.btn-outline {
-    margin-top: 10px;
-    padding: 5px 15px;
-    border: 1px solid #ccc;
-    background: #f9f9f9;
-    border-radius: 5px;
-    cursor: pointer;
+.week-picker i { cursor: pointer; color: #555; }
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
-/* Table Section */
-.summary-table {
+.attendance-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
-.summary-table th {
-    background: #333;
-    color: white;
+.attendance-table th {
+    background: #2e2e2e;
+    color: #fff;
     padding: 12px;
-    font-weight: 400;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
-.summary-table td {
-    border: 1px solid #ddd;
+.attendance-table td {
+    border: 1px solid #eee;
     padding: 15px;
     text-align: center;
-    height: 80px;
+    height: 90px;
+    vertical-align: middle;
 }
+
+.week-label { font-size: 0.85rem; color: #555; width: 150px; }
 
 /* Status Pills */
-.status-pill {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+.pill {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    display: inline-block;
 }
 
-.status-yellow { background: #fdf2d0; color: #856404; }
-.status-purple { background: #f3e8ff; color: #6b21a8; }
-.status-green-check { background: #dcfce7; color: #166534; }
-.status-green { background: #dcfce7; color: #166534; font-weight: bold;}
+.pill-warning { background: #fff8e1; color: #b78a00; border: 1px solid #ffe082; }
+.pill-purple { background: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7; }
+.pill-success-check { 
+    background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; 
+    display: inline-flex; align-items: center; gap: 5px;
+}
+/* Add a checkmark icon to the pill via CSS if you prefer */
+.pill-success-check::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
+
+.pill-active { background: #e8f5e9; color: #2e7d32; font-weight: bold; }
+
+.footer-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
 
 .btn-history {
-    float: right;
-    margin-top: 15px;
-    background: #5c2d2d;
+    background: #4d1c14; /* Darker burgundy for button */
     color: white;
     border: none;
     padding: 10px 25px;
     border-radius: 8px;
     cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.3s;
 }
+
+.btn-history:hover { background: #63251a; }
+
+/* Custom Scrollbar for the Main Content */
+.main-container::-webkit-scrollbar { width: 8px; }
+.main-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+.main-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }

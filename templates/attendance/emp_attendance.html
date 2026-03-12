@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance | UPH</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    
     <link rel="stylesheet" href="../../static/css/attendance/emp_attendance.css">
-
-    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -14,33 +14,27 @@
     <div class="background"></div>
 
     <div class="sidebar" id="sidebar">
-
-        <!-- TOP -->
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo">
+                <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
                 <div class="open-icon">
                     <i class="fas fa-chevron-right"></i>
                 </div>
             </div>
-
             <button class="close-btn" id="closeBtn">
                 <i class="fas fa-chevron-left"></i>
             </button>
         </div>
 
-        <!-- MENU -->
         <ul class="menu">
-
             <li>
-                <a href="emp_dash.html" class="menu-item active">
+                <a href="emp_dash.html" class="menu-item">
                     <i class="fas fa-border-all"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-
             <li>
-                <a href="ENTER" class="menu-item">
+                <a href="#" class="menu-item">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
@@ -49,133 +43,129 @@
             <hr>
 
             <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Position Change Request</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
+                <a href="#" class="menu-item active">
                     <i class="fas fa-calendar-check"></i>
                     <span>Attendance</span>
                 </a>
             </li>
-
             <li>
-                <a href="ENTER" class="menu-item">
+                <a href="#" class="menu-item">
                     <i class="fas fa-plane-departure"></i>
                     <span>Leave Request</span>
                 </a>
             </li>
-
             <li>
-                <a href="ENTER" class="menu-item">
+                <a href="#" class="menu-item">
                     <i class="fas fa-star"></i>
-                    <span>Performance Evaluation</span>
+                    <span>Performance</span>
                 </a>
             </li>
-
             <li>
-                <a href="ENTER" class="menu-item">
+                <a href="#" class="menu-item">
                     <i class="fas fa-folder-open"></i>
                     <span>Documents</span>
                 </a>
             </li>
-
             <li>
-                <a href="ENTER" class="menu-item">
+                <a href="#" class="menu-item">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>Trainings</span>
                 </a>
             </li>
-
         </ul>
 
-        <!-- LOGOUT -->
         <div class="bottom-section">
             <a href="../login/login.html" class="menu-item logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Log Out</span>
             </a>
         </div>
-
     </div>
 
-    </div>
-    <main class="main-content" id="mainContent">
-    <header class="header-banner">
-        <h1>Good morning, Juan! ☀️</h1>
-    </header>
-
-    <section class="dashboard-grid">
-        <div class="card attendance-card">
-            <div class="card-header">
-                <h2>Attendance</h2>
-                <span class="date-time">Monday, February 8 | 8:14 AM</span>
-            </div>
-            <p class="subtitle">Let's get it started</p>
-            <div class="attendance-stats">
-                <p>Working for: 0h</p>
-                <p>Time In: --</p>
-            </div>
-            <button class="btn-clock-in">Clock in</button>
+    <main class="main-container" id="mainContent">
+        
+        <div class="content-card header-banner">
+            <h1>Good morning, Juan! ☀️</h1>
         </div>
 
-        <div class="card profile-card">
-            <div class="profile-info">
-                <div class="avatar-container">
-                    <img src="https://via.placeholder.com/100" alt="Juan"> </div>
-                <div class="profile-details">
-                    <h3>Juan Dela Cruz</h3>
-                    <p>Department Head</p>
-                    <p>Employee ID: 001</p>
-                    <button class="btn-outline">View Profile</button>
+        <div class="dashboard-grid">
+            
+            <div class="content-card attendance-section">
+                <div class="card-header">
+                    <h2>Attendance</h2>
+                    <span class="date-now">Monday, February 8 | 8:14 AM</span>
+                </div>
+                <p class="status-text">Let's get it started</p>
+                
+                <div class="stats-row">
+                    <p id="workingTime">Working for: 0h</p>
+                    <p id="timeInDisplay">Time In: --</p>
+                </div>
+                
+                <button class="btn-clock-in" id="clockBtn">Clock in</button>
+            </div>
+
+            <div class="content-card profile-preview">
+                <div class="profile-flex">
+                    <div class="avatar-box">
+                        <img src="https://via.placeholder.com/100" alt="Juan Dela Cruz">
+                    </div>
+                    <div class="profile-details">
+                        <h3>Juan Dela Cruz</h3>
+                        <p>Department Head</p>
+                        <p class="emp-id">Employee ID: 001</p>
+                        <button class="btn-secondary">View Profile</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="summary-section">
-        <div class="summary-header">
-            <h2>Weekly Summary</h2>
-            <div class="week-nav">
-                <i class="fas fa-chevron-left"></i>
-                <span>Week 5</span>
-                <i class="fas fa-chevron-right"></i>
+        <div class="content-card summary-section">
+            <div class="summary-header">
+                <h2>Weekly Summary</h2>
+                <div class="week-picker">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>Week 5</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th>Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="week-label">Feb 3 — Feb 10</td>
+                            <td>2</td>
+                            <td><span class="pill pill-warning">4h 36m</span></td>
+                            <td><span class="pill pill-purple">Leave</span></td>
+                            <td><span class="pill pill-success-check">8h 39m</span></td>
+                            <td><span class="pill pill-success-check">8 hours</span></td>
+                            <td><span class="pill pill-active">Active</span></td>
+                            <td>8</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer-actions">
+                <button class="btn-history">View Full History</button>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="summary-table">
-                <thead>
-                    <tr>
-                        <th>Week</th>
-                        <th>Sunday</th>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                        <th>Saturday</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="week-range">February 3 — February 10</td>
-                        <td>2</td>
-                        <td><span class="status-pill status-yellow">4h 36m</span></td>
-                        <td><span class="status-pill status-purple">Leave</span></td>
-                        <td><span class="status-pill status-green-check">8h 39m</span></td>
-                        <td><span class="status-pill status-green-check">8 hours</span></td>
-                        <td><span class="status-pill status-green">Active</span></td>
-                        <td>8</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <button class="btn-history">View Full History</button>
-    </section>
-</main>
+
+    </main>
+
     <script src="../../static/js/attendance/emp_attendance.js"></script>
 </body>
 </html>
