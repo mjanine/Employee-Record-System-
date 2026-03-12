@@ -4,9 +4,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const closeBtn = document.getElementById('closeBtn');
     const logoToggle = document.getElementById('logoToggle');
-    const handleToggle = () => sidebar.classList.toggle('collapsed');
+    
+    const handleToggle = () => sidebar.classList.toggle('close');
+    
     if (closeBtn) closeBtn.onclick = handleToggle;
     if (logoToggle) logoToggle.onclick = handleToggle;
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+        const span = item.querySelector('span');
+        if (span) {
+            item.setAttribute('data-text', span.innerText);
+        }
+    });
 
     function getEmployeeData() {
         const employees = JSON.parse(localStorage.getItem('addedEmployees')) || [];
@@ -161,10 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-/**
- * GLOBAL MODAL FUNCTIONS
- * Placed outside of DOMContentLoaded so the HTML buttons can see them.
- */
 window.openEmpDoc = function(name, file, url) {
     const modal = document.getElementById('documentModal');
     const wrapper = document.getElementById('modalPreviewWrapper');
