@@ -3,187 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Attendance Monitoring</title>
-
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <link rel="stylesheet" href="../../static/css/attendance/hr_attendance.css">
 
-    <!-- External Fonts & Icons -->
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="../static/css/attendance/hr_attendance.css">
 </head>
 <body>
 
-    <!-- Blurred Background -->
     <div class="background"></div>
 
-    <!-- ─── SIDEBAR ─────────────────────────────────────────────────────── -->
     <div class="sidebar" id="sidebar">
 
-        <!-- Top: Logo + Close -->
+        <!-- TOP -->
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <!-- Replace with: <img src="../../static/img/general/uph.png" class="logo-img" alt="UPH Logo"> -->
-                <div class="logo-placeholder">
-                    <i class="fas fa-shield-alt" style="font-size:18px;opacity:0.9;"></i>
-                </div>
+                <img src="../../static/img/general/uph.png" class="logo">
                 <div class="open-icon">
                     <i class="fas fa-chevron-right"></i>
                 </div>
             </div>
+
             <button class="close-btn" id="closeBtn">
                 <i class="fas fa-chevron-left"></i>
             </button>
         </div>
 
-        <!-- Navigation Menu -->
+        <!-- MENU -->
         <ul class="menu">
-            <li>
-                <a href="emp_dash.html" class="menu-item">
-                    <i class="fas fa-border-all"></i><span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-user"></i><span>Profile</span>
-                </a>
-            </li>
+            <li><a href="emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
             <hr>
-            <li>
-                <a href="../new_employee/new_employee.html" class="menu-item">
-                    <i class="fas fa-file"></i><span>Application Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="../hr/employee_management/hr_employeelist.html" class="menu-item">
-                    <i class="fas fa-database"></i><span>Employee Records</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item active">
-                    <i class="fas fa-calendar-alt"></i><span>Attendance Monitoring</span>
-                </a>
-            </li>
-            <li>
-                <a href="../leave/hr_leaveselect.html" class="menu-item">
-                    <i class="fas fa-briefcase"></i><span>Leave Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-star"></i><span>Performance Evaluation</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-folder-open"></i><span>Document Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="../training_management/emp_training.html" class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i><span>Trainings</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-chart-line"></i><span>Reports / Analytics</span>
-                </a>
-            </li>
+            <li><a href="../new_employee/new_employee.html" class="menu-item active"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+            <li><a href="../hr/employee_management/hr_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-calendar-alt"></i><span>Attendance Monitoring</span></a></li>
+            <li><a href="../leave/hr_leaveselect.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Document Management</span></a></li>
+            <li><a href="../training_management/emp_training.html" class="menu-item"><i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span></a></li>
+            <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
         </ul>
 
-        <!-- Bottom: Logout -->
-        <div class="bottom-section">
-            <a href="../login/login.html" class="menu-item logout">
-                <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
-            </a>
-        </div>
+    </div>
 
-    </div><!-- /sidebar -->
-
-    <!-- ─── MAIN CONTENT ─────────────────────────────────────────────────── -->
-    <div class="main-content" id="mainContent">
-
-        <!-- Top Bar -->
-        <div class="topbar">
-            <div class="topbar-row1">
-                <h1 class="page-title">Employee Attendance</h1>
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search by Name / ID / Department / Position">
-                </div>
-            </div>
-
-            <!-- Stat Cards -->
-            <div class="stat-cards">
-                <div class="stat-card">
-                    <div class="stat-label">Total Employees</div>
-                    <div class="stat-value" id="totalEmp">—</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Present Today</div>
-                    <div class="stat-value" id="presentToday">—</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Absent Today</div>
-                    <div class="stat-value" id="absentToday">—</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">On Leave</div>
-                    <div class="stat-value" id="onLeave">—</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Late Arrivals</div>
-                    <div class="stat-value" id="lateArrivals">—</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filter Bar -->
-        <div class="filter-bar">
-            <div class="filter-left">
-                <button class="btn-filter"><i class="fas fa-filter"></i> Filter</button>
-                <button class="btn-date"><i class="fas fa-calendar"></i> Sample Date</button>
-                <div class="filter-chip" id="sampleFilterChip">
-                    Sample Filter
-                    <span class="remove" onclick="removeFilter(this)">✕</span>
-                </div>
-            </div>
-            <div class="filter-right">
-                <div class="week-nav">
-                    <button id="prevWeek"><i class="fas fa-chevron-left"></i></button>
-                    <span id="weekLabel">Week 5</span>
-                    <button id="nextWeek"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Attendance Table -->
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Sunday</th>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                        <th>Saturday</th>
-                    </tr>
-                </thead>
-                <tbody id="attendanceBody">
-                    <!-- Rows injected by hr_attendance.js -->
-                </tbody>
-            </table>
-        </div>
-
-    </div><!-- /main-content -->
-
-    <!-- JavaScript -->
-    <script src="../static/js/attendance/hr_attendance.js"></script>
-
+    <script src="../../static/js/attendance/hr_attendance.js"></script>
 </body>
 </html>
