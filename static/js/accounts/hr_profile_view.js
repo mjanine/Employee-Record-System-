@@ -5,7 +5,7 @@ let pendingBase64 = null;
 let employees = JSON.parse(localStorage.getItem('addedEmployees')) || [];
 const params = new URLSearchParams(window.location.search);
 const empID = params.get('id');
-const source = params.get('source'); // This detects if you clicked from the list
+const source = params.get('source'); 
 
 let employmentHistory = [];
 
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeBtn = document.getElementById('closeBtn');
     const logoToggle = document.getElementById('logoToggle');
 
-    const handleToggle = () => sidebar.classList.toggle('collapsed');
+    const handleToggle = () => sidebar.classList.toggle('close');
     if (closeBtn) closeBtn.onclick = handleToggle;
     if (logoToggle) logoToggle.onclick = handleToggle;
 
@@ -215,6 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (empData) {
         if (empData.photo) document.getElementById('profImage').src = empData.photo;
         document.getElementById('profName').textContent = empData.fullName;
+        
+        // UPDATE: This sets the Position right below the Name
+        document.getElementById('profRoleHeader').textContent = empData.pos;
+        
         document.getElementById('profID').textContent = "Employee ID: " + empData.id;
         document.getElementById('profStatusText').textContent = empData.status;
         document.getElementById('profPos').textContent = empData.pos;
@@ -233,26 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         employmentHistory = empData.history || [];
     }
-
-    // --- SIDEBAR TAB HIGHLIGHTING LOGIC ---
-    const menuItems = document.querySelectorAll(".menu-item");
-    menuItems.forEach(item => {
-        const text = item.querySelector("span")?.innerText;
-        item.classList.remove('active'); // Start by clearing highlights
-
-        // 1. If we clearly came from the Records List, highlight Records
-        if (source === 'list' && text === "Employee Records") {
-            item.classList.add('active');
-        } 
-        // 2. If it is the HR viewing their own profile (or no source and correct ID)
-        else if (empID === "2024-001" && text === "Profile") {
-            item.classList.add('active');
-        }
-        // 3. Fallback: If no list source but viewing someone else, stay in Records
-        else if (empID !== "2024-001" && text === "Employee Records") {
-            item.classList.add('active');
-        }
-    });
 
     const editBtn = document.getElementById('editProfileBtn');
     if (editBtn) {
@@ -278,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     valueSpan.style.fontWeight = "normal";
 
                     if (label === "Department / Office") valueSpan.textContent = empData.dept;
+                    if (label === "Position") valueSpan.textContent = empData.pos;
                     if (label === "Department Code") {
                         const codeMap = { "Registrar": "REG - 101", "Computer": "CCS - 201", "Engineering": "COE - 301", "Medicine": "MED - 401", "Humanities": "CAS - 501", "Business": "CBA - 601" };
                         let code = "GEN - 101";
@@ -300,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const rows = document.querySelectorAll('table tbody tr');
                 rows.forEach(row => {
                     const docName = row.cells[0].innerText.trim();
-                    const savedDoc = (empData.documents && empData.documents[docName]);
+                    const savedDoc = (empData && empData.documents && empData.documents[docName]);
                     
                     if (!savedDoc) {
                         row.cells[1].innerText = "---";
@@ -335,15 +320,3 @@ window.onclick = (event) => {
     if (event.target == document.getElementById('documentModal')) closeModal();
     if (event.target == document.getElementById('historyModal')) closeHistoryModal();
 };
-
-const dashboard = document.querySelector(".dashboard-wrapper");
-function adjustDashboard() {
-    const sb = document.getElementById('sidebar');
-    if(!dashboard || !sb) return;
-    if(sb.classList.contains("collapsed")){
-        dashboard.style.marginLeft = "120px";
-    } else {
-        dashboard.style.marginLeft = "340px";
-    }
-}
-adjustDashboard();
