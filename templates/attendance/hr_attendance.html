@@ -214,6 +214,70 @@
             </div>
         </div> </main>
 
+    <div id="employeeModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        
+        <div class="modal-body">
+            <div class="modal-main">
+                <div class="modal-header-row">
+                    <h2 id="modalEmployeeName">Employee Name</h2>
+                    <div class="view-toggles">
+                        <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
+                        <button class="view-btn" id="monthlyViewBtn">Monthly View</button>
+                    </div>
+                    <div class="date-pager">
+                        <i class="fas fa-chevron-left"></i>
+                        <span id="dateRangeText">February 4 - 10, 2026</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <table class="modal-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Day</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Total Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTableBody">
+                        </tbody>
+                </table>
+                <div class="total-hours-footer">
+                    Total Hours This <span id="periodText">Week</span>: <span id="totalHoursValue">XX</span>
+                </div>
+            </div>
+
+            <div class="modal-sidebar">
+                <h3>Employee Details</h3>
+                <div class="detail-card">
+                    <div class="detail-avatar"><i class="fas fa-user"></i></div>
+                    <div class="info-group">
+                        <label>Employee ID</label>
+                        <span id="detID">001</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Position</label>
+                        <span id="detPos">Instructor</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Department</label>
+                        <span id="detDept">College of Computer Studies</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Employment Type</label>
+                        <span>Full-Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="../../static/js/attendance/hr_attendance.js"></script>
 </body>
 </html>

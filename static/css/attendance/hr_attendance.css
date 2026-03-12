@@ -351,3 +351,67 @@ hr {
 .pill-tan { background: #fef3c7; color: #92400e; }    /* Late / Partial Hours */
 .pill-purple { background: #f3e8ff; color: #6b21a8; } /* Leave */
 .pill-red { background: #fee2e2; color: #991b1b; }    /* Absent */
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    width: 90%;
+    max-width: 1100px;
+    border-radius: 20px;
+    position: relative;
+    padding: 30px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-body { display: flex; gap: 30px; }
+.modal-main { flex: 3; }
+.modal-sidebar { flex: 1; background: #f8f9fa; padding: 20px; border-radius: 15px; border: 1px solid #ddd; }
+
+/* View Toggles */
+.view-toggles { background: #eee; padding: 4px; border-radius: 10px; display: inline-flex; }
+.view-btn {
+    border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    font-weight: 600; font-size: 13px; transition: 0.3s;
+}
+.view-btn.active { background: #6b21a8; color: white; } /* Using your purple tone */
+
+/* Details Card */
+.detail-avatar {
+    width: 80px; height: 80px; background: #7f1d1d; color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin: 0 auto 20px;
+}
+.info-group { margin-bottom: 15px; }
+.info-group label { display: block; font-size: 12px; font-weight: 700; color: #666; }
+.info-group span { font-size: 14px; font-weight: 500; }
+
+.modal-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.modal-table th { background: #333; color: white; padding: 12px; text-align: left; }
+.modal-table td { padding: 12px; border-bottom: 1px solid #eee; }
+
+.total-hours-footer {
+    margin-top: 20px; background: #ddd; padding: 15px;
+    border-radius: 10px; text-align: center; font-weight: 700;
+}
