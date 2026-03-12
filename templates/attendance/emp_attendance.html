@@ -65,7 +65,7 @@
                     </div>
                     <div class="profile-details">
                         <h3>Juan Dela Cruz</h3>
-                        <p>Instructor</p>
+                        <p>Department Head</p>
                         <p class="emp-id">Employee ID: 001</p>
                         <button class="btn-secondary">View Profile</button>
                     </div>
@@ -100,13 +100,13 @@
                     <tbody>
                         <tr>
                             <td class="week-label">Feb 3 — Feb 10</td>
-                            <td>-</td>
+                            <td>2</td>
                             <td><span class="pill pill-warning">4h 36m</span></td>
                             <td><span class="pill pill-purple">Leave</span></td>
                             <td><span class="pill pill-success-check">8h 39m</span></td>
                             <td><span class="pill pill-success-check">8 hours</span></td>
                             <td><span class="pill pill-active">Active</span></td>
-                            <td>-</td>
+                            <td>8</td>
                         </tr>
                     </tbody>
                 </table>
@@ -118,78 +118,77 @@
         </div>
     </main>
 
-    <div id="historyModal" class="history-modal">
-        <div class="history-modal-content">
-            <div class="history-modal-header">
-                <div class="employee-name-tab">Dela Cruz, Juan</div>
-                <span class="close-history" id="closeHistoryBtn">&times;</span>
+   <div id="historyModal" class="history-modal">
+    <div class="history-modal-content">
+        <div class="history-modal-header">
+            <div class="employee-tab">Dela Cruz, Juan</div>
+            <span class="close-history" id="closeHistory">&times;</span>
+        </div>
+
+        <div class="history-modal-body">
+            <div class="history-controls">
+                <div class="view-toggle">
+                    <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
+                    <button class="view-btn" id="monthlyViewBtn">Monthly View</button>
+                </div>
+                <div class="date-navigator">
+                    <i class="fas fa-chevron-left"></i>
+                    <span id="historyDateRange">February 4 - 10</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
             </div>
 
-            <div class="history-modal-body">
-                <div class="history-controls">
-                    <div class="view-toggle">
-                        <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
-                        <button class="view-btn" id="monthlyViewBtn">Monthly View</button>
-                    </div>
-                    <div class="date-navigator">
-                        <i class="fas fa-chevron-left"></i>
-                        <span id="historyDateRange">February 4 - 10</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
+            <div class="history-layout-grid">
+                
+                <div class="table-section">
+                    <table class="history-log-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Day</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th>Total Hours</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td>February 4, 2026</td>
+                                <td>Monday</td>
+                                <td>8:03 AM</td>
+                                <td>5:02 PM</td>
+                                <td>8h 59m</td>
+                                <td><span class="status-badge present">Present</span></td>
+                            </tr>
+                            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="history-layout-grid">
-                    <div class="table-section">
-                        <table class="history-log-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Day</th>
-                                    <th>Time In</th>
-                                    <th>Time Out</th>
-                                    <th>Total Hours</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historyTableBody">
-                                <tr>
-                                    <td>February 4, 2026</td>
-                                    <td>Monday</td>
-                                    <td>8:03 AM</td>
-                                    <td>5:02 PM</td>
-                                    <td>8h 59m</td>
-                                    <td><span class="status-badge present">Present</span></td>
-                                </tr>
-                                <tr class="empty-row"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                <tr class="empty-row"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                <tr class="empty-row"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                                <tr class="empty-row"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                            </tbody>
-                        </table>
+                <aside class="history-sidebar">
+                    <div class="employee-details-card">
+                        <h3>Employee Details</h3>
+                        <div class="profile-circle">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="details-rows">
+                            <div class="detail-item"><strong>Employee ID</strong> <span>001</span></div>
+                            <div class="detail-item"><strong>Position</strong> <span>Instructor</span></div>
+                            <div class="detail-item"><strong>Department</strong> <span>College of Computer Studies</span></div>
+                            <div class="detail-item"><strong>Employment Type</strong> <span>Full-Time</span></div>
+                        </div>
                     </div>
-
-                    <aside class="history-sidebar">
-                        <div class="employee-details-card">
-                            <h3>Employee Details</h3>
-                            <div class="profile-circle">
-                                <img src="../../static/img/icon.jpeg" alt="Juan">
-                            </div>
-                            <div class="details-rows">
-                                <div class="detail-item"><strong>Employee ID</strong> <span>001</span></div>
-                                <div class="detail-item"><strong>Position</strong> <span>Instructor</span></div>
-                                <div class="detail-item"><strong>Department</strong> <span>College of Computer Studies</span></div>
-                                <div class="detail-item"><strong>Employment Type</strong> <span>Full-Time</span></div>
-                            </div>
-                        </div>
-                        <div class="hours-summary-box">
-                            Total Hours This Week: <span id="totalHoursCount">XX</span>
-                        </div>
-                    </aside>
-                </div>
+                    <div class="hours-summary-box">
+                        Total Hours This Week: <span id="totalHoursCount">45h 12m</span>
+                    </div>
+                </aside>
             </div>
         </div>
     </div>
-
+</div>
     <script src="../../static/js/attendance/emp_attendance.js"></script>
 </body>
 </html>
