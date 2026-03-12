@@ -1,15 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // --- Elements ---
+    // --- Element Selectors ---
     const sidebar = document.getElementById("sidebar");
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
     const mainContent = document.getElementById("mainContent");
-    const menuItems = document.querySelectorAll(".menu-item");
-
     const searchInput = document.getElementById("trainingSearch");
-    const cards = document.querySelectorAll(".training-card");
-
+    const trainingCards = document.querySelectorAll(".training-card");
+    
+    // Modal Elements
     const modal = document.getElementById("trainingModal");
     const closeModalBtn = document.getElementById("closeModal");
     const modalTitle = document.getElementById("modalTitle");
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (closeBtn) {
         closeBtn.addEventListener("click", () => {
             sidebar.classList.add("collapsed");
-            if (mainContent) mainContent.style.marginLeft = "100px";
+            if (mainContent) mainContent.style.marginLeft = "110px";
         });
     }
 
@@ -32,78 +31,82 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Set tooltip text for collapsed sidebar
-    menuItems.forEach(item => {
-        const span = item.querySelector("span");
-        if (span) item.setAttribute("data-text", span.innerText);
-    });
-
-
-    // --- 2. Search / Filter Logic ---
+    // --- 2. Search Filter Logic ---
     if (searchInput) {
         searchInput.addEventListener("keyup", () => {
             const filter = searchInput.value.toLowerCase();
-            cards.forEach(card => {
+            trainingCards.forEach(card => {
                 const text = card.innerText.toLowerCase();
                 card.style.display = text.includes(filter) ? "" : "none";
             });
         });
     }
 
+    // --- 3. Modal Functionality ---
 
-    // --- 3. Registration Button Logic ---
-    // We use stopPropagation so clicking "Register" doesn't also open the "View" modal
-    document.querySelectorAll(".btn-register:not(.btn-register--disabled)").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevents the card click event from firing
-            const card = btn.closest(".training-card");
-            const name = card.querySelector(".training-card-title").textContent;
-            alert(`Registration request sent for: ${name}`);
-        });
-    });
-
-
-    // --- 4. Modal (View Training) Logic ---
-    
-    // Function to open modal and populate data
-    const openTrainingModal = (card) => {
+    /**
+     * Opens the modal and populates the header with card data
+     * @param {HTMLElement} card - The clicked training card element
+     */
+    const openModal = (card) => {
         const title = card.querySelector(".training-card-title").innerText;
         const category = card.querySelector(".training-card-category").innerText;
         const date = card.querySelector(".training-card-date").innerText;
 
-        // Update Modal Header text based on clicked card
+        // Update Modal Header
         if (modalTitle) modalTitle.innerText = title;
-        if (modalSubtitle) modalSubtitle.innerText = `${category} | ${date}`;
+        if (modalSubtitle) modalSubtitle.innerText = `${category} | Onsite | ${date}`;
 
         modal.classList.add("active");
     };
 
-    // Click event for the cards
-    cards.forEach(card => {
-        card.addEventListener("click", () => {
-            openTrainingModal(card);
+    // Card Click Event
+    trainingCards.forEach(card => {
+        card.addEventListener("click", (e) => {
+            // If the user clicks the "Register" button specifically, do not open the modal
+            if (e.target.classList.contains("btn-register")) {
+                handleRegistration(card);
+                return;
+            }
+            openModal(card);
         });
     });
 
-    // Close Modal via Button
+    // Registration Handler
+    const handleRegistration = (card) => {
+        const title = card.querySelector(".training-card-title").innerText;
+        alert(`Registration request submitted for: ${title}`);
+    };
+
+    // --- 4. Close Modal Logic ---
+
+    // Close via "Close" button
     if (closeModalBtn) {
         closeModalBtn.addEventListener("click", () => {
             modal.classList.remove("active");
         });
     }
 
-    // Close Modal by clicking the darkened background
+    // Close via clicking the darkened overlay
     window.addEventListener("click", (e) => {
         if (e.target === modal) {
             modal.classList.remove("active");
         }
     });
 
-    // Handle "Esc" key to close modal
+    // Close via "Escape" key
     window.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal.classList.contains("active")) {
             modal.classList.remove("active");
         }
     });
 
+    // --- 5. Action Buttons (Edit/Cancel) ---
+    const editBtn = document.querySelector(".btn-grey:nth-child(1)");
+    if (editBtn) {
+        editBtn.addEventListener("click", () => {
+            console.log("Edit mode triggered for:", modalTitle.innerText);
+            // Future logic: Toggle contentEditable on table cells
+        });
+    }
 });
