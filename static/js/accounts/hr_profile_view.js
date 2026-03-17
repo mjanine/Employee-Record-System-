@@ -215,10 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (empData) {
         if (empData.photo) document.getElementById('profImage').src = empData.photo;
         document.getElementById('profName').textContent = empData.fullName;
-        
-        // UPDATE: This sets the Position right below the Name
         document.getElementById('profRoleHeader').textContent = empData.pos;
-        
         document.getElementById('profID').textContent = "Employee ID: " + empData.id;
         document.getElementById('profStatusText').textContent = empData.status;
         document.getElementById('profPos').textContent = empData.pos;
@@ -236,6 +233,28 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (status === "on leave") statusDot.style.backgroundColor = "#f3e08c";
 
         employmentHistory = empData.history || [];
+
+        // --- ROLE-BASED SIDEBAR HIGHLIGHT ---
+        const menuItems = document.querySelectorAll('.menu-item');
+        const userPosition = empData.pos.toLowerCase();
+
+        menuItems.forEach(item => {
+            item.classList.remove('active');
+            const icon = item.querySelector('i');
+
+            // If the person being viewed is HR or Admin, highlight Profile
+            if (userPosition.includes('hr') || userPosition.includes('admin')) {
+                if (icon && icon.classList.contains('fa-user')) {
+                    item.classList.add('active');
+                }
+            } 
+            // Otherwise, keep highlighting Employee Records
+            else {
+                if (icon && icon.classList.contains('fa-database')) {
+                    item.classList.add('active');
+                }
+            }
+        });
     }
 
     const editBtn = document.getElementById('editProfileBtn');
