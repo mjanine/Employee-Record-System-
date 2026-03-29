@@ -1,4 +1,3 @@
-/* emp_applicationleave.js */
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const closeBtn = document.getElementById('closeBtn');
@@ -7,25 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const leaveForm = document.getElementById('leaveRequestForm');
-    const menuItems = document.querySelectorAll(".menu-item"); // Added for tooltips
+    const menuItems = document.querySelectorAll(".menu-item");
 
-    let selectedFileData = null; 
-    let selectedFileName = "No Document Attached";
-
-    // --- TOOLTIP INITIALIZATION (The Fix for the Labels) ---
+    // --- sidebar tooltips ---
     menuItems.forEach(item => {
         const span = item.querySelector("span");
         if (span) {
-            const spanText = span.innerText;
-            item.setAttribute("data-text", spanText);
+            item.setAttribute("data-text", span.innerText);
         }
     });
 
-    // Sidebar
+    // sidebar toggle logic
     if (closeBtn) closeBtn.onclick = () => sidebar.classList.add('collapsed');
     if (logoToggle) logoToggle.onclick = () => sidebar.classList.toggle('collapsed');
 
-    // Type Selection
+    // leave type selection logic
     typeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             typeButtons.forEach(b => b.classList.remove('active'));
@@ -33,61 +28,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // File Upload
+    // --- file upload & filename display ---
     if (dropZone && fileInput) {
         dropZone.onclick = () => fileInput.click();
+
         fileInput.onchange = () => {
             if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                selectedFileName = file.name;
-                const reader = new FileReader();
-                reader.onload = (e) => { 
-                    selectedFileData = e.target.result; 
-                    dropZone.innerHTML = `<i class="fas fa-check-circle" style="color: #28a745; font-size: 24px;"></i><p>Selected: <b>${selectedFileName}</b></p>`;
-                };
-                reader.readAsDataURL(file);
+                const fileName = fileInput.files[0].name;
+                dropZone.innerHTML = `
+                    <i class="fas fa-file-alt" style="color: #4a1d1d; font-size: 24px;"></i>
+                    <p>selected: <b>${fileName}</b></p>
+                    <small style="color: #666;">click again to change file</small>
+                `;
             }
         };
     }
 
-    // Submit Logic
+    // --- submit logic (no localstorage) ---
     if (leaveForm) {
         leaveForm.onsubmit = (e) => {
             e.preventDefault();
-            const activeBtn = document.querySelector('.type-btn.active');
-            const leaveType = activeBtn ? activeBtn.innerText : "General Leave";
-            const startDateVal = document.getElementsByName('start_date')[0].value;
-            const endDateVal = document.getElementsByName('end_date')[0].value;
-            const reasonVal = document.querySelector('.form-textarea').value;
 
-            const diffDays = Math.ceil(Math.abs(new Date(endDateVal) - new Date(startDateVal)) / (1000 * 60 * 60 * 24)) + 1;
+            const toast = Swal.mixin({
+                toast: true,
+                position: "top",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
 
-            const newRequest = {
-                id: Date.now(),
-                name: "John Smith",
-                role: "Instructor",
-                dept: "CCS",
-                dateFiled: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-                submitDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-                submitTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-                leaveType: leaveType,
-                startDate: startDateVal,
-                endDate: endDateVal,
-                numDays: diffDays,
-                status: "Pending",
-                reviewedBy: "---",
-                fileName: selectedFileName,
-                fileData: selectedFileData, 
-                reason: reasonVal,
-                // Stage 1 Remark
-                reviewRemarks: "Awaiting initial review from the Department Head."
-            };
-
-            let allRequests = JSON.parse(localStorage.getItem('allLeaveRequests')) || [];
-            allRequests.push(newRequest);
-            localStorage.setItem('allLeaveRequests', JSON.stringify(allRequests));
-            alert("Leave Request Submitted!");
-            window.location.href = 'emp_leaverequest.html';
+            toast.fire({
+                icon: "success",
+                title: "Leave request submitted successfully"
+            }).then(() => {
+                window.location.href = 'emp_leaverequest.html';
+            });
         };
     }
 });
