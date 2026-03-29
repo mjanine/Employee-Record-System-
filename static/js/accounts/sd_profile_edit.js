@@ -1,80 +1,68 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const targetID = "003"; // Targeting School Director ID
+/**
+ * Sidebar Toggle Logic
+ */
+const sidebar = document.getElementById('sidebar');
+const logoToggle = document.getElementById('logoToggle');
+const closeBtn = document.getElementById('closeBtn');
 
-    // --- Sidebar & UI Logic ---
-    const sidebar = document.getElementById('sidebar');
-    const closeBtn = document.getElementById('closeBtn');
-    const logoToggle = document.getElementById('logoToggle');
+if (logoToggle) {
+    logoToggle.addEventListener('click', () => sidebar.classList.toggle('close'));
+}
+if (closeBtn) {
+    closeBtn.addEventListener('click', () => sidebar.classList.add('close'));
+}
 
-    const handleToggle = () => sidebar && sidebar.classList.toggle('close');
-    if (closeBtn) closeBtn.onclick = handleToggle;
-    if (logoToggle) logoToggle.onclick = handleToggle;
-
-    // Sidebar Tooltips
-    document.querySelectorAll('.menu-item').forEach(item => {
-        const span = item.querySelector('span');
-        if (span) item.setAttribute('data-text', span.innerText);
+/**
+ * Update Changes Function (Rectangle Toast)
+ */
+function updateSDProfile() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 1800,
+        timerProgressBar: true,
+        width: '450px', // Horizontal Rectangle
+        background: '#fff',
+        color: '#4a1d1d',
+        iconColor: '#4a1d1d',
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
     });
 
-    // --- Data Loading Logic ---
-    let employees = JSON.parse(localStorage.getItem('addedEmployees')) || [];
-    let headData = employees.find(e => e.id === targetID);
+    Toast.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'School Director profile has been updated.'
+    }).then(() => {
+        window.location.href = 'sd_profile_view.html';
+    });
+}
 
-    if (headData) {
-        // Map data to your exact HTML IDs
-        document.getElementById('sdID').value = headData.id || "";
-        document.getElementById('sdStatus').value = headData.status || "";
-        document.getElementById('sdType').value = headData.empType || ""; // maps to Employment Type
-        document.getElementById('dept').value = headData.dept || "";
-        document.getElementById('pos').value = headData.pos || "";
-        document.getElementById('dateHired').value = headData.dateHired || "";
-        
-        // Split Name logic
-        if (headData.fullName && headData.fullName.includes(',')) {
-            const parts = headData.fullName.split(',');
-            document.getElementById('lastName').value = parts[0].trim();
-            document.getElementById('firstName').value = parts[1].trim();
-        } else {
-            document.getElementById('firstName').value = headData.fullName || "";
-            document.getElementById('lastName').value = "---";
+/**
+ * Cancel Function (Rectangle Modal)
+ */
+function cancelSDEdit() {
+    Swal.fire({
+        title: 'Discard changes?',
+        text: "Any unsaved information will be lost.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4a1d1d',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, discard',
+        cancelButtonText: 'No',
+        width: '400px', // Rectangle shape
+        padding: '1rem',
+        customClass: {
+            title: 'small-swal-title',
+            htmlContainer: 'small-swal-text'
         }
-
-        // Photo
-        if (headData.photo) {
-            document.getElementById('displayPhoto').src = headData.photo;
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'sd_profile_view.html';
         }
-
-        // Editable Contact Fields
-        document.getElementById('email').value = headData.email || "";
-        document.getElementById('contact').value = headData.contact || "";
-        document.getElementById('address').value = headData.address || "";
-        document.getElementById('emergencyName').value = headData.emergencyName || "";
-        document.getElementById('emergencyPhone').value = headData.emergencyPhone || "";
-    } else {
-        console.error("No record found for ID 003");
-    }
-});
-
-// --- Update Function ---
-window.updateSD = function() {
-    const targetID = "003";
-    let employees = JSON.parse(localStorage.getItem('addedEmployees')) || [];
-    const index = employees.findIndex(e => e.id === targetID);
-
-    if (index !== -1) {
-        // Update the editable fields only
-        employees[index].email = document.getElementById('email').value;
-        employees[index].contact = document.getElementById('contact').value;
-        employees[index].address = document.getElementById('address').value;
-        employees[index].emergencyName = document.getElementById('emergencyName').value;
-        employees[index].emergencyPhone = document.getElementById('emergencyPhone').value;
-
-        // Save to storage
-        localStorage.setItem('addedEmployees', JSON.stringify(employees));
-        
-        alert("Changes saved successfully!");
-        window.location.href = "sd_profile_view.html";
-    } else {
-        alert("Error: Record not found.");
-    }
-};
+    });
+}

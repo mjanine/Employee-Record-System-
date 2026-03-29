@@ -124,7 +124,7 @@ body {
 .background {
     position: fixed;
     inset: 0;
-    background: url('../../img/general/bg.jpeg') no-repeat center/cover;
+    background: url('../../../img/general/bg.jpeg') no-repeat center/cover;
     filter: blur(10px);
     transform: scale(1.1); 
     z-index: -1;
@@ -269,14 +269,5 @@ hr {
 
 .bottom-section {
     margin-top: auto;
-}
-
-.background {
-    position: fixed;
-    inset: 0;
-    background: url('/Employee-Record-System--main/static/img/general/bg.jpeg') no-repeat center/cover;
-    filter: blur(10px);
-    transform: scale(1.1); 
-    z-index: -1;
 }
 

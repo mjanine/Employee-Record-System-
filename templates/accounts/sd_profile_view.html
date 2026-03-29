@@ -3,108 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Director | Profile</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <title>My Profile | Employee System</title>
+    <link rel="shortcut icon" href="../../static/img/general/uph.png">
     <link rel="stylesheet" href="../../static/css/accounts/sd_profile_view.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-    <div class="background"></div>
+<div class="background"></div>
 
-    <div class="dashboard-viewport">
-        <div class="sidebar" id="sidebar">
-            <div class="top-section">
-                <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo">
-                    <div class="open-icon">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
+<div class="dashboard-viewport">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="top-section">
+            <div class="logo-wrapper" id="logoToggle">
+                <img src="../../static/img/general/uph.png" class="logo">
+                <div class="open-icon">
+                    <i class="fas fa-chevron-right"></i>
                 </div>
-                <button class="close-btn" id="closeBtn">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
             </div>
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
 
-            <ul class="menu">
-                <li><a href="../dashboards/sd_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+        <ul class="menu">
+            <li><a href="../dashboards/sd_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
                 <li><a href="../accounts/sd_profile_view.html" class="menu-item active"><i class="fas fa-user"></i> <span>Profile</span></a></li>
                 <hr>
                 <li><a href="ENTER" class="menu-item"><i class="fas fa-star"></i> <span>Performance Evaluation</span></a></li>
                 <li><a href="ENTER" class="menu-item"><i class="fas fa-calendar-check"></i> <span>Attendance</span></a></li>
                 <li><a href="../leave/sd_leaveselect.html" class="menu-item"><i class="fas fa-plane-departure"></i> <span>Leave Request</span></a></li>
-            </ul>
+        </ul>
 
-            <div class="bottom-section">
-                <a href="../login/login.html" class="menu-item logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Log Out</span>
-                </a>
-            </div>
+        <div class="bottom-section">
+            <a href="#" class="menu-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Log Out</span>
+            </a>
         </div>
+    </div>
 
-        <main class="main-content">
-            <div class="profile-page-container">
+    <!-- MAIN -->
+    <main class="main-content">
+        <div class="profile-page-container">
 
-                <div class="profile-card">
-                    <div class="profile-left">
-                        <img src="../../static/img/sample-profile-pic.jfif" class="profile-img" id="profImage">
-                        <div class="profile-info">
-                            <h2 id="profName">---</h2>
-                            <p class="role" id="profRoleHeader">---</p>
-                            <p class="employee-id" id="profID">Employee ID: ---</p>
+            <!-- PROFILE -->
+            <div class="profile-card">
+                <div class="profile-left">
+                    <img src="../../static/img/sample-profile-pic.jfif" class="profile-img">
 
-                            <div class="employment-details">
-                                <p>
-                                    <strong>Status</strong>
-                                    <span id="statusDot" class="status-dot"></span>
-                                    <span id="profStatusText">---</span>
-                                </p>
-                                <p><strong>Position</strong> <span id="profPos">---</span></p>
-                                <p><strong>Department</strong> <span id="profDept">---</span></p>
-                                <p><strong>Employment Type</strong> <span id="profType">---</span></p>
-                                <p><strong>Date Hired</strong> <span id="profDateHired">---</span></p>
+                    <div class="profile-info">
+                        <h2>Maria Santos</h2>
+                        <p class="role">School Director</p>
+                        <p class="employee-id">Employee ID: SD001</p>
+
+                        <div class="employment-details">
+                            <p><strong>Status</strong> <span class="status-dot" style="background:#8ddf9b"></span> Active</p>
+                            <p><strong>Position</strong> School Director</p>
+                            <p><strong>Department</strong> Administration</p>
+                            <p><strong>Employment Type</strong> Full-time</p>
+                            <p><strong>Date Hired</strong> 2022-01-15</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-right">
+                    <a href="sd_profile_edit.html">
+                        <button class="edit-btn">Edit Profile</button>
+                    </a>
+
+                    <div class="contact-info">
+                        <h4>Contact Information</h4>
+                        <p><i class="fas fa-envelope"></i> maria.santos@email.com</p>
+                        <p><i class="fas fa-phone"></i> +63 912 345 6789</p>
+                        <p><i class="fas fa-location-dot"></i> Manila, Philippines</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab active" data-tab="dept">Department</button>
+                <button class="tab" data-tab="docs">Documents</button>
+                <button class="tab" data-tab="history">Employment History</button>
+            </div>
+
+            <!-- TAB CONTENT -->
+            <div class="tab-content">
+
+                <!-- DEPARTMENT -->
+                <div class="tab-content-item active" id="dept">
+                    <div class="info-card">
+                        <h4>Department Information</h4>
+                        <div class="info-row"><span>Department</span><span>Administration</span></div>
+                        <div class="info-row"><span>Code</span><span>ADM-101</span></div>
+                        <div class="info-row"><span>Location</span><span>Main Building 1st Floor</span></div>
+                        <div class="info-row"><span>Email</span><span>admin@school.com</span></div>
+                        <div class="info-row"><span>Contact</span><span>+63 912 333 4444</span></div>
+                    </div>
+                </div>
+
+                <!-- DOCUMENTS -->
+                <div class="tab-content-item" id="docs">
+
+                    <div class="doc-header">
+                        <span>2 of 3 uploaded</span>
+                    </div>
+
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Date Uploaded</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+    <tr>
+        <td>Transcript of Records</td>
+        <td>PDF</td>
+        <td class="valid">Valid</td>
+        <td>March 1, 2025</td>
+        <td class="actions">
+            <a href="../../docs/tor.pdf" target="_blank">
+                <i class="fas fa-eye action-icon"></i>
+            </a>
+            <a href="../../docs/tor.pdf" download>
+                <i class="fas fa-download action-icon"></i>
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Licenses / Certification</td>
+        <td>PDF</td>
+        <td class="update">Needs Update</td>
+        <td>February 10, 2025</td>
+        <td class="actions">
+            <a href="../../docs/license.pdf" target="_blank">
+                <i class="fas fa-eye action-icon"></i>
+            </a>
+            <a href="../../docs/license.pdf" download>
+                <i class="fas fa-download action-icon"></i>
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <td>NBI Clearance</td>
+        <td>JPG</td>
+        <td class="missing">Missing</td>
+        <td>---</td>
+        <td class="actions">---</td>
+    </tr>
+</tbody>
+                    </table>
+
+                </div>
+
+                <!-- HISTORY -->
+                <div class="tab-content-item" id="history">
+
+                    <div class="timeline">
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025</div>
+                            <div class="timeline-content">
+                                <h4>Promotion</h4>
+                                <p>School Director Asst. → School Director</p>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="profile-right">
-                        <a href="sd_profile_edit.html" style="text-decoration: none;">
-                            <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
-                        </a>
-
-                        <div class="contact-info">
-                            <h4>Contact Information</h4>
-                            <p>📧 <span id="profEmail">---</span></p>
-                            <p>📞 <span id="profContact">---</span></p>
-                            <p>📍 <span id="profAddress">---</span></p>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2022</div>
+                            <div class="timeline-content">
+                                <h4>Hired</h4>
+                                <p>Joined Director Office Department</p>
+                            </div>
                         </div>
+
                     </div>
-                </div>
 
-                <div class="tabs">
-                    <button class="tab active" data-tab="sd_department_view">Department</button>
-                    <button class="tab" data-tab="sd_documents_view">Documents</button>
-                    <button class="tab" data-tab="sd_employment-history_view">Employment History</button>
                 </div>
-
-                <div id="tab-content-container" class="tab-content"></div>
 
             </div>
-        </main>
-    </div>
 
-
-    <!-- DOCUMENT MODAL -->
-    <div id="documentModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
-        <div style="background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 900px; position: relative; color: black; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <span onclick="closeModal()" style="position: absolute; right: 20px; top: 10px; font-size: 35px; cursor: pointer; color: #333; font-weight: bold;">&times;</span>
-            <h2 id="modalDocName" style="margin-bottom: 20px; font-size: 18px; font-family: sans-serif; border-bottom: 1px solid #eee; padding-bottom: 10px;">Document View</h2>
-            <div id="modalPreviewWrapper" style="text-align: center; width: 100%; min-height: 450px; display: flex; align-items: center; justify-content: center; background: #f4f4f4; border-radius: 8px; overflow: auto;"></div>
         </div>
-    </div>
+    </main>
+</div>
 
+<script src="../../static/js/accounts/sd_profile_view.js"></script>
 
-    <script src="../../static/js/accounts/sd_profile_view.js"></script>
 </body>
 </html>

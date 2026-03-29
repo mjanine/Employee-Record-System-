@@ -179,3 +179,46 @@ input[readonly] { background-color: #f0f0f0; cursor: not-allowed; color: #888; }
 .close-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; }
 hr { border: 0.5px solid rgba(255,255,255,0.2); margin: 10px 0; }
 .bottom-section { margin-top: auto; }
+
+/* Custom sizes for SweetAlert notifications */
+.small-swal-title {
+    font-size: 18px !important; /* Smaller Header */
+    font-weight: 600;
+    color: #4a1d1d;
+}
+
+.small-swal-text {
+    font-size: 14px !important; /* Smaller Body Text */
+    color: #666;
+}
+
+/* Optional: Make the icons slightly smaller too */
+.swal2-icon {
+    transform: scale(0.8);
+}
+/* Styling for the Rectangle Notification */
+.swal2-toast {
+    border: 1px solid #4a1d1d;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* Slimmer Text for Toast */
+.swal2-title {
+    font-size: 16px !important;
+    margin: 0 10px !important;
+}
+
+.swal2-html-container {
+    font-size: 13px !important;
+}
+
+/* Adjusting the Header of the Discard Modal */
+.small-swal-title {
+    font-size: 18px !important;
+    color: #4a1d1d;
+}
+
+.small-swal-text {
+    font-size: 14px !important;
+}
