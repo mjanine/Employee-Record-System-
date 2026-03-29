@@ -38,7 +38,7 @@ function updateHRProfile() { // Pinalitan ang pangalan para mag-match sa HTML
         text: 'HR Manager profile has been updated.' // Custom message para sa HR
     }).then(() => {
         // Siguraduhin na tama ang path papunta sa view page
-        window.location.href = 'hr_profile_view.html?id=2024-001';
+        window.location.href = 'hr_profile_view.html';
     });
 }
 
@@ -63,7 +63,7 @@ function cancelHREdit() { // Pinalitan ang pangalan para mag-match sa HTML
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = 'hr_profile_view.html?id=2024-001';
+            window.location.href = 'hr_profile_view.html';
         }
     });
 }

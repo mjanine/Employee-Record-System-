@@ -13,16 +13,16 @@ if (closeBtn) {
 }
 
 /**
- * Update Changes Function (Rectangle Toast)
+ * Update Changes Function (HR Version)
  */
-function updateEProfile() {
+function updateHRProfile() { // Pinalitan ang pangalan para mag-match sa HTML
     const Toast = Swal.mixin({
         toast: true,
         position: 'top',
         showConfirmButton: false,
         timer: 1800,
         timerProgressBar: true,
-        width: '450px', // Horizontal Rectangle
+        width: '450px',
         background: '#fff',
         color: '#4a1d1d',
         iconColor: '#4a1d1d',
@@ -35,16 +35,17 @@ function updateEProfile() {
     Toast.fire({
         icon: 'success',
         title: 'Success!',
-        text: 'Employee profile has been updated.'
+        text: 'Employee profile has been updated.' // Custom message para sa HR
     }).then(() => {
-        window.location.href = 'emp_profile_view.html';
+        // Siguraduhin na tama ang path papunta sa view page
+        window.location.href = 'hr_employee_view.html';
     });
 }
 
 /**
- * Cancel Function (Rectangle Modal)
+ * Cancel Function (HR Version)
  */
-function cancelEEdit() {
+function cancelHREdit() { // Pinalitan ang pangalan para mag-match sa HTML
     Swal.fire({
         title: 'Discard changes?',
         text: "Any unsaved information will be lost.",
@@ -54,7 +55,7 @@ function cancelEEdit() {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, discard',
         cancelButtonText: 'No',
-        width: '400px', // Rectangle shape
+        width: '400px',
         padding: '1rem',
         customClass: {
             title: 'small-swal-title',
@@ -62,7 +63,7 @@ function cancelEEdit() {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = 'emp_profile_view.html';
+            window.location.href = 'hr_employee_view.html';
         }
     });
 }

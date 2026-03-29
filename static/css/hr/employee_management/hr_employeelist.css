@@ -319,3 +319,27 @@ hr {
     transform: scale(1.1); 
     z-index: -1;
 }
+/* Sets the action icons to a deep maroon */
+.action-cell i, 
+.action-link i {
+    color: #800000; /* Maroon */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Hover effect for the icons */
+.action-cell i:hover, 
+.action-link:hover i {
+    color: #4a1d1d; /* Slightly darker maroon on hover */
+    transform: scale(1.1);
+}
+
+/* Specific styling for the 'Add File' label icons */
+.add-file-label {
+    color: #800000;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.add-file-label i {
+    margin-right: 5px;
+}
