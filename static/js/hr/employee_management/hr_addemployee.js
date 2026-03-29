@@ -219,5 +219,3 @@ if(canvas){
         startAngle += slice;
     });
 }
-
-
