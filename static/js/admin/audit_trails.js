@@ -241,19 +241,39 @@ document.querySelectorAll('.ip-address, .device-info').forEach(el => {
 });
 
 function showAlert(message, type = 'info') {
-    // Create a simple alert (in real app, would use a toast notification library)
+    // Create (or reuse) a toast container so multiple alerts stack without overlap.
+    let alertContainer = document.getElementById('toastContainer');
+    if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'toastContainer';
+        alertContainer.style.position = 'fixed';
+        alertContainer.style.top = '32px';
+        alertContainer.style.right = '32px';
+        alertContainer.style.zIndex = '2000';
+        alertContainer.style.display = 'flex';
+        alertContainer.style.flexDirection = 'column';
+        alertContainer.style.gap = '12px';
+        alertContainer.style.maxWidth = '420px';
+        alertContainer.style.width = 'min(420px, calc(100vw - 40px))';
+        alertContainer.style.pointerEvents = 'none';
+        document.body.appendChild(alertContainer);
+    }
+
     const alert = document.createElement('div');
     alert.className = `alert ${type}`;
     alert.innerHTML = `<i class="fas fa-info-circle"></i> <span>${message}</span>`;
-    alert.style.position = 'fixed';
-    alert.style.top = '20px';
-    alert.style.right = '20px';
-    alert.style.zIndex = '2000';
     alert.style.maxWidth = '400px';
+    alert.style.margin = '0';
+    alert.style.pointerEvents = 'auto';
     
-    document.body.appendChild(alert);
+    alertContainer.appendChild(alert);
     
     setTimeout(() => {
         alert.remove();
+
+        // Remove empty container so we do not keep unused fixed elements in DOM.
+        if (alertContainer && !alertContainer.children.length) {
+            alertContainer.remove();
+        }
     }, 3000);
 }
