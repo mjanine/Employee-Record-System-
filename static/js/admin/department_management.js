@@ -191,7 +191,7 @@ function handleAssignHeadSubmit(e) {
 
 function filterDepartments(searchTerm) {
     // Filter Grid View
-    document.querySelectorAll('.department-card').forEach(card => {
+    document.querySelectorAll('#departmentsGrid .department-card[data-dept-id]').forEach(card => {
         const deptName = card.querySelector('h3')?.textContent.toLowerCase() || '';
         card.style.display = deptName.includes(searchTerm) ? '' : 'none';
     });
@@ -206,14 +206,14 @@ function filterDepartments(searchTerm) {
 function filterDepartmentsByHead(filterValue) {
     if (filterValue === '') {
         // Show all
-        document.querySelectorAll('.department-card, .dept-row').forEach(el => {
+        document.querySelectorAll('#departmentsGrid .department-card[data-dept-id], .dept-row').forEach(el => {
             el.style.display = '';
         });
         return;
     }
 
     // Filter Grid View
-    document.querySelectorAll('.department-card').forEach(card => {
+    document.querySelectorAll('#departmentsGrid .department-card[data-dept-id]').forEach(card => {
         const hasHead = !card.querySelector('.unassigned');
         const show = (filterValue === 'assigned' && hasHead) || 
                      (filterValue === 'unassigned' && !hasHead);

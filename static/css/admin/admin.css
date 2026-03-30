@@ -1242,6 +1242,9 @@
 }
 
 .head-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--admin-border);
     cursor: pointer;
@@ -1257,12 +1260,15 @@
 }
 
 .head-option input {
-    margin-right: 0.75rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
 }
 
 .head-option label {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
     cursor: pointer;
     margin: 0;
 }
@@ -1277,7 +1283,6 @@
     display: block;
     font-size: 0.8rem;
     color: var(--admin-text-light);
-    margin-top: 0.25rem;
 }
 
 /* =================================
