@@ -1,66 +1,246 @@
+/* ================================
+   1. Reset & Global Layout
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
 /* Lock Viewport Height */
 body, html {
     height: 100%;
+    width: 100%;
     margin: 0;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
-/* Master Layout Container */
+/* ================================
+   2. Blurred Fixed Background
+================================ */
+.background {
+    position: fixed;
+    inset: 0;
+    background: url('../../img/general/bg.jpeg') no-repeat center/cover;
+    filter: blur(10px);
+    transform: scale(1.1);
+    z-index: -1;
+}
+
+/* ================================
+   3. Master Layout Container
+================================ */
 .dashboard-viewport {
     display: flex;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    padding: 20px;
+    gap: 20px;
     box-sizing: border-box;
 }
 
-/* Sidebar behavior - Fixed shrink prevention */
+/* ================================
+   4. Sidebar (FIXED)
+================================ */
 .sidebar {
-    flex-shrink: 0;
-    transition: width 0.4s ease;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    height: calc(100% - 40px);
+    width: 300px;
+    padding: 25px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: width 0.35s ease;
+    z-index: 1000;
 }
 
-/* Main Content: The Adjusted Centering Wrapper */
-.main-content {
-    flex: 1; 
+.sidebar.collapsed {
+    width: 90px;
+}
+
+/* Sidebar Internal spacing */
+.top-section {
     display: flex;
-    /* Centers the modal in the area to the right of the sidebar */
-    justify-content: center; 
-    align-items: center;     
-    height: 100vh;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-wrapper {
+    width: 45px;
+    height: 45px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.logo {
+    width: 100%;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.open-icon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    color: white;
+    transition: 0.3s;
+}
+
+.sidebar.collapsed .logo-wrapper:hover .logo {
+    opacity: 0;
+}
+
+.sidebar.collapsed .logo-wrapper:hover .open-icon {
+    opacity: 1;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.sidebar.collapsed .close-btn {
+    display: none;
+}
+
+.menu {
+    list-style: none;
+    margin-top: 30px;
+    flex: 1;
+}
+
+.menu-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: background 0.3s;
+}
+
+.menu-item i {
+    width: 50px;
+    text-align: center;
+}
+
+.menu-item span {
+    position: absolute;
+    left: 60px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .menu-item span {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.menu-item.active {
+    background: rgba(255,255,255,0.25);
+}
+
+/* --- FIXED: LABEL TOOLTIP FOR COLLAPSED SIDEBAR --- */
+.sidebar.collapsed .menu-item:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(20, 20, 20, 0.95);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 2000;
+    opacity: 1;
+    pointer-events: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Optional: Pointer triangle for the tooltip */
+.sidebar.collapsed .menu-item:hover::before {
+    content: "";
+    position: absolute;
+    left: 72px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent rgba(20, 20, 20, 0.95) transparent transparent;
+    z-index: 2000;
+}
+
+hr {
+    border: 0.5px solid rgba(255,255,255,0.2);
+    margin: 10px 0;
+}
+
+.bottom-section {
+    margin-top: auto;
+}
+
+/* ================================
+   5. Main Content (FIXED SPACING)
+================================ */
+.main-content {
+    height: 100%;
+    width: 100%;
+    margin-left: 320px; /* 300 sidebar + 20 gap */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
     box-sizing: border-box;
-    transition: all 0.4s ease;
+    transition: margin-left 0.35s ease;
 }
 
-/* The Modal Box */
-/* ... Keep top sections the same ... */
+/* Sidebar collapsed spacing */
+.sidebar.collapsed ~ .dashboard-viewport .main-content {
+    margin-left: 110px; /* 90 sidebar + 20 gap */
+}
 
-/* The Modal Box */
+/* ================================
+   6. Selection Modal (FIXED WIDTH)
+================================ */
 .selection-modal {
     background: #ffffff;
     padding: 60px;
     border-radius: 35px;
     text-align: center;
     box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 550px; 
+
+    width: 550px;        /* FIXED WIDTH */
+    max-width: 550px;    /* keep same */
+    min-width: 550px;    /* keep same */
+
     z-index: 10;
-    
-    /* ADJUSTMENT: Pushing further to the right */
-    /* Current: 250px. Increase to 300px or 350px for more shift */
-    margin-left: 250px; 
-    
-    transition: all 0.3s ease;
 }
 
-/* Logic for when the sidebar is closed (Icons only) */
-#sidebar.close ~ .main-content .selection-modal {
-    /* Set this to the same value as above to keep position consistent */
-    margin-left: 250px; 
-}
-
-/* ... Keep bottom sections the same ... */
-
+/* Modal Title */
 .selection-modal h2 {
     font-size: 32px;
     margin: 0 0 10px 0;
@@ -73,7 +253,9 @@ body, html {
     font-size: 16px;
 }
 
-/* Choice Cards Layout */
+/* ================================
+   7. Choice Cards Layout
+================================ */
 .modal-options {
     display: flex;
     gap: 25px;
@@ -109,189 +291,4 @@ body, html {
     color: white;
     transform: translateY(-8px);
     box-shadow: 0 10px 20px rgba(74, 29, 29, 0.2);
-}
-
-.modal-cancel {
-    color: #999;
-    text-decoration: none;
-    font-size: 15px;
-    transition: color 0.2s;
-}
-
-.modal-cancel:hover {
-    color: #4a1d1d;
-    text-decoration: underline;
-}
-
-/* 1. Reset & Global Layout */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-    height: 100vh;
-    overflow: hidden;
-}
-
-/* 2. Blurred Fixed Background */
-.background {
-    position: fixed;
-    inset: 0;
-    background: url('../../img/general/bg.jpeg') no-repeat center/cover;
-    filter: blur(10px);
-    transform: scale(1.1); 
-    z-index: -1;
-}
-
-/* 3. Glassmorphism Sidebar Container */
-.sidebar {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    height: calc(100% - 40px);
-    width: 300px; 
-    padding: 25px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: width 0.35s ease;
-}
-
-/* Collapsed State */
-.sidebar.collapsed {
-    width: 90px;
-}
-
-/* 4. Top Section (Logo & Toggle) */
-.top-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.logo-wrapper {
-    width: 45px;
-    height: 45px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.logo {
-    width: 100%;
-    border-radius: 50%;
-    transition: 0.3s;
-}
-
-/* Centered Icon Logic (Hover Effects) */
-.open-icon {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    color: white;
-    transition: 0.3s;
-}
-
-.sidebar.collapsed .logo-wrapper:hover .logo {
-    opacity: 0;
-}
-
-.sidebar.collapsed .logo-wrapper:hover .open-icon {
-    opacity: 1;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.sidebar.collapsed .close-btn {
-    display: none;
-}
-
-/* 5. Navigation Menu Items */
-.menu {
-    list-style: none;
-    margin-top: 30px;
-    flex: 1;
-}
-
-.menu a, .bottom-section a {
-    text-decoration: none;
-}
-
-.menu-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 48px;
-    color: white;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: background 0.3s;
-}
-
-.menu-item i {
-    width: 50px;
-    text-align: center;
-}
-
-/* Text span anchored to prevent shifting */
-.menu-item span {
-    position: absolute;
-    left: 60px;
-    white-space: nowrap;
-    transition: opacity 0.2s ease;
-}
-
-/* Smooth text hiding for collapsed state */
-.sidebar.collapsed .menu-item span {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.menu-item:hover {
-    background: rgba(255,255,255,0.15);
-}
-
-.menu-item.active {
-    background: rgba(255,255,255,0.25);
-}
-
-/* Tooltip for collapsed icons */
-.sidebar.collapsed .menu-item:hover::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 80px;
-    background: rgba(20,20,20,0.95);
-    padding: 8px 14px;
-    border-radius: 8px;
-    white-space: nowrap;
-    font-size: 14px;
-}
-
-/* 6. Footer Divider & Bottom Section */
-hr {
-    border: 0.5px solid rgba(255,255,255,0.2);
-    margin: 10px 0;
-}
-
-.bottom-section {
-    margin-top: auto;
 }

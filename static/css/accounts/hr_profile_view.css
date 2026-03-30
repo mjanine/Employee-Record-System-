@@ -15,22 +15,24 @@ body, html {
 .main-content {
     flex: 1;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center; /* Centers the card in the remaining space */
     height: 100%;
+    margin-left: 320px; /* Matches sidebar width (300px) + gap (20px) */
+    transition: margin-left 0.35s ease;
 }
 
 .profile-page-container {
     width: 100%;
-    max-width: 1180px; 
+    max-width: 100%; /* Change from 1180px to 100% for auto-width */
     display: flex;
     flex-direction: column;
     height: 100%; 
     box-sizing: border-box;
-    transition: max-width 0.4s ease-in-out; 
+    padding-right: 20px; /* Adds a small buffer on the right */
 }
 
-#sidebar.close ~ .main-content .profile-page-container {
-    max-width: calc(100% - 110px);
+.sidebar.close ~ .main-content {
+    margin-left: 110px; 
 }
 
 .profile-card {
@@ -57,9 +59,18 @@ body, html {
 
 .profile-right { display: flex; flex-direction: column; align-items: flex-end; }
 .edit-btn {
-    background: #4a1d1d; color: white; border: none; padding: 8px 18px; border-radius: 8px;
-    cursor: pointer; margin-bottom: 40px; font-weight: 600;
+    position: relative; /* Ensures z-index works */
+    z-index: 10;       /* Puts it on top of background layers */
+    background: #4a1d1d; 
+    color: white; 
+    border: none; 
+    padding: 8px 18px; 
+    border-radius: 8px;
+    cursor: pointer; 
+    margin-bottom: 40px; 
+    font-weight: 600;
 }
+
 .edit-btn:hover { background: #7b3f3f; }
 
 .contact-info { width: 260px; text-align: right; }
@@ -160,6 +171,15 @@ body, html {
 body {
     height: 100vh;
     overflow: hidden;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    background: url('../../img/general/bg.jpeg') no-repeat center/cover;
+    filter: blur(10px);
+    transform: scale(1.1); 
+    z-index: -1;
 }
 
 .sidebar {
