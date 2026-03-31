@@ -63,7 +63,7 @@ body {
 /* 4. Section Header Bar - "Applicant Information" Centered    */
 /* ----------------------------------------------------------- */
 .section-header-bar {
-    padding: 2px 30px;
+    padding: 5px 60px;
     border-bottom: none;
     background: #ffffff;
     display: flex;
