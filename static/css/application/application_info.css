@@ -37,28 +37,38 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 3. Header - Centered Title & Left-Aligned Logo              */
+/* 3. Header - Logo Only (Left-Aligned)                        */
 /* ----------------------------------------------------------- */
 .form-header.centered-header {
     background: #ffffff;
     padding: 20px 60px;
     border-bottom: 1px solid #eeeeee;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     width: 100%;
-    position: relative; 
 }
 
 .header-logo {
     width: 50px;
     height: 50px;
     object-fit: contain;
-    position: absolute;
-    left: 60px; 
+    margin-top: 10px;
 }
 
-.header-title {
+/* ----------------------------------------------------------- */
+/* 4. Section Header Bar - "Applicant Information" Centered    */
+/* ----------------------------------------------------------- */
+.section-header-bar {
+    padding: 18px 60px;
+    border-bottom: 1px solid #eeeeee;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-header-bar .page-title {
     font-size: 1.4rem;
     color: #333;
     font-weight: 700;
@@ -67,7 +77,7 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 4. Panels - Vertical & Horizontal Centering                 */
+/* 5. Panels - Vertical & Horizontal Centering                 */
 /* ----------------------------------------------------------- */
 .form-body { 
     flex: 1;
@@ -86,8 +96,8 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers items vertically */
-    align-items: center;     /* Centers items horizontally */
+    justify-content: center;
+    align-items: center;
     padding: 40px;
     background: #ffffff;
 }
@@ -109,7 +119,7 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 5. Form Elements Width Control                              */
+/* 6. Form Elements Width Control                              */
 /* ----------------------------------------------------------- */
 .form-group { 
     width: 100%;
@@ -145,7 +155,7 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 6. Upload Zone                                              */
+/* 7. Upload Zone                                              */
 /* ----------------------------------------------------------- */
 .drop-zone {
     width: 100%;
@@ -178,7 +188,7 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 7. Footer & Action Buttons                                  */
+/* 8. Footer & Action Buttons                                  */
 /* ----------------------------------------------------------- */
 .form-footer.aligned-right {
     background: #ffffff;
@@ -216,7 +226,7 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 8. Modals & Notifications (Timer Styling Included)           */
+/* 9. Modals & Notifications (Timer Styling Included)          */
 /* ----------------------------------------------------------- */
 .modal-overlay {
     position: fixed;
@@ -265,6 +275,21 @@ body {
     font-size: 60px;
     color: #f39c12;
     margin-bottom: 20px;
+}
+
+.modal-warning-title {
+    margin-top: 15px;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-flex {
+    flex: 1;
+    padding: 12px;
 }
 
 .btn-ok {
