@@ -1,91 +1,74 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    // 1. SELECT ELEMENTS
     const sidebar = document.getElementById("sidebar");
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
     const menuItems = document.querySelectorAll(".menu-item");
-    const logoutBtn = document.querySelector(".logout"); // Added for logout
-
-    // CV Elements
+    const logoutBtn = document.querySelector(".logout");
     const cvInput = document.getElementById("cv-upload");
     const fileNameDisplay = document.getElementById("file-name");
-
     const applicantForm = document.getElementById("applicantForm");
 
-    console.log("Dashboard Script: Initialized");
-
-    // 2. SIDEBAR LOGIC
-    if (sidebar && closeBtn && logoToggle) {
-        // Collapse sidebar
+    // Sidebar Toggle Logic
+    if (closeBtn) {
         closeBtn.addEventListener("click", () => {
             sidebar.classList.add("collapsed");
-            console.log("Sidebar Status: Collapsed");
         });
+    }
 
-        // Expand sidebar when clicking logo
+    if (logoToggle) {
         logoToggle.addEventListener("click", () => {
             if (sidebar.classList.contains("collapsed")) {
                 sidebar.classList.remove("collapsed");
-                console.log("Sidebar Status: Expanded");
             }
         });
     }
 
-    // 3. CV UPLOAD LOGIC
+    // CV Upload Display
     if (cvInput && fileNameDisplay) {
         cvInput.addEventListener("change", (e) => {
-            if (e.target.files && e.target.files.length > 0) {
-                const name = e.target.files[0].name;
-                fileNameDisplay.textContent = name;
-                console.log("File Selected:", name);
+            if (e.target.files.length > 0) {
+                fileNameDisplay.textContent = e.target.files[0].name;
+                fileNameDisplay.style.color = "#5c2b2b";
+                fileNameDisplay.style.fontWeight = "bold";
             } else {
                 fileNameDisplay.textContent = "File_Name.pdf";
             }
         });
     }
 
-    // 4. MENU ACTIVE STATES & TOOLTIP TEXT
+    // Menu Active States
     menuItems.forEach(item => {
-        const span = item.querySelector("span");
-
-        if (span) {
-            const text = span.innerText;
-            item.setAttribute("data-text", text);
-        }
-
-        item.addEventListener("click", () => {
-            // Prevent 'active' highlight if it's the logout button
-            if (item.classList.contains("logout")) return;
-
-            const currentActive = document.querySelector(".menu-item.active");
-            if (currentActive) {
-                currentActive.classList.remove("active");
-            }
-            item.classList.add("active");
+        item.addEventListener("click", function() {
+            if (this.parentElement.classList.contains("logout")) return;
+            document.querySelector(".menu-item.active")?.classList.remove("active");
+            this.classList.add("active");
         });
     });
 
-    // 5. FORM SUBMISSION
+    // Form Submission
     if (applicantForm) {
         applicantForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            alert("Application Saved Successfully!");
+            // Basic success feedback
+            const saveBtn = document.querySelector(".btn-save");
+            saveBtn.innerText = "Saving...";
+            saveBtn.disabled = true;
+
+            setTimeout(() => {
+                alert("Application Saved Successfully!");
+                saveBtn.innerText = "Save";
+                saveBtn.disabled = false;
+            }, 1000);
         });
     }
 
-    // 6. LOGOUT LOGIC (Added)
+    // Logout Action
     if (logoutBtn) {
         logoutBtn.addEventListener("click", (e) => {
-            e.preventDefault(); // Stop the link from following the URL immediately
-            
-            const confirmLogout = confirm("Are you sure you want to log out?");
-            if (confirmLogout) {
-                console.log("User confirmed logout.");
-                // Update this path to your actual login page location
+            e.preventDefault();
+            if (confirm("Are you sure you want to log out?")) {
                 window.location.href = "../login/login.html";
             }
         });
     }
-
 });

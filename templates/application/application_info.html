@@ -12,10 +12,12 @@
 
     <div class="background"></div>
 
-
     <main class="main-content">
         <div class="form-card">
-            <div class="form-header">Applicant Information</div>
+            <div class="form-header">
+                <i class="fa-solid fa-user-pen" style="margin-right: 10px; color: #000000;"></i>
+                Applicant Information
+            </div>
             <form id="applicantForm" class="form-body">
                 <div class="form-row">
                     <div class="form-group">
@@ -45,6 +47,8 @@
                         <option value="" disabled selected>Select department...</option>
                         <option>Human Resources</option>
                         <option>Information Technology</option>
+                        <option>Marketing</option>
+                        <option>Finance</option>
                     </select>
                 </div>
 
@@ -54,15 +58,18 @@
                         <option value="" disabled selected>Select position...</option>
                         <option>Manager</option>
                         <option>Staff</option>
+                        <option>Intern</option>
                     </select>
                 </div>
 
                 <div class="form-group full-width">
-                    <label>Tell us about yourself</label>
+                    <label>Tell us about yourself (CV)</label>
                     <div class="upload-container">
-                        <label for="cv-upload" class="upload-btn">Upload CV</label>
+                        <label for="cv-upload" class="upload-btn">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload CV
+                        </label>
                         <input type="file" id="cv-upload" accept=".pdf" hidden>
-                        <span id="file-name">File_Name.pdf</span>
+                        <span id="file-name">No file chosen (PDF only)</span>
                     </div>
                 </div>
 
