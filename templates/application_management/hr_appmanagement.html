@@ -4,34 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applications Management | UPHSD</title>
-
     <link rel="stylesheet" href="../../static/css/application_management/hr_appmanagement.css">
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
     <div class="background"></div>
-
     <div class="dashboard-viewport">
 
-        <!-- SIDEBAR (UNCHANGED) -->
+        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="top-section">
                 <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo">
+                    <img src="../../static/img/general/uph.png" class="logo" alt="UPHSD Logo">
                     <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
                 </div>
-                <button class="close-btn" id="closeBtn">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
+                <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
             </div>
-
             <ul class="menu">
                 <li><a href="../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
                 <li><a href="../accounts/hr_profile_view.html" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
                 <hr>
-
                 <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
                 <li><a href="../new_employee/new_employee.html" class="menu-item active"><i class="fas fa-file"></i><span>Application Management</span></a></li>
                 <li><a href="../hr/employee_management/hr_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
@@ -41,60 +34,49 @@
                 <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
                 <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
             </ul>
-
             <div class="bottom-section">
-                <a href="../login/login.html" class="menu-item logout">
-                    <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
-                </a>
+                <a href="../login/login.html" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
             </div>
         </div>
 
-        <!-- MAIN CONTENT -->
+        <!-- Main Content -->
         <main class="main-content">
-
-            <!-- 🔥 GLASS CARD (UPDATED) -->
-            <div class="glass-card">
-
-                <!-- HEADER -->
+            <div class="leave-card">
                 <div class="header">
                     <h1>Applications Management</h1>
-
                     <div class="search-add">
                         <input type="text" id="tableSearch" placeholder="Search by Name / ID / Dept">
-
                         <div class="tab-group">
-                            <button class="tab-btn active" id="tab-new">New Applications</button>
-                            <button class="tab-btn" id="tab-position">Position Requests</button>
+                            <button class="tab-btn active" id="tab-new">New Employee Applications</button>
+                            <button class="tab-btn" id="tab-position">Position Change Requests</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- TABLE -->
                 <div class="form-body">
                     <table id="applicationTable">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Employee</th>
+                                <th>Application ID</th>
+                                <th>Full Name</th>
                                 <th>Department</th>
                                 <th>Position</th>
-                                <th>Date Submitted</th>
+                                <th>Submitted</th>
                                 <th>Progress</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-
                         <tbody id="applicationTableBody">
                             <tr>
                                 <td>001</td>
-                                <td><strong>Juan Dela Cruz</strong></td>
+                                <td>Dela Cruz, Juan</td>
                                 <td>CCS</td>
                                 <td>Instructor</td>
-                                <td>Feb 12, 2026</td>
+                                <td>02/12/2026</td>
                                 <td>Stage 2 of 4</td>
-                                <td><span class="status-pill pending-hr">Pending - HR</span></td>
-                                <td>
+                                <td><span class="status-pill pending-hr">Pending - HR Evaluator</span></td>
+                                <td class="actions-cell">
                                     <a href="#" class="view-link">View</a>
                                     <div class="dropdown">
                                         <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
@@ -105,163 +87,135 @@
                                     </div>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>002</td>
-                                <td><strong>Maria Santos</strong></td>
+                                <td>Santos, Maria</td>
                                 <td>CBA</td>
                                 <td>Professor</td>
-                                <td>Feb 15, 2026</td>
+                                <td>02/15/2026</td>
                                 <td>Stage 1 of 4</td>
-                                <td><span class="status-pill pending-hr">Pending - Dept</span></td>
-                                <td>
+                                <td><span class="status-pill pending-hr">Pending - Dept. Head</span></td>
+                                <td class="actions-cell">
                                     <a href="#" class="view-link">View</a>
+                                    <div class="dropdown">
+                                        <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
+                                    </div>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>003</td>
-                                <td><strong>Ricardo Reyes</strong></td>
+                                <td>Reyes, Ricardo</td>
                                 <td>COE</td>
                                 <td>Registrar</td>
-                                <td>Feb 10, 2026</td>
+                                <td>02/10/2026</td>
                                 <td>Completed</td>
                                 <td><span class="status-pill approved">Approved</span></td>
-                                <td>
-                                    <a href="#" class="view-link">View</a>
-                                </td>
+                                <td class="actions-cell"><a href="#" class="view-link">View</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </main>
     </div>
 
-    <!-- VIEW MODAL -->
+    <!-- View Modal -->
     <div id="viewModal" class="modal-overlay">
         <div class="view-modal-content">
-
             <div class="modal-header">
                 <h3>Application Detail</h3>
             </div>
-
             <div class="modal-grid">
-                <!-- DOCUMENT -->
                 <div class="doc-preview">
                     <div class="doc-tab-label">Supporting Document</div>
-
                     <div class="doc-box">
                         <div class="doc-header" id="modalFileName">Document.pdf</div>
-
                         <div class="pdf-placeholder">
                             <i class="fas fa-file-pdf"></i>
-                            <p>Document Preview</p>
+                            <p>Document Preview Mode</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- INFO -->
                 <div class="info-panel">
-
                     <div class="info-item">
-                        <label>Status</label>
+                        <label>Application Status</label>
                         <div id="modalStatusContainer"></div>
                         <p id="modalReviewerText"><small>Reviewed by: ---</small></p>
                     </div>
-
                     <div class="info-item">
                         <label>Submission Date</label>
                         <p id="modalSubmitDate">---</p>
                     </div>
-
                     <div class="info-item">
                         <label>Department</label>
                         <p id="modalDepartment">---</p>
                     </div>
-
                     <div class="info-item">
-                        <label>Position</label>
+                        <label>Position Applied For</label>
                         <p id="modalPosition">---</p>
                     </div>
-
                     <div class="info-item">
                         <label>Progress</label>
                         <p id="modalProgress">---</p>
                     </div>
-
                     <div class="info-item">
                         <label>Remarks</label>
-                        <p id="modalRemarks">---</p>
+                        <p id="modalRemarks" class="modal-text-unified">---</p>
                     </div>
-
                     <div class="modal-footer" id="modalActions">
-                        <button class="btn-approve">Approve</button>
-                        <button class="btn-reject">Reject</button>
+                        <button class="btn-approve">Approve Request</button>
+                        <button class="btn-reject">Reject Request</button>
                     </div>
-
-                    <button class="modal-close-btn" id="closeViewModal">Close</button>
+                    <button class="modal-close-btn" id="closeViewModal">Close View</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- POSITION CHANGE MODAL -->
+    <!-- Position Change Modal -->
     <div id="positionChangeModal" class="modal-overlay">
         <div class="view-modal-content modal-sm">
-
             <div class="modal-header">
-                <h3>Position Change Request</h3>
+                <h3>Log New Position Change Request</h3>
             </div>
-
             <div class="modal-body-form">
                 <form id="positionChangeForm" class="log-request-grid">
-
                     <div class="form-field">
                         <label>Employee Name</label>
-                        <input type="text">
+                        <input type="text" placeholder="Employee Name">
                     </div>
-
                     <div class="form-field">
                         <label>Employee ID</label>
-                        <input type="text" disabled>
+                        <input type="text" placeholder="Auto-filled" disabled>
                     </div>
-
                     <div class="form-field">
                         <label>Current Position</label>
-                        <input type="text" disabled>
+                        <input type="text" placeholder="Auto-filled" disabled>
                     </div>
-
                     <div class="form-field">
                         <label>Department</label>
-                        <input type="text" disabled>
+                        <input type="text" placeholder="Auto-filled" disabled>
                     </div>
-
                     <div class="form-field full-width">
                         <label>Requested Position</label>
                         <select>
-                            <option>Select position...</option>
+                            <option value="" disabled selected>Select position...</option>
                             <option>Dean</option>
                             <option>Department Head</option>
                         </select>
                     </div>
-
                     <div class="form-field full-width">
                         <label>Effective Date</label>
                         <input type="date">
                     </div>
-
                     <div class="form-field full-width">
-                        <label>Reason</label>
-                        <textarea rows="4"></textarea>
+                        <label>Reason for Position Change</label>
+                        <textarea placeholder="Input reason/remarks..." rows="4"></textarea>
                     </div>
-
                     <div class="pos-modal-footer full-width">
-                        <button type="button" id="cancelRequest">Cancel</button>
-                        <button type="submit">Save</button>
+                        <button type="button" id="cancelRequest" class="btn-cancel-modal">Cancel</button>
+                        <button type="submit" class="btn-save-modal">Save</button>
                     </div>
-
                 </form>
             </div>
         </div>
