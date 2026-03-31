@@ -13,20 +13,14 @@
     <main class="main-content full-view">
         <div class="form-card transparent-layout">
             
-            <!-- Updated Header Section -->
             <div class="form-header centered-header">
-                <div class="logo-container">
-                    <img src="../../static/img/general/uph.png" alt="Logo" class="header-logo">
-                </div>
-                <div class="title-container">
-                    <span class="header-title">Applicant Information</span>
-                </div>
+                <img src="../../static/img/general/uph.png" alt="Logo" class="header-logo">
+                <span class="header-title">Applicant Information</span>
             </div>
             
             <form id="applicantForm" class="form-body">
                 <div class="split-container">
                     
-                    <!-- LEFT PANEL -->
                     <div class="panel left-panel">
                         <h3 class="section-title">Personal Information</h3>
                         
@@ -51,7 +45,6 @@
                         </div>
                     </div>
 
-                    <!-- RIGHT PANEL -->
                     <div class="panel right-panel">
                         <h3 class="section-title">Application Details</h3>
 
@@ -99,10 +92,11 @@
         </div>
     </main>
 
-    <!-- Modals (Kept same as your original) -->
     <div id="successModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
-            <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="success-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
             <h2>Application Sent</h2>
             <p>Success! Your application information has been submitted.</p>
             <button id="modalOkBtn" class="btn-ok">OK</button>
@@ -111,7 +105,9 @@
 
     <div id="cancelModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
-            <div class="warning-icon"><i class="fa-solid fa-circle-exclamation" style="color: #f39c12; font-size: 60px;"></i></div>
+            <div class="warning-icon">
+                <i class="fa-solid fa-circle-exclamation" style="color: #f39c12; font-size: 60px;"></i>
+            </div>
             <h2 style="margin-top: 15px;">Cancel Progress?</h2>
             <p>Are you sure you want to cancel? All unsaved progress will be lost.</p>
             <div class="modal-footer" style="display: flex; gap: 10px; margin-top: 25px;">
