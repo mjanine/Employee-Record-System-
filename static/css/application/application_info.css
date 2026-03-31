@@ -50,7 +50,7 @@ body {
 /* 3. Header - Centered Title & Logo                           */
 /* ----------------------------------------------------------- */
 .form-header.centered-header {
-    background: rgba(253, 253, 253, 0.95);
+    background: rgba(255, 255, 255, 0.95);
     padding: 15px 40px;
     border-bottom: 2px solid #ddd;
     display: flex; 
@@ -128,7 +128,7 @@ body {
 .form-group input, 
 .form-group select {
     padding: 12px 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #ffffff;
     border-radius: 6px;
     font-size: 1rem;
     outline: none;
@@ -145,9 +145,9 @@ body {
 .drop-zone {
     width: 100%;
     min-height: 160px;
-    border: 3px dashed #bbb;
+    border: 3px dashed #ffffff;
     border-radius: 12px;
-    background: #f9f9f9;
+    background: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,7 +159,7 @@ body {
 
 .drop-zone.over {
     border-color: #5c2b2b;
-    background: #fef4f4;
+    background: #ffffff;
 }
 
 .drop-zone-content i {
