@@ -51,12 +51,9 @@ body {
 }
 
 .header-logo {
-      width: 45px;
-    height: 45px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 /* ----------------------------------------------------------- */
@@ -188,6 +185,18 @@ body {
     font-size: 0.9rem;
     font-weight: 600;
     color: #444;
+}
+
+.drop-zone-subtext {
+    font-size: 0.72rem;
+    color: #999;
+}
+
+.drop-zone-filename {
+    display: block;
+    font-size: 0.72rem;
+    color: #aaa;
+    margin-top: 4px;
 }
 
 /* ----------------------------------------------------------- */
