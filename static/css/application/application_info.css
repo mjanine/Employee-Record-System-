@@ -13,17 +13,16 @@ body {
     width: 100vw;
     overflow: hidden; 
     display: flex;
-    /* Changed background to solid white */
     background-color: #ffffff; 
 }
 
-/* Background class removed/hidden to ensure pure white */
+/* Ensure background image div is hidden */
 .background {
     display: none;
 }
 
 /* ----------------------------------------------------------- */
-/* 2. Layout Containers (Full View)                            */
+/* 2. Layout Containers                                        */
 /* ----------------------------------------------------------- */
 .main-content.full-view {
     flex: 1;
@@ -43,36 +42,37 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 3. Header - Logo & Title Alignment                          */
+/* 3. Header - Centered Title & Left-Aligned Logo              */
 /* ----------------------------------------------------------- */
 .form-header.centered-header {
     background: #ffffff;
-    padding: 20px 60px; /* Increased padding for better breathability */
+    padding: 20px 60px;
     border-bottom: 1px solid #eeeeee;
     display: flex; 
     align-items: center; 
+    justify-content: center; /* Centers the title text */
     width: 100%;
-    justify-content: flex-start; /* Aligns content to the left logo */
+    position: relative; /* Context for absolute logo */
 }
 
 .header-logo {
     width: 50px;
     height: 50px;
-    margin-right: 15px;
     object-fit: contain;
+    position: absolute;
+    left: 60px; /* Aligns with the panel content padding */
 }
 
 .header-title {
-    /* Removed flex-grow: 1 and text-align: center to keep it next to logo */
     font-size: 1.4rem;
     color: #333;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
 }
 
 /* ----------------------------------------------------------- */
-/* 4. Split Body & Vertical Panels                             */
+/* 4. Panels & Section Headers                                 */
 /* ----------------------------------------------------------- */
 .form-body { 
     flex: 1;
@@ -90,28 +90,33 @@ body {
 .panel {
     flex: 1;
     height: 100%;
-    padding: 40px 60px;
+    padding: 30px 60px;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    /* All panels now white */
     background: #ffffff;
 }
 
 .left-panel {
-    /* Removed the vertical border line as requested */
-    border-right: none; 
+    border-right: none; /* Removed the vertical divider line */
 }
 
-.right-panel {
-    background: #ffffff;
+/* Section Titles (Personal Info / Application Details) */
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #5c2b2b; /* Matches submit button theme */
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #f8f8f8;
+    padding-bottom: 8px;
 }
 
 /* ----------------------------------------------------------- */
-/* 5. Form Elements                                            */
+/* 5. Form Elements Alignment                                  */
 /* ----------------------------------------------------------- */
 .form-group { 
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
 }
@@ -119,47 +124,48 @@ body {
 .form-group label {
     font-weight: 600;
     font-size: 0.85rem;
-    color: #666;
+    color: #555;
     margin-bottom: 8px;
 }
 
 .form-group input, 
 .form-group select {
     padding: 12px 15px;
-    /* Subtle border instead of invisible white */
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     font-size: 0.95rem;
     outline: none;
-    transition: all 0.2s;
-    background-color: #f9f9f9;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
     border-color: #5c2b2b;
-    background-color: #fff;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(92, 43, 43, 0.1);
 }
 
 /* ----------------------------------------------------------- */
-/* 6. Dashed Upload Zone                                       */
+/* 6. Upload Zone                                              */
 /* ----------------------------------------------------------- */
 .drop-zone {
     width: 100%;
-    min-height: 150px;
+    min-height: 140px;
     border: 2px dashed #cccccc;
     border-radius: 8px;
-    background: #fafafa;
+    background: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     cursor: pointer;
-    transition: border-color 0.3s;
-    padding: 20px;
+    transition: all 0.3s ease;
 }
 
 .drop-zone:hover {
     border-color: #5c2b2b;
+    background-color: #fffafb;
 }
 
 .drop-zone-content i {
@@ -170,7 +176,7 @@ body {
 
 .drop-zone-text {
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     color: #444;
 }
 
@@ -179,18 +185,12 @@ body {
     color: #888;
 }
 
-.drop-zone-filename {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #5c2b2b;
-}
-
 /* ----------------------------------------------------------- */
-/* 7. Footer Buttons                                           */
+/* 7. Footer & Buttons                                         */
 /* ----------------------------------------------------------- */
 .form-footer.aligned-right {
     background: #ffffff;
-    padding: 25px 60px;
+    padding: 20px 60px;
     border-top: 1px solid #eeeeee;
     display: flex; 
     justify-content: flex-end;
@@ -201,40 +201,31 @@ body {
     background: #f0f0f0; 
     border: none;
     color: #444;
-    padding: 12px 25px; 
+    padding: 12px 30px; 
     border-radius: 6px; 
     font-weight: 600; 
     cursor: pointer;
-    transition: background 0.2s;
-}
-
-.btn-cancel:hover {
-    background: #e5e5e5;
 }
 
 .btn-save { 
     background: #5c2b2b;
     color: white; 
     border: none; 
-    padding: 12px 40px; 
+    padding: 12px 50px; 
     border-radius: 6px; 
-    font-weight: 600; 
+    font-weight: 700; 
     cursor: pointer;
     text-transform: uppercase;
-    transition: opacity 0.2s;
-}
-
-.btn-save:hover {
-    opacity: 0.9;
 }
 
 /* ----------------------------------------------------------- */
-/* 8. Modal Styles                                             */
+/* 8. Success Modal                                            */
 /* ----------------------------------------------------------- */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -248,7 +239,7 @@ body {
     text-align: center;
     max-width: 400px;
     width: 90%;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
 .success-icon {
@@ -261,8 +252,8 @@ body {
     background: #5c2b2b;
     color: white;
     border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
+    padding: 12px 0;
+    border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
     width: 100%;
