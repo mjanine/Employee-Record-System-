@@ -17,7 +17,7 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 2. Main Layout                                              */
+/* 2. Main Layout - Centering Content                          */
 /* ----------------------------------------------------------- */
 .main-content.full-view {
     flex: 1;
@@ -37,43 +37,37 @@ body {
 }
 
 /* ----------------------------------------------------------- */
-/* 3. Header - Logo & Circular Blue Title                      */
+/* 3. Header - Centered Title & Left-Aligned Logo              */
 /* ----------------------------------------------------------- */
 .form-header.centered-header {
     background: #ffffff;
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    width: 100%;
-    padding-bottom: 20px;
+    padding: 20px 60px;
     border-bottom: 1px solid #eeeeee;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%;
+    position: relative; 
 }
 
 .header-logo {
-    width: 70px;
-    height: auto;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
-    /* Margin top for the logo as requested */
-    margin-top: 50px; 
-    margin-bottom: 25px;
+    position: absolute;
+    left: 60px; 
 }
 
-/* The Blue "Circle"/Pill shape for the Applicant Info */
 .header-title {
-    background-color: #004a99; /* Adjust to your specific blue */
-    color: #ffffff;
-    padding: 12px 40px;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
+    color: #333;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    border-radius: 50px; /* Creates the circular/pill look */
-    display: inline-block;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* ----------------------------------------------------------- */
-/* 4. Form Panels (Centered Content)                           */
+/* 4. Panels - Vertical & Horizontal Centering                 */
 /* ----------------------------------------------------------- */
 .form-body { 
     flex: 1;
@@ -92,34 +86,35 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center;     
+    justify-content: center; /* Centers items vertically */
+    align-items: center;     /* Centers items horizontally */
     padding: 40px;
+    background: #ffffff;
 }
 
 .left-panel {
-    border-right: 1px solid #f0f0f0;
+    border-right: 1px solid #f5f5f5;
 }
 
 .section-title {
     width: 100%;
     max-width: 480px;
-    font-size: 1rem;
-    font-weight: 800;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: #5c2b2b;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     text-transform: uppercase;
     border-bottom: 2px solid #f8f8f8;
     padding-bottom: 10px;
 }
 
 /* ----------------------------------------------------------- */
-/* 5. Inputs & Selects                                         */
+/* 5. Form Elements Width Control                              */
 /* ----------------------------------------------------------- */
 .form-group { 
     width: 100%;
     max-width: 480px; 
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     display: flex;
     flex-direction: column;
 }
@@ -137,22 +132,37 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     font-size: 0.95rem;
+    outline: none;
     background-color: #fafafa;
+    transition: 0.2s;
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: #5c2b2b;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(92, 43, 43, 0.05);
 }
 
 /* ----------------------------------------------------------- */
-/* 6. File Upload Zone                                         */
+/* 6. Upload Zone                                              */
 /* ----------------------------------------------------------- */
 .drop-zone {
     width: 100%;
-    min-height: 130px;
+    min-height: 140px;
     border: 2px dashed #cccccc;
     border-radius: 8px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.drop-zone:hover, .drop-zone.over {
+    border-color: #5c2b2b;
+    background-color: #fffafb;
 }
 
 .drop-zone-content i {
@@ -161,10 +171,17 @@ body {
     margin-bottom: 10px;
 }
 
+.drop-zone-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+}
+
 /* ----------------------------------------------------------- */
-/* 7. Footer & Buttons                                         */
+/* 7. Footer & Action Buttons                                  */
 /* ----------------------------------------------------------- */
 .form-footer.aligned-right {
+    background: #ffffff;
     padding: 25px 60px;
     border-top: 1px solid #eeeeee;
     display: flex; 
@@ -175,10 +192,16 @@ body {
 .btn-cancel { 
     background: #f0f0f0; 
     border: none;
+    color: #444;
     padding: 12px 30px; 
     border-radius: 6px; 
     font-weight: 600; 
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #e4e4e4;
 }
 
 .btn-save { 
@@ -189,19 +212,21 @@ body {
     border-radius: 6px; 
     font-weight: 700; 
     cursor: pointer;
+    text-transform: uppercase;
 }
 
 /* ----------------------------------------------------------- */
-/* 8. Modals                                                   */
+/* 8. Modals & Notifications (Timer Styling Included)           */
 /* ----------------------------------------------------------- */
 .modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 2000;
 }
 
 .modal-content {
@@ -209,5 +234,47 @@ body {
     padding: 40px;
     border-radius: 15px;
     text-align: center;
-    width: 400px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Countdown Timer Styling */
+#redirect-timer {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+    border: 1px solid #eee;
+}
+
+#redirect-timer b {
+    color: #5c2b2b;
+    font-size: 1.1rem;
+}
+
+.success-icon {
+    font-size: 60px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.warning-icon {
+    font-size: 60px;
+    color: #f39c12;
+    margin-bottom: 20px;
+}
+
+.btn-ok {
+    background: #5c2b2b;
+    color: white;
+    border: none;
+    padding: 14px 0;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
 }
