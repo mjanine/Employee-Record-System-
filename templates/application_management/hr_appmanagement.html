@@ -12,7 +12,6 @@
     <div class="background"></div>
     <div class="dashboard-viewport">
 
-        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="top-section">
                 <div class="logo-wrapper" id="logoToggle">
@@ -39,7 +38,6 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="leave-card">
                 <div class="header">
@@ -68,58 +66,13 @@
                             </tr>
                         </thead>
                         <tbody id="applicationTableBody">
-                            <tr>
-                                <td>001</td>
-                                <td>Dela Cruz, Juan</td>
-                                <td>CCS</td>
-                                <td>Instructor</td>
-                                <td>02/12/2026</td>
-                                <td>Stage 2 of 4</td>
-                                <td><span class="status-pill pending-hr">Pending - HR Evaluator</span></td>
-                                <td class="actions-cell">
-                                    <a href="#" class="view-link">View</a>
-                                    <div class="dropdown">
-                                        <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
-                                        <div class="dropdown-content">
-                                            <a href="#" class="approve-option">Approve</a>
-                                            <a href="#" class="reject-option">Reject</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>Santos, Maria</td>
-                                <td>CBA</td>
-                                <td>Professor</td>
-                                <td>02/15/2026</td>
-                                <td>Stage 1 of 4</td>
-                                <td><span class="status-pill pending-hr">Pending - Dept. Head</span></td>
-                                <td class="actions-cell">
-                                    <a href="#" class="view-link">View</a>
-                                    <div class="dropdown">
-                                        <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>003</td>
-                                <td>Reyes, Ricardo</td>
-                                <td>COE</td>
-                                <td>Registrar</td>
-                                <td>02/10/2026</td>
-                                <td>Completed</td>
-                                <td><span class="status-pill approved">Approved</span></td>
-                                <td class="actions-cell"><a href="#" class="view-link">View</a></td>
-                            </tr>
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- View Modal -->
     <div id="viewModal" class="modal-overlay">
         <div class="view-modal-content">
             <div class="modal-header">
@@ -172,7 +125,6 @@
         </div>
     </div>
 
-    <!-- Position Change Modal -->
     <div id="positionChangeModal" class="modal-overlay">
         <div class="view-modal-content modal-sm">
             <div class="modal-header">
@@ -220,6 +172,8 @@
             </div>
         </div>
     </div>
+
+    <div id="notification-container" class="notification-container"></div>
 
     <script src="../../static/js/application_management/hr_appmanagement.js"></script>
 </body>

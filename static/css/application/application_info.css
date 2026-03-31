@@ -1,323 +1,376 @@
 /* ----------------------------------------------------------- */
-/* 1. Reset & Base Styles                                      */
+/* 1. Reset & Global Layout                                    */
 /* ----------------------------------------------------------- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-body {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    background-color: #ffffff; 
-}
-
-/* ----------------------------------------------------------- */
-/* 2. Main Layout - Centering Content                          */
-/* ----------------------------------------------------------- */
-.main-content.full-view {
-    flex: 1;
+body, html {
+    height: 100%;
     width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.form-card.transparent-layout {
-    background: #ffffff;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    margin: 0;
     overflow: hidden;
 }
 
 /* ----------------------------------------------------------- */
-/* 3. Header - Logo Only (Left-Aligned)                        */
+/* 2. Background                                               */
 /* ----------------------------------------------------------- */
-.form-header.centered-header {
-    background: #ffffff;
-    padding: 10px 60px;
-    border-bottom: none;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    flex-shrink: 0;
-}
-
-.header-logo {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-    margin-top: 10px;
+.background {
+    position: fixed;
+    inset: 0;
+    background: url('../../img/general/bg.jpeg') no-repeat center/cover;
+    filter: blur(10px);
+    transform: scale(1.1);
+    z-index: -1;
 }
 
 /* ----------------------------------------------------------- */
-/* 4. Section Header Bar - "Applicant Information" Centered    */
+/* 3. Sidebar                                                  */
 /* ----------------------------------------------------------- */
-.section-header-bar {
-    padding: 10px 60px;
-    border-bottom: none;
-    background: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.section-header-bar .page-title {
-    font-size: 1.4rem;
-    color: #333;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}
-
-/* ----------------------------------------------------------- */
-/* 5. Panels - Vertical & Horizontal Centering                 */
-/* ----------------------------------------------------------- */
-.form-body { 
-    flex: 1;
+.sidebar {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    height: calc(100% - 40px);
+    width: 300px;
+    padding: 25px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    min-height: 0;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: width 0.35s ease;
+    z-index: 1000;
 }
 
-.split-container {
-    flex: 1;
-    display: flex; 
-    width: 100%;
-    min-height: 0;
+.sidebar.collapsed {
+    width: 90px;
 }
 
-.panel {
-    flex: 1;
+.top-section {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 20px 40px;
-    background: #ffffff;
+    justify-content: space-between;
 }
 
-.left-panel {
-    border-right: none;
-}
-
-.section-title {
-    width: 100%;
-    max-width: 480px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #5c2b2b;
-    margin-bottom: 18px;
-    text-transform: uppercase;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-/* ----------------------------------------------------------- */
-/* 6. Form Elements Width Control                              */
-/* ----------------------------------------------------------- */
-.form-group { 
-    width: 100%;
-    max-width: 480px; 
-    margin-bottom: 14px;
+.logo-wrapper {
+    width: 45px;
+    height: 45px;
+    position: relative;
     display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #555;
-    margin-bottom: 6px;
-}
-
-.form-group input, 
-.form-group select {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    outline: none;
-    background-color: #f0f0f0;
-    transition: 0.2s;
-}
-
-.form-group input:focus, 
-.form-group select:focus {
-    border-color: #5c2b2b;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(92, 43, 43, 0.05);
-}
-
-/* ----------------------------------------------------------- */
-/* 7. Upload Zone                                              */
-/* ----------------------------------------------------------- */
-.drop-zone {
-    width: 100%;
-    min-height: 110px;
-    border: 2px dashed #cccccc;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    justify-content: center;
     cursor: pointer;
+}
+
+.logo {
+    width: 100%;
+    border-radius: 50%;
     transition: 0.3s;
 }
 
-.drop-zone:hover, .drop-zone.over {
-    border-color: #5c2b2b;
-    background-color: #fffafb;
+.open-icon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    color: white;
+    transition: 0.3s;
 }
 
-.drop-zone-content i {
-    font-size: 1.6rem;
-    color: #bbb;
-    margin-bottom: 6px;
-}
+.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0; }
+.sidebar.collapsed .logo-wrapper:hover .open-icon { opacity: 1; }
 
-.drop-zone-text {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #444;
-}
-
-.drop-zone-subtext {
-    font-size: 0.72rem;
-    color: #999;
-}
-
-.drop-zone-filename {
-    display: block;
-    font-size: 0.72rem;
-    color: #aaa;
-    margin-top: 4px;
-}
-
-/* ----------------------------------------------------------- */
-/* 8. Footer & Action Buttons                                  */
-/* ----------------------------------------------------------- */
-.form-footer.aligned-right {
-    background: #ffffff;
-    padding: 16px 60px;
-    border-top: none;
-    display: flex; 
-    justify-content: flex-end;
-    gap: 15px;
-    flex-shrink: 0;
-}
-
-.btn-cancel { 
-    background: #f0f0f0; 
+.close-btn {
+    background: none;
     border: none;
-    color: #444;
-    padding: 12px 30px; 
-    border-radius: 6px; 
-    font-weight: 600; 
+    color: white;
+    font-size: 18px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
-.btn-cancel:hover {
-    background: #e4e4e4;
+.sidebar.collapsed .close-btn { display: none; }
+
+.menu {
+    list-style: none;
+    margin-top: 30px;
+    flex: 1;
 }
 
-.btn-save { 
-    background: #5c2b2b;
-    color: white; 
-    border: none; 
-    padding: 12px 50px; 
-    border-radius: 6px; 
-    font-weight: 700; 
-    cursor: pointer;
-    text-transform: uppercase;
+.menu-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: background 0.3s;
+}
+
+.menu-item i {
+    width: 50px;
+    text-align: center;
+}
+
+.menu-item span {
+    position: absolute;
+    left: 60px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .menu-item span {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.menu-item:hover { background: rgba(255,255,255,0.15); }
+.menu-item.active { background: rgba(255,255,255,0.25); }
+
+.sidebar.collapsed .menu-item:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(20, 20, 20, 0.95);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 2000;
+    pointer-events: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+hr {
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+}
+
+.bottom-section { margin-top: auto; }
+
+/* ----------------------------------------------------------- */
+/* 4. Dashboard Viewport & Main Content                        */
+/* ----------------------------------------------------------- */
+.dashboard-viewport {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 20px;
+    position: relative;
+}
+
+.main-content {
+    flex: 1;
+    height: 100%;
+    margin-left: 320px;
+    display: flex;
+    min-width: 0;
+    transition: margin-left 0.35s ease-in-out;
+}
+
+.sidebar.collapsed + .main-content {
+    margin-left: 110px;
 }
 
 /* ----------------------------------------------------------- */
-/* 9. Modals & Notifications (Timer Styling Included)          */
+/* 5. Card & Table Styles                                      */
+/* ----------------------------------------------------------- */
+.leave-card {
+    background: #ffffff;
+    border-radius: 25px;
+    padding: 25px 40px;
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.header h1 {
+    font-size: 30px;
+    color: #1a1a1a;
+}
+
+.search-add {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-add input {
+    padding: 10px 15px;
+    width: 280px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+}
+
+.tab-group {
+    display: flex;
+    gap: 5px;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 12px;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+    color: #666;
+    background: transparent;
+}
+
+.tab-btn.active {
+    background: #4a1d1d;
+    color: white;
+}
+
+.form-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.status-pill {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-pill.approved { background: #e6f4ea; color: #1e7e34; }
+.status-pill.rejected { background: #fce8e6; color: #d93025; }
+.status-pill.pending-hr { background: #fef7e0; color: #b06000; }
+
+/* ----------------------------------------------------------- */
+/* 6. Notification Toasts (NEW)                                */
+/* ----------------------------------------------------------- */
+.notification-container {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification {
+    min-width: 320px;
+    padding: 18px 25px;
+    border-radius: 15px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: slideIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transition: all 0.4s ease;
+}
+
+.notification.success {
+    background: #28a745;
+    border-left: 8px solid #1e7e34;
+}
+
+.notification.error {
+    background: #dc3545;
+    border-left: 8px solid #bd2130;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ----------------------------------------------------------- */
+/* 7. Modal Styles (Existing)                                  */
 /* ----------------------------------------------------------- */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
+    background: rgba(0,0,0,0.5);
+    display: none;
     align-items: center;
+    justify-content: center;
     z-index: 2000;
 }
 
-.modal-content {
+.view-modal-content {
     background: white;
-    padding: 40px;
-    border-radius: 15px;
-    text-align: center;
-    max-width: 420px;
-    width: 90%;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-/* Countdown Timer Styling */
-#redirect-timer {
-    background: #f9f9f9;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #666;
-    border: 1px solid #eee;
-}
-
-#redirect-timer b {
-    color: #5c2b2b;
-    font-size: 1.1rem;
-}
-
-.success-icon {
-    font-size: 60px;
-    color: #4CAF50;
-    margin-bottom: 20px;
-}
-
-.warning-icon {
-    font-size: 60px;
-    color: #f39c12;
-    margin-bottom: 20px;
-}
-
-.modal-warning-title {
-    margin-top: 15px;
+    padding: 30px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 900px;
 }
 
 .modal-footer {
     display: flex;
     gap: 10px;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
-.btn-flex {
-    flex: 1;
-    padding: 12px;
-}
-
-.btn-ok {
-    background: #5c2b2b;
+.btn-approve {
+    background: #1e7e34;
     color: white;
     border: none;
-    padding: 14px 0;
+    padding: 10px 20px;
     border-radius: 8px;
-    font-weight: bold;
     cursor: pointer;
-    width: 100%;
-    margin-top: 20px;
+}
+
+.btn-reject {
+    background: #d93025;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
 }
