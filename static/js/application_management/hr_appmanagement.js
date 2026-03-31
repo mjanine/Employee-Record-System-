@@ -2,146 +2,126 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById("sidebar");
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn = document.getElementById("closeBtn");
-    const mainContent = document.getElementById("mainContent");
 
     const searchInput = document.getElementById("tableSearch");
     const tableBody = document.getElementById("applicationTableBody");
-    const noResultsRow = document.getElementById("noResultsRow");
-    const rows = tableBody.querySelectorAll("tr:not(#noResultsRow)");
 
     const viewModal = document.getElementById("viewModal");
     const posModal = document.getElementById("positionChangeModal");
     const posForm = document.getElementById("positionChangeForm");
 
-    const newEmpTabBtn = document.getElementById("newEmpTabBtn");
-    const posChangeTabBtn = document.getElementById("posChangeTabBtn");
+    const tabNew = document.getElementById("tab-new");
+    const tabPosition = document.getElementById("tab-position");
 
-    const statusBanner = document.getElementById("statusBanner");
-    const statusTimelineBox = document.getElementById("statusTimelineBox");
-    const submissionTimestamp = document.getElementById("submissionTimestamp");
+    // --- Sidebar Tooltips ---
+    document.querySelectorAll('.menu-item').forEach(item => {
+        const span = item.querySelector("span");
+        if (span) item.setAttribute("data-text", span.textContent.trim());
+    });
 
-    // --- Search Functionality ---
-    if (searchInput) {
+    // --- Sidebar Toggle ---
+    if (closeBtn) closeBtn.onclick = () => sidebar.classList.add("collapsed");
+    if (logoToggle) logoToggle.onclick = () => sidebar.classList.toggle("collapsed");
+
+    // --- Search ---
+    if (searchInput && tableBody) {
         searchInput.addEventListener("keyup", () => {
             const filter = searchInput.value.toLowerCase();
-            let visibleCount = 0;
-
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                if (text.includes(filter)) {
-                    row.style.display = "";
-                    visibleCount++;
-                } else {
-                    row.style.display = "none";
-                }
+            tableBody.querySelectorAll("tr").forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
             });
-
-            if (noResultsRow) {
-                noResultsRow.style.display = visibleCount === 0 ? "" : "none";
-            }
         });
     }
 
-    // --- Sidebar Logic ---
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            sidebar.classList.add("collapsed");
-            if (mainContent) mainContent.style.marginLeft = "110px";
-        });
+    // --- Tab Switching ---
+    if (tabNew && tabPosition) {
+        tabNew.onclick = () => {
+            tabNew.classList.add("active");
+            tabPosition.classList.remove("active");
+        };
+
+        tabPosition.onclick = () => {
+            tabPosition.classList.add("active");
+            tabNew.classList.remove("active");
+            openModal(posModal);
+        };
     }
 
-    if (logoToggle) {
-        logoToggle.addEventListener("click", () => {
-            if (sidebar.classList.contains("collapsed")) {
-                sidebar.classList.remove("collapsed");
-                if (mainContent) mainContent.style.marginLeft = "320px";
-            }
-        });
-    }
-
-    // --- Modal Management ---
-    const openModal = (modal) => {
+    // --- Modal Helpers ---
+    function openModal(modal) {
         if (modal) modal.style.display = "flex";
-    };
+    }
 
-    const closeAllModals = () => {
+    function closeAllModals() {
         [viewModal, posModal].forEach(m => { if (m) m.style.display = "none"; });
-    };
+    }
 
-    // View Modal Trigger
+    // --- View Modal Triggers ---
     document.querySelectorAll(".view-link").forEach(link => {
         link.addEventListener("click", (e) => {
             e.preventDefault();
-            showSlide(1);
+
+            // Get row data
+            const row = e.target.closest("tr");
+            const cells = row.querySelectorAll("td");
+
+            document.getElementById("modalSubmitDate").innerText     = cells[4]?.innerText || "---";
+            document.getElementById("modalDepartment").innerText     = cells[2]?.innerText || "---";
+            document.getElementById("modalPosition").innerText       = cells[3]?.innerText || "---";
+            document.getElementById("modalProgress").innerText       = cells[5]?.innerText || "---";
+            document.getElementById("modalRemarks").innerText        = "Awaiting review.";
+            document.getElementById("modalFileName").innerText       = "Document.pdf";
+
+            // Status pill
+            const statusPill = cells[6]?.querySelector(".status-pill");
+            document.getElementById("modalStatusContainer").innerHTML = statusPill
+                ? statusPill.outerHTML
+                : "<span>---</span>";
+
+            document.getElementById("modalReviewerText").innerHTML = "<small>Reviewed by: ---</small>";
+
+            // Show/hide action buttons based on status
+            const statusText = statusPill?.innerText || "";
+            const isFinal = statusText === "Approved" || statusText === "Rejected";
+            document.getElementById("modalActions").style.display = isFinal ? "none" : "flex";
+
             openModal(viewModal);
         });
     });
 
-    // Close Buttons
-    document.querySelectorAll(".modal-close, #cancelRequest").forEach(btn => {
-        btn.addEventListener("click", closeAllModals);
+    // --- Close View Modal ---
+    document.getElementById("closeViewModal")?.addEventListener("click", closeAllModals);
+
+    // --- Modal Approve / Reject ---
+    document.querySelector(".btn-approve")?.addEventListener("click", () => {
+        document.getElementById("modalStatusContainer").innerHTML =
+            '<span class="status-pill approved">Approved</span>';
+        document.getElementById("modalActions").style.display = "none";
+        document.getElementById("modalRemarks").innerText =
+            `Approved by HR on ${new Date().toLocaleDateString()}`;
     });
 
-    // --- Tab Switching ---
-    const setActiveTab = (clicked, other) => {
-        clicked.classList.add("active");
-        clicked.classList.remove("secondary");
-        other.classList.add("secondary");
-        other.classList.remove("active");
-    };
+    document.querySelector(".btn-reject")?.addEventListener("click", () => {
+        document.getElementById("modalStatusContainer").innerHTML =
+            '<span class="status-pill rejected">Rejected</span>';
+        document.getElementById("modalActions").style.display = "none";
+        document.getElementById("modalRemarks").innerText =
+            `Rejected by HR on ${new Date().toLocaleDateString()}`;
+    });
 
-    if (newEmpTabBtn && posChangeTabBtn) {
-        newEmpTabBtn.addEventListener("click", () => setActiveTab(newEmpTabBtn, posChangeTabBtn));
-        posChangeTabBtn.addEventListener("click", () => {
-            setActiveTab(posChangeTabBtn, newEmpTabBtn);
-            openModal(posModal);
-        });
-    }
-
-    // --- Slide Control (View Modal) ---
-    function showSlide(n) {
-        const s1 = document.getElementById("slide1");
-        const s2 = document.getElementById("slide2");
-        if (n === 1) {
-            s1?.classList.add("active");
-            s2?.classList.remove("active");
-        } else {
-            s1?.classList.remove("active");
-            s2?.classList.add("active");
-        }
-    }
-
-    document.getElementById("nextSlide")?.addEventListener("click", () => showSlide(2));
-    document.getElementById("prevSlide")?.addEventListener("click", () => showSlide(1));
-
-    // --- Form Submission (Position Change) ---
+    // --- Position Change Form Submit ---
     if (posForm) {
         posForm.addEventListener("submit", (e) => {
             e.preventDefault();
-
-            // Generate timestamp
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-            // Show Status Timeline box in the view modal with timestamp
-            if (submissionTimestamp && statusTimelineBox) {
-                submissionTimestamp.innerText = `${dateStr} - ${timeStr}`;
-                statusTimelineBox.style.display = "block";
-            }
-
-            // Update the approval banner with selected position
-            const selectedPos = posForm.querySelector('select').value;
-            if (statusBanner && selectedPos) {
-                statusBanner.innerHTML = `<i class="fas fa-exclamation-circle"></i> Pending - For ${selectedPos} Approval`;
-            }
-
-            alert("Success: Position change request logged.");
+            alert("Position change request logged successfully.");
             closeAllModals();
         });
     }
 
-    // Global Close (Click Outside or Esc Key)
+    // --- Cancel Button in Pos Modal ---
+    document.getElementById("cancelRequest")?.addEventListener("click", closeAllModals);
+
+    // --- Close on backdrop click or Escape ---
     window.addEventListener("click", (e) => {
         if (e.target === viewModal || e.target === posModal) closeAllModals();
     });
