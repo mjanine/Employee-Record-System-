@@ -76,8 +76,20 @@ body, html {
 .tab.active { border-bottom: 3px solid #7b3f3f; color: #7b3f3f; font-weight: bold; }
 
 .tab-content {
-    background: #f3f3f3; padding: 25px; border-radius: 0 0 20px 20px;
-    border: 1px solid #d8d8d8; border-top: none; flex: 1; overflow-y: auto;
+    background: #f3f3f3; 
+    padding: 25px; 
+    border-radius: 0 0 20px 20px;
+    border: 1px solid #d8d8d8; 
+    border-top: none; 
+    flex: 1; 
+    overflow-y: auto;
+
+    /* Hide Scrollbar logic */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+.tab-content::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
 }
 
 .dept-grid {
@@ -628,4 +640,15 @@ hr {
 
 .save-btn:hover {
     opacity: 0.9;
+}
+.form-body { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding-right: 15px; 
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.form-body::-webkit-scrollbar { 
+    display: none; 
 }

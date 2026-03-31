@@ -17,7 +17,6 @@ body, html {
 .background {
     position: fixed;
     inset: 0;
-    /* Verify if 'static' is needed in your path */
     background: url('../../img/general/bg.jpeg') no-repeat center/cover;
     filter: blur(10px);
     transform: scale(1.1);
@@ -193,23 +192,21 @@ hr {
     padding: 20px;
     box-sizing: border-box;
     gap: 20px;
-    position: relative;
 }
 
 /* IMPORTANT: MAIN CONTENT MUST RESERVE SIDEBAR SPACE */
 .main-content {
     flex: 1;
     height: 100%;
-    /* Default margin when sidebar is open */
-    margin-left: 320px; 
+    margin-left: 320px; /* 300 sidebar + 20 gap */
     display: flex;
     min-width: 0;
-    transition: margin-left 0.35s ease-in-out;
+    transition: margin-left 0.35s ease;
 }
 
 /* WHEN SIDEBAR COLLAPSED */
-.sidebar.collapsed + .main-content {
-    margin-left: 110px; 
+.sidebar.collapsed ~ .dashboard-viewport .main-content {
+    margin-left: 110px; /* 90 sidebar + 20 gap */
 }
 
 /* Leave Card (FULL WIDTH ALWAYS) */
@@ -289,10 +286,15 @@ hr {
     flex: 1;
     overflow-y: auto;
     padding-right: 5px;
+    
+    /* Hide for Firefox */
+    scrollbar-width: none;
+    /* Hide for IE/Edge */
+    -ms-overflow-style: none;
 }
 
 .form-body::-webkit-scrollbar {
-    width: 6px;
+    display: none;
 }
 
 .form-body::-webkit-scrollbar-thumb {

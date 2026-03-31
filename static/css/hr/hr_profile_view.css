@@ -105,6 +105,22 @@ body, html {
     flex-direction: column;
     gap: 10px;
 }
+/* Hide scrollbar for Chrome, Safari and Opera */
+.tab-content::-webkit-scrollbar,
+.history-list::-webkit-scrollbar,
+.scroll-content::-webkit-scrollbar,
+.main-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.tab-content,
+.history-list,
+.scroll-content,
+.main-wrapper {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
 
 .info-card h4 {
     margin-bottom: 5px;

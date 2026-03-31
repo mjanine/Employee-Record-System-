@@ -245,13 +245,17 @@ hr {
 
 .form-body {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Keeps the scrolling functionality */
     padding-right: 10px;
     margin-bottom: 20px;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
 .form-body::-webkit-scrollbar {
-    width: 6px;
+    display: none;
 }
 
 .form-body::-webkit-scrollbar-thumb {

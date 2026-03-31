@@ -286,10 +286,15 @@ hr {
     flex: 1;
     overflow-y: auto;
     padding-right: 5px;
+    
+    /* Hide for Firefox */
+    scrollbar-width: none;
+    /* Hide for IE/Edge */
+    -ms-overflow-style: none;
 }
 
 .form-body::-webkit-scrollbar {
-    width: 6px;
+    display: none;
 }
 
 .form-body::-webkit-scrollbar-thumb {
