@@ -616,6 +616,18 @@
     font-size: 1.5rem;
 }
 
+/* Keep modal form content left-aligned across all admin pages. */
+.modal-content form,
+.modal-content .form-group,
+.modal-content .form-group label {
+    text-align: left;
+}
+
+.modal-content .form-group label {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
 /* =================================
    FORMS
    ================================= */

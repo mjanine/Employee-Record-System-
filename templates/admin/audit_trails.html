@@ -6,6 +6,7 @@
     <title>Audit Trails | Employee Portal</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
     <link rel="stylesheet" href="../../static/css/application/application_info.css">
+    <link rel="stylesheet" href="../../static/css/admin/admin_dash.css">
     <link rel="stylesheet" href="../../static/css/admin/admin.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -14,27 +15,54 @@
             overflow: hidden;
         }
 
-        .main-content.audit-main {
-            align-items: flex-start;
-            padding: 20px 1.5rem;
-            height: 100vh;
-            overflow: hidden;
+        body {
+            background: transparent;
         }
 
-        .form-card.audit-card {
-            width: min(98%, 1700px);
-            max-width: 1700px;
-            height: calc(100vh - 40px);
-            margin: 0 auto;
+        .sidebar {
+            z-index: 1000;
+        }
+
+        .dashboard-viewport {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 20px;
+        }
+
+        .main-content.audit-main {
+            flex: 1;
+            height: 100%;
+            margin-left: 320px;
+            display: flex;
+            min-width: 0;
+            transition: margin-left 0.35s ease;
+        }
+
+        .sidebar.collapsed ~ .dashboard-viewport .main-content.audit-main {
+            margin-left: 110px;
+        }
+
+        .leave-card.audit-card {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 25px 32px;
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
         }
 
         .form-body.audit-body {
-            padding: 2rem;
             flex: 1;
             overflow: auto;
+            padding-right: 0.5rem;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -49,8 +77,75 @@
             min-height: auto;
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--admin-text);
+            font-size: 1.9rem;
+            font-weight: 700;
+        }
+
+        .search-add {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .quick-filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            width: 100%;
+            align-items: end;
+        }
+
+        .quick-filters .search-box {
+            min-width: 320px;
+            margin: 0;
+        }
+
+        .quick-filters .date-range {
+            min-width: 145px;
+        }
+
+        .quick-filters .btn {
+            white-space: nowrap;
+        }
+
         .logs-section {
             margin-bottom: 2rem;
+        }
+
+        .logs-section .section-title {
+            display: block;
+            width: 100%;
+            max-width: none;
+            margin: 0 0 1rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: none;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .logs-section .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
+            background: var(--admin-border);
         }
 
         .log-details-content {
@@ -104,6 +199,44 @@
         #loginLogsBody td:last-child .btn-icon {
             margin: 0 auto;
         }
+
+        @media (max-width: 1100px) {
+            .main-content.audit-main {
+                margin-left: 110px;
+            }
+
+            .search-add {
+                justify-content: flex-start;
+            }
+
+            .quick-filters .search-box {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-viewport {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .main-content.audit-main {
+                margin-left: 0;
+            }
+
+            .leave-card.audit-card {
+                padding: 18px;
+                border-radius: 18px;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .quick-filters {
+                justify-content: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -131,24 +264,26 @@
         </div>
     </div>
 
-    <main class="main-content audit-main">
-        <div class="form-card audit-card">
-            <div class="form-header">Audit Trails</div>
-            <div class="form-body audit-body">
+    <div class="dashboard-viewport">
+        <main class="main-content audit-main">
+            <div class="leave-card audit-card">
+                <div class="form-body audit-body">
                 <div class="admin-section">
-                    <div class="section-header">
+                    <div class="header">
                         <h1>Audit Trails</h1>
-                        <button class="btn btn-secondary" id="exportBtn">
-                            <i class="fas fa-download"></i> Export Logs
-                        </button>
+                        <div class="search-add">
+                            <button class="btn btn-secondary" id="exportBtn">
+                                <i class="fas fa-download"></i> Export Logs
+                            </button>
+                        </div>
                     </div>
 
                     <div class="filters-container">
+                        <div class="quick-filters">
                         <div class="search-box">
                             <i class="fas fa-search"></i>
                             <input type="text" id="auditSearch" placeholder="Search by username, email, or IP...">
                         </div>
-
                         <div class="date-range">
                             <label>From Date</label>
                             <input type="date" id="fromDate">
@@ -186,6 +321,7 @@
                         <button class="btn btn-secondary" id="clearFilterBtn">
                             <i class="fas fa-times"></i> Clear
                         </button>
+                        </div>
                     </div>
 
                     <div class="logs-section">
@@ -332,8 +468,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
 
     <div id="logDetailsModal" class="modal">
         <div class="modal-content modal-large">
