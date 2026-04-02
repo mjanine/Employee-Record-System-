@@ -1,22 +1,18 @@
-/* ============================================================
-   head_training.css
-   Path: static/css/training_management/head_training.css
-   ============================================================ */
-
-/* ── Reset & Base ── */
+/* --- Global Styles --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
     height: 100vh;
     overflow: hidden;
+    background-color: #f9f9f9;
 }
 
-/* ── Background ── */
+/* --- Background --- */
 .background {
     position: fixed;
     inset: 0;
@@ -26,7 +22,7 @@ body {
     z-index: -1;
 }
 
-/* ── Sidebar ── */
+/* --- Sidebar --- */
 .sidebar {
     position: fixed;
     top: 20px;
@@ -42,12 +38,9 @@ body {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     transition: width 0.35s ease;
-    z-index: 100;
 }
 
-.sidebar.collapsed {
-    width: 90px;
-}
+.sidebar.collapsed { width: 90px; }
 
 .top-section {
     display: flex;
@@ -83,13 +76,8 @@ body {
     transition: 0.3s;
 }
 
-.sidebar.collapsed .logo-wrapper:hover .logo {
-    opacity: 0;
-}
-
-.sidebar.collapsed .logo-wrapper:hover .open-icon {
-    opacity: 1;
-}
+.sidebar.collapsed .logo-wrapper:hover .logo { opacity: 0; }
+.sidebar.collapsed .logo-wrapper:hover .open-icon { opacity: 1; }
 
 .close-btn {
     background: none;
@@ -99,15 +87,10 @@ body {
     cursor: pointer;
 }
 
-.sidebar.collapsed .close-btn {
-    display: none;
-}
+.sidebar.collapsed .close-btn { display: none; }
 
-/* ── Menu ── */
 .menu a,
-.bottom-section a {
-    text-decoration: none;
-}
+.bottom-section a { text-decoration: none; }
 
 .menu {
     list-style: none;
@@ -143,428 +126,528 @@ body {
     pointer-events: none;
 }
 
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.menu-item.active {
-    background: rgba(255, 255, 255, 0.25);
-}
+.menu-item:hover { background: rgba(255,255,255,0.15); }
+.menu-item.active { background: rgba(255,255,255,0.25); }
 
 .sidebar.collapsed .menu-item:hover::after {
     content: attr(data-text);
     position: absolute;
     left: 80px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(20, 20, 20, 0.95);
-    color: white;
+    background: rgba(20,20,20,0.95);
     padding: 8px 14px;
     border-radius: 8px;
     white-space: nowrap;
     font-size: 14px;
-    z-index: 200;
-    pointer-events: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.sidebar.collapsed .menu-item:hover::before {
-    content: "";
-    position: absolute;
-    left: 72px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent rgba(20, 20, 20, 0.95) transparent transparent;
-    z-index: 200;
+    color: white;
+    z-index: 100;
 }
 
 hr {
-    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    border: 0.5px solid rgba(255,255,255,0.2);
     margin: 10px 0;
 }
 
-.bottom-section {
-    margin-top: auto;
-}
+.bottom-section { margin-top: auto; }
 
-/* ── Main Content ── */
+/* --- Main Content --- */
 .main-content {
-    position: fixed;
-    top: 20px;
-    left: 340px;
-    right: 20px;
-    bottom: 20px;
-    background: #f1f1f1;
-    border-radius: 20px;
-    padding: 30px;
-    overflow-y: auto;
-    transition: left 0.35s ease;
+    margin-left: 340px;
+    padding: 20px 20px 20px 0;
+    transition: margin-left 0.35s ease;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar.collapsed ~ .main-content {
-    left: 130px;
+    margin-left: 110px;
 }
 
-.main-content h2 {
-    font-size: 26px;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin-bottom: 20px;
-}
-
-/* ── Content Layout ── */
-.content-layout {
-    display: flex;
-    gap: 20px;
-    height: calc(100% - 60px);
-}
-
-/* ── Trainings Grid ── */
-.trainings-grid {
+/* --- White Content Card --- */
+.content-card {
+    background: #ffffff;
+    border-radius: 35px;
+    padding: 35px 40px;
     flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-content: start;
     overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.trainings-grid::-webkit-scrollbar {
-    display: none;
-}
-
-/* ── Training Card ── */
-.training-card {
-    background: white;
-    border-radius: 14px;
-    padding: 18px;
-    border: 1px solid #e5e5e5;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    cursor: pointer;
-    transition: box-shadow 0.2s, transform 0.2s;
+    gap: 20px;
 }
 
-.training-card:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+/* --- Card Top Row (Title + optional actions) --- */
+.card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.training-card.registered {
-    border-left: 4px solid #28a745;
-    opacity: 0.85;
-}
-
-.training-card h3 {
-    font-size: 15px;
-    font-weight: 700;
+/* --- Page Title (inside card) --- */
+.page-title {
     color: #1a1a1a;
-    line-height: 1.3;
-}
-
-.training-card .category {
-    font-size: 13px;
-    color: #888;
-}
-
-.training-card .date {
-    font-size: 13px;
-    color: #555;
-}
-
-/* ── Badges ── */
-.badge {
-    display: inline-block;
-    background: #f5c5c5;
-    color: #c0392b;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    width: fit-content;
-}
-
-.badge-online {
-    background: #d4edda;
-    color: #155724;
-}
-
-.badge-hybrid {
-    background: #cfe2ff;
-    color: #084298;
-}
-
-.slots {
-    font-size: 13px;
-    color: #555;
-    margin-top: 2px;
-}
-
-/* ── Register Button ── */
-.register-btn {
-    margin-top: 8px;
-    background: #8b1a1a;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    align-self: flex-end;
-    transition: background 0.2s;
-}
-
-.register-btn:hover {
-    background: #6e1010;
-}
-
-.register-btn.registered {
-    background: #28a745;
-    cursor: default;
-}
-
-.register-btn.registered:hover {
-    background: #218838;
-}
-
-/* ── My Trainings Panel ── */
-.my-trainings-panel {
-    width: 220px;
-    flex-shrink: 0;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.my-trainings-panel::-webkit-scrollbar {
-    display: none;
-}
-
-.my-trainings-panel h4 {
-    font-size: 14px;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #1a1a1a;
+}
+
+/* --- Search & Filter --- */
+.search-filter-section {
+    margin-bottom: 0;
+}
+
+.search-bar-container {
+    display: flex;
+    gap: 12px;
     margin-bottom: 12px;
 }
 
-.my-training-item {
+.search-input-wrapper {
+    flex-grow: 1;
+    position: relative;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    outline: none;
+    background: #f5f5f5;
+    transition: border-color 0.3s ease;
+}
+
+.search-input-wrapper input:focus {
+    border-color: #632b2b;
+}
+
+.filter-main-btn {
+    padding: 0 25px;
+    border: 1.5px solid #333;
     background: white;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 10px;
-    border: 1px solid #e5e5e5;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.my-training-item .t-name {
-    font-size: 13px;
+    border-radius: 10px;
     font-weight: 600;
-    color: #333;
-    line-height: 1.3;
-    margin-bottom: 3px;
-}
-
-.my-training-item .t-date {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 6px;
-}
-
-/* ── Status Badges ── */
-.status-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 10px;
-    border-radius: 20px;
-}
-
-.status-badge.registered {
-    background: #d4edda;
-    color: #155724;
-}
-
-.status-badge.pending {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status-badge.completed {
-    background: #cfe2ff;
-    color: #084298;
-}
-
-/* ── Empty State ── */
-.empty-state {
-    font-size: 13px;
-    color: #aaa;
-    text-align: center;
-    padding: 20px 10px;
-    background: white;
-    border-radius: 12px;
-    border: 1px dashed #ddd;
-}
-
-/* ── Modal Overlay ── */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 500;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-overlay.active {
+    cursor: pointer;
     display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
-.modal {
-    background: white;
-    border-radius: 16px;
-    width: 440px;
-    max-width: 95vw;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: modalIn 0.25s ease;
+.filter-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-@keyframes modalIn {
-    from { opacity: 0; transform: scale(0.92) translateY(10px); }
-    to   { opacity: 1; transform: scale(1)    translateY(0);    }
+.active-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
-.modal-header {
-    background: white;
-    padding: 20px 22px 16px;
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.modal-header h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 4px;
-}
-
-.modal-meta {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.modal-meta span {
-    margin: 0 4px;
-    color: #bbb;
-}
-
-.status-open {
-    display: inline-block;
-    background: #fffbe6;
-    color: #b8860b;
-    border: 1px solid #f0d060;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 3px 12px;
+.filter-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 15px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
     border-radius: 20px;
+    font-size: 0.85rem;
+    gap: 10px;
 }
 
-.modal-section-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #333;
-    padding: 14px 22px 10px;
-    background: #fafafa;
-    border-bottom: 1px solid #f0f0f0;
+.filter-tag i {
+    cursor: pointer;
+    font-size: 0.8rem;
 }
 
-.info-table {
+.btn-add-training {
+    padding: 8px 18px;
+    background: #e0e0e0;
+    border: 1px solid #999;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-add-training:hover { background: #d0d0d0; }
+
+/* --- Table --- */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    flex: 1;
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.info-table tr {
-    border-bottom: 1px solid #f0f0f0;
+thead th {
+    background: #333333;
+    color: #ffffff;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
-.info-table tr:last-child {
+tbody td {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+    color: #333;
+    height: 50px;
+}
+
+tbody tr:nth-child(even) { background-color: #f0f0f0; }
+
+/* --- No Results Row --- */
+.no-results-row {
+    display: none;
+}
+
+.no-results-row td {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-style: italic;
+}
+
+/* --- Status Badges --- */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    min-width: 90px;
+}
+
+.open      { background-color: #f7e9c3; color: #4d3d0f; }
+.full      { background-color: #f4c2c2; color: #7a1f1f; }
+.completed { background-color: #c9f7c9; color: #1b4d1b; }
+.cancelled { background-color: #f4c2c2; color: #7a1f1f; }
+
+/* --- Action Links --- */
+.action-links a {
+    color: #8c2d2d;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-right: 10px;
+}
+
+.action-links a:hover { text-decoration: underline; }
+
+/* --- Modal --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    width: 520px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    background: #f0f0f0;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-header span {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #555;
+}
+
+.modal-body { padding: 22px; }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group.full-width { grid-column: span 2; }
+
+.form-group label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    color: #333;
+    outline: none;
+    background: #fff;
+}
+
+.form-group textarea {
+    resize: none;
+    height: 90px;
+}
+
+.modal-footer-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.btn-cancel {
+    background: #d3d3d3;
+    color: #333;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-save {
+    background: #5b2a2a;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-cancel:hover { background: #c0c0c0; }
+.btn-save:hover   { background: #4a2222; }
+
+/* --- View Training Modal --- */
+.modal-content--view {
+    width: 860px;
+    max-height: 90vh;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.view-modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    min-height: 420px;
+}
+
+/* Left Panel */
+.view-left-panel {
+    padding: 28px 24px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.view-training-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+}
+
+.view-training-meta {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.view-status-badge {
+    align-self: flex-start;
+    margin-bottom: 6px;
+}
+
+.view-info-table {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.view-info-section-label {
+    background: #f5f5f5;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.view-info-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    padding: 9px 14px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 10px;
+}
+
+.view-info-row:last-child {
     border-bottom: none;
 }
 
-.info-table td {
-    padding: 11px 22px;
-    font-size: 13px;
-    vertical-align: top;
-}
-
-.info-table td:first-child {
-    color: #888;
-    width: 140px;
+.view-info-key {
+    color: #666;
     font-weight: 500;
 }
 
-.info-table td:last-child {
+.view-info-val {
+    color: #1a1a1a;
+    font-weight: 400;
+}
+
+/* Right Panel */
+.view-right-panel {
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.view-right-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.view-right-header h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.view-right-header .filter-main-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    height: auto;
+}
+
+.participants-table-wrap {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.participants-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.participants-table thead th {
+    background: #f5f5f5;
     color: #333;
-    font-weight: 500;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.modal-footer {
-    padding: 16px 22px;
+.participants-table tbody td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    color: #333;
+    height: auto;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.participants-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.participants-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.edit-icon {
+    color: #aaa;
+    font-size: 0.75rem;
+    margin-left: 6px;
+    cursor: pointer;
+}
+
+.edit-icon:hover { color: #632b2b; }
+
+/* View Modal Footer */
+.view-modal-footer {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    border-top: 1px solid #e5e5e5;
+    margin-top: auto;
 }
 
-.btn-close-modal {
-    background: #eee;
+.btn-view-edit {
+    background: #e0e0e0;
     color: #333;
     border: none;
-    padding: 8px 20px;
+    padding: 9px 28px;
     border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: background 0.2s;
+    font-size: 0.9rem;
 }
 
-.btn-close-modal:hover {
-    background: #ddd;
-}
-
-.btn-register-modal {
-    background: #8b1a1a;
+.btn-view-close {
+    background: #5b2a2a;
     color: white;
     border: none;
-    padding: 8px 20px;
+    padding: 9px 28px;
     border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: background 0.2s;
+    font-size: 0.9rem;
 }
 
-.btn-register-modal:hover {
-    background: #6e1010;
-}
-
-.btn-register-modal.registered {
-    background: #28a745;
-    cursor: default;
-}
-
-.btn-register-modal.registered:hover {
-    background: #218838;
-}
+.btn-view-edit:hover  { background: #d0d0d0; }
+.btn-view-close:hover { background: #4a2222; }

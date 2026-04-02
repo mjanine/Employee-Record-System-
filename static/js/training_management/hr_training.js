@@ -1,155 +1,170 @@
-/* ============================================================
-   head_training.js
-   Path: static/js/training_management/head_training.js
-   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
 
-// ── State ─────────────────────────────────────────────────────────────
-let myTrainings = [];       // registered trainings for this user
-let activeCardData = null;  // data of the card currently open in modal
+    // --- UI Elements ---
+    const sidebar = document.getElementById("sidebar");
+    const logoToggle = document.getElementById("logoToggle");
+    const closeBtn = document.getElementById("closeBtn");
+    const mainContent = document.getElementById("mainContent");
+    const menuItems = document.querySelectorAll(".menu-item");
 
-// ── DOM References ────────────────────────────────────────────────────
-const sidebar        = document.getElementById('sidebar');
-const logoToggle     = document.getElementById('logoToggle');
-const closeBtn       = document.getElementById('closeBtn');
-const menuItems      = document.querySelectorAll('.menu-item');
-const modalOverlay   = document.getElementById('modalOverlay');
-const btnCloseModal  = document.getElementById('btnCloseModal');
-const btnRegister    = document.getElementById('btnRegisterModal');
-const myTrainingsList = document.getElementById('myTrainingsList');
+    const searchInput = document.getElementById("tableSearch");
+    const tableBody = document.getElementById("trainingTableBody");
+    const noResultsRow = document.getElementById("noResultsRow");
+    const rows = tableBody.querySelectorAll("tr:not(#noResultsRow)");
 
-// ── Sidebar: collapse / expand ────────────────────────────────────────
-closeBtn.addEventListener('click', () => {
-    sidebar.classList.add('collapsed');
-});
+    const modal = document.getElementById("addTrainingModal");
+    const addTrainingBtn = document.getElementById("addTrainingBtn");
+    const modalClose = document.getElementById("modalClose");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const addTrainingForm = document.getElementById("addTrainingForm");
 
-logoToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-});
+    const viewModal = document.getElementById("viewTrainingModal");
+    const viewModalCancel = document.getElementById("viewModalCancel");
+    const viewModalCloseStatus = document.getElementById("viewModalCloseStatus");
 
-// ── Sidebar: tooltip data-text + active state ─────────────────────────
-menuItems.forEach(item => {
-    const text = item.querySelector('span')?.innerText;
-    if (text) item.setAttribute('data-text', text);
-
-    item.addEventListener('click', () => {
-        document.querySelector('.menu-item.active')?.classList.remove('active');
-        item.classList.add('active');
+    // --- Sidebar Toggle ---
+    closeBtn.addEventListener("click", () => {
+        sidebar.classList.add("collapsed");
+        mainContent.style.marginLeft = "110px";
     });
-});
 
-// ── Training Cards: open modal on card click, skip register button ─────
-document.querySelectorAll('.training-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('register-btn')) {
-            // Register button clicked directly on the card
-            handleRegister(card.dataset, card);
-            return;
+    logoToggle.addEventListener("click", () => {
+        if (sidebar.classList.contains("collapsed")) {
+            sidebar.classList.remove("collapsed");
+            mainContent.style.marginLeft = "340px";
         }
-        openModal(card.dataset, card);
-    });
-});
-
-// ── Open Modal ────────────────────────────────────────────────────────
-function openModal(data, card) {
-    activeCardData = { data, card };
-
-    document.getElementById('modal-title').textContent       = data.title;
-    document.getElementById('modal-meta').innerHTML          =
-        `${data.category} <span>|</span> ${data.type} <span>|</span> ${data.date}`;
-    document.getElementById('modal-status').textContent      = data.status;
-    document.getElementById('modal-description').textContent = data.description;
-    document.getElementById('modal-provider').textContent    = data.provider;
-    document.getElementById('modal-location').textContent    = data.location;
-    document.getElementById('modal-contact').textContent     = data.contact;
-    document.getElementById('modal-slots').textContent       = data.slots;
-
-    // Sync register button state with card
-    const alreadyRegistered = myTrainings.some(t => t.title === data.title);
-    if (alreadyRegistered) {
-        btnRegister.textContent = 'Registered ✓';
-        btnRegister.classList.add('registered');
-        btnRegister.disabled = true;
-    } else {
-        btnRegister.textContent = 'Register';
-        btnRegister.classList.remove('registered');
-        btnRegister.disabled = false;
-    }
-
-    modalOverlay.classList.add('active');
-}
-
-// ── Close Modal ───────────────────────────────────────────────────────
-function closeModal() {
-    modalOverlay.classList.remove('active');
-    activeCardData = null;
-}
-
-btnCloseModal.addEventListener('click', closeModal);
-
-modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) closeModal();
-});
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-});
-
-// ── Register Handler ──────────────────────────────────────────────────
-btnRegister.addEventListener('click', () => {
-    if (!activeCardData) return;
-    handleRegister(activeCardData.data, activeCardData.card);
-});
-
-function handleRegister(data, card) {
-    // Prevent duplicate registrations
-    const alreadyRegistered = myTrainings.some(t => t.title === data.title);
-    if (alreadyRegistered) return;
-
-    // Add to My Trainings state
-    myTrainings.push({
-        title:  data.title,
-        date:   data.date,
-        type:   data.type,
-        status: 'Registered'
     });
 
-    // Update card button
-    const cardBtn = card.querySelector('.register-btn');
-    if (cardBtn) {
-        cardBtn.textContent = 'Registered ✓';
-        cardBtn.classList.add('registered');
-        cardBtn.disabled = true;
-    }
-    card.classList.add('registered');
-
-    // Update modal button if modal is open for this card
-    const alreadyInModal = activeCardData && activeCardData.data.title === data.title;
-    if (alreadyInModal) {
-        btnRegister.textContent = 'Registered ✓';
-        btnRegister.classList.add('registered');
-        btnRegister.disabled = true;
-    }
-
-    // Re-render My Trainings panel
-    renderMyTrainings();
-}
-
-// ── Render My Trainings Panel ─────────────────────────────────────────
-function renderMyTrainings() {
-    if (myTrainings.length === 0) {
-        myTrainingsList.innerHTML =
-            '<div class="empty-state">No registered trainings yet.</div>';
-        return;
-    }
-
-    myTrainingsList.innerHTML = '';
-    myTrainings.forEach(t => {
-        const item = document.createElement('div');
-        item.className = 'my-training-item';
-        item.innerHTML =
-            `<div class="t-name">${t.title}</div>` +
-            `<div class="t-date">${t.date}</div>` +
-            `<span class="status-badge registered">${t.status}</span>`;
-        myTrainingsList.appendChild(item);
+    // --- Tooltip Text for Collapsed Sidebar ---
+    menuItems.forEach(item => {
+        const span = item.querySelector("span");
+        if (span) item.setAttribute("data-text", span.innerText);
     });
-}
+
+    // --- Search / Filter ---
+    searchInput.addEventListener("keyup", () => {
+        const filter = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const match = row.innerText.toLowerCase().includes(filter);
+            row.style.display = match ? "" : "none";
+            if (match) visibleCount++;
+        });
+
+        noResultsRow.style.display = visibleCount === 0 ? "" : "none";
+    });
+
+    // --- Add Training Modal Open / Close ---
+    const openModal = () => modal.style.display = "flex";
+    const closeModal = () => modal.style.display = "none";
+
+    addTrainingBtn.addEventListener("click", openModal);
+    modalClose.addEventListener("click", closeModal);
+    cancelBtn.addEventListener("click", closeModal);
+
+    // --- View Training Modal ---
+
+    // Training data keyed by ID (mirrors the table rows)
+    const trainingData = {
+        "001": {
+            name: "Outcomes-Based Education Workshop",
+            meta: "Teaching &nbsp;|&nbsp; Onsite &nbsp;|&nbsp; March 12, 2026",
+            status: "open",
+            statusLabel: "Open",
+            description: "College of Computer Studies",
+            trainer: "CCS - 201",
+            location: "Main building 2nd floor",
+            maxSlots: "30",
+            slotsFilled: "25 / 30"
+        },
+        "002": {
+            name: "Research Writing Seminar",
+            meta: "Research &nbsp;|&nbsp; Online &nbsp;|&nbsp; March 20, 2026",
+            status: "full",
+            statusLabel: "Full",
+            description: "Research writing and publication skills",
+            trainer: "Dr. Santos",
+            location: "Zoom / Online",
+            maxSlots: "30",
+            slotsFilled: "30 / 30"
+        },
+        "003": {
+            name: "Faculty Development Program",
+            meta: "Development &nbsp;|&nbsp; Onsite &nbsp;|&nbsp; Feb. 28, 2026",
+            status: "completed",
+            statusLabel: "Completed",
+            description: "Annual faculty development seminar",
+            trainer: "External Agency",
+            location: "Auditorium",
+            maxSlots: "20",
+            slotsFilled: "20 / 20"
+        },
+        "004": {
+            name: "Safety & Emergency Response Training",
+            meta: "Safety &nbsp;|&nbsp; Onsite &nbsp;|&nbsp; March 5, 2026",
+            status: "cancelled",
+            statusLabel: "Cancelled",
+            description: "Emergency procedures and safety protocols",
+            trainer: "Safety Officer",
+            location: "Gymnasium",
+            maxSlots: "25",
+            slotsFilled: "15 / 25"
+        }
+    };
+
+    const openViewModal = (id) => {
+        const data = trainingData[id];
+        if (!data) return;
+
+        document.getElementById("viewTrainingName").textContent = data.name;
+        document.getElementById("viewTrainingMeta").innerHTML = data.meta;
+        document.getElementById("viewDescription").textContent = data.description;
+        document.getElementById("viewTrainer").textContent = data.trainer;
+        document.getElementById("viewLocation").textContent = data.location;
+        document.getElementById("viewMaxSlots").textContent = data.maxSlots;
+        document.getElementById("viewSlotsFilled").textContent = data.slotsFilled;
+
+        const statusBadge = document.getElementById("viewTrainingStatus");
+        statusBadge.className = `status-badge ${data.status} view-status-badge`;
+        statusBadge.textContent = data.statusLabel;
+
+        viewModal.style.display = "flex";
+    };
+
+    const closeViewModal = () => viewModal.style.display = "none";
+
+    // Wire up all "View" links in the table
+    document.querySelectorAll(".action-links a:first-child").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const row = e.target.closest("tr");
+            const id = row.querySelector("td:first-child").textContent.trim();
+            openViewModal(id);
+        });
+    });
+
+    viewModalCancel.addEventListener("click", closeViewModal);
+    viewModalCloseStatus.addEventListener("click", closeViewModal);
+
+    // Close on backdrop click or Escape
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+        if (e.target === viewModal) closeViewModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeModal();
+            closeViewModal();
+        }
+    });
+
+    // --- Form Submission ---
+    addTrainingForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Training saved successfully.");
+        closeModal();
+    });
+
+});
