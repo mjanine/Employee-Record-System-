@@ -94,13 +94,9 @@
             }
         }
 
-        .action-dropdown {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .action-cell {
             position: relative;
-            width: 100%;
-            height: 100%;
+            text-align: center;
         }
 
         .action-btn {
@@ -112,7 +108,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: -15px;
+            margin-left: 25px;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            padding: 0;
+        }
+
+        .action-cell.open .dropdown-menu {
+            display: block;
         }
 
         .data-table tbody td:last-child {
@@ -231,18 +238,16 @@
                                 <td>Information Technology</td>
                                 <td><span class="status-badge active">Active</span></td>
                                 <td>Jan 15, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="1"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="1"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="1"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="1"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="1"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="1"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="1"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="1"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -260,18 +265,16 @@
                                 <td>Human Resources</td>
                                 <td><span class="status-badge active">Active</span></td>
                                 <td>Jan 20, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="2"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="2"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="2"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="2"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="2"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="2"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="2"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="2"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -289,18 +292,16 @@
                                 <td>Information Technology</td>
                                 <td><span class="status-badge active">Active</span></td>
                                 <td>Feb 01, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="3"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="3"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="3"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="3"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="3"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="3"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="3"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="3"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -318,18 +319,16 @@
                                 <td>Finance</td>
                                 <td><span class="status-badge inactive">Inactive</span></td>
                                 <td>Feb 10, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="4"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="4"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="4"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="4"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="4"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="4"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="4"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="4"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -347,18 +346,16 @@
                                 <td>Operations</td>
                                 <td><span class="status-badge active">Active</span></td>
                                 <td>Feb 18, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="5"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="5"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="5"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="5"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="5"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="5"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="5"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="5"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -376,18 +373,16 @@
                                 <td>Sales &amp; Marketing</td>
                                 <td><span class="status-badge active">Active</span></td>
                                 <td>Mar 02, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="6"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="6"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="6"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="6"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="6"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="6"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="6"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="6"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -405,18 +400,16 @@
                                 <td>Human Resources</td>
                                 <td><span class="status-badge inactive">Inactive</span></td>
                                 <td>Mar 10, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="7"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="7"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="7"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="7"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="7"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="7"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="7"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="7"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -434,18 +427,16 @@
                                 <td>Information Technology</td>
                                 <td><span class="status-badge active">Active</span></td>
                                 <td>Mar 18, 2024</td>
-                                <td>
-                                    <div class="action-dropdown">
-                                        <button class="action-btn" onclick="toggleDropdown(this)">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a href="#" class="dropdown-item edit-user" data-user-id="8"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="dropdown-item assign-role" data-user-id="8"><i class="fas fa-user-tie"></i> Assign Role</a>
-                                            <a href="#" class="dropdown-item reset-password" data-user-id="8"><i class="fas fa-key"></i> Reset Password</a>
-                                            <hr>
-                                            <a href="#" class="dropdown-item delete-user" data-user-id="8"><i class="fas fa-trash"></i> Delete</a>
-                                        </div>
+                                <td class="action-cell">
+                                    <button class="action-btn" onclick="toggleDropdown(this)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item edit-user" data-user-id="8"><i class="fas fa-edit"></i> Edit</a>
+                                        <a href="#" class="dropdown-item assign-role" data-user-id="8"><i class="fas fa-user-tie"></i> Assign Role</a>
+                                        <a href="#" class="dropdown-item reset-password" data-user-id="8"><i class="fas fa-key"></i> Reset Password</a>
+                                        <hr>
+                                        <a href="#" class="dropdown-item delete-user" data-user-id="8"><i class="fas fa-trash"></i> Delete</a>
                                     </div>
                                 </td>
                             </tr>

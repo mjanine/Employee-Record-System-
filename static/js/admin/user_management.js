@@ -449,10 +449,10 @@ function executeConfirmedAction() {
 }
 
 function toggleDropdown(button) {
-    const dropdown = button.closest('.action-dropdown');
+    const dropdown = button.closest('.action-cell');
     
     // Close all other dropdowns
-    document.querySelectorAll('.action-dropdown.open').forEach(d => {
+    document.querySelectorAll('.action-cell.open').forEach(d => {
         if (d !== dropdown) d.classList.remove('open');
     });
 
@@ -461,8 +461,8 @@ function toggleDropdown(button) {
 
 // Close dropdowns when clicking outside
 document.addEventListener('click', function(e) {
-    if (!e.target.closest('.action-dropdown')) {
-        document.querySelectorAll('.action-dropdown.open').forEach(d => {
+    if (!e.target.closest('.action-cell')) {
+        document.querySelectorAll('.action-cell.open').forEach(d => {
             d.classList.remove('open');
         });
     }
