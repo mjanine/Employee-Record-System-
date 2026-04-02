@@ -25,22 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     // --- Sidebar Toggle ---
-    const setSidebarSpacing = () => {
-        if (sidebar.classList.contains("collapsed")) {
-            mainContent.style.marginLeft = "110px";
-        } else {
-            mainContent.style.marginLeft = "340px";
-        }
-    };
-
     closeBtn.addEventListener("click", () => {
         sidebar.classList.add("collapsed");
-        setSidebarSpacing();
+        mainContent.style.marginLeft = "110px";
     });
 
     logoToggle.addEventListener("click", () => {
-        sidebar.classList.toggle("collapsed");
-        setSidebarSpacing();
+        if (sidebar.classList.contains("collapsed")) {
+            sidebar.classList.remove("collapsed");
+            mainContent.style.marginLeft = "340px";
+        }
     });
 
     // --- Tooltip Text for Collapsed Sidebar ---
