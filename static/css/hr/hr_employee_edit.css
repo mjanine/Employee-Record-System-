@@ -173,7 +173,14 @@ label { display: block; margin-bottom: 6px; font-weight: 600; color: #555; font-
 input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; }
 input[readonly] { background-color: #f0f0f0; cursor: not-allowed; color: #888; }
 .sub-header { margin: 20px 0 10px 0; font-weight: bold; border-top: 1px solid #eee; padding-top: 15px; }
-.form-footer { display: flex; justify-content: flex-end; gap: 15px; padding-top: 20px; border-top: 1px solid #eee; margin-top: 10px; }
+.form-footer { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding-top: 20px; 
+    border-top: 1px solid #eee; 
+    margin-top: 10px; 
+}
 .btn { padding: 12px 35px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.3s; }
 .btn-cancel { background: #eee; color: #333; }
 .btn-save { background: #4a1d1d; color: white; }
@@ -231,4 +238,25 @@ hr { border: 0.5px solid rgba(255,255,255,0.2); margin: 10px 0; }
 
 .small-swal-text {
     font-size: 14px !important;
+}
+.right-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Unique Class for Delete Button */
+.btn-maroon-action {
+    background-color: #800000; /* Maroon */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.3s ease;
+}
+
+.btn-maroon-action:hover {
+    background-color: #600000;
 }

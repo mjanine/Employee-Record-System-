@@ -1,6 +1,7 @@
 const sidebar = document.getElementById('sidebar');
 const logoToggle = document.getElementById('logoToggle');
 const closeBtn = document.getElementById('closeBtn');
+const deleteUserBtn = document.getElementById('deleteUserBtn'); // Reference to maroon button
 const menuItems = document.querySelectorAll('.menu-item');
 
 // --- FIX: This loop puts the text into the tooltips so they aren't black/empty ---
@@ -16,6 +17,39 @@ if (logoToggle) {
 }
 if (closeBtn) {
     closeBtn.addEventListener('click', () => sidebar.classList.add('close'));
+}
+
+// --- NEW: Delete User Logic ---
+if (deleteUserBtn) {
+    deleteUserBtn.addEventListener('click', function() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to delete this user? This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#800000', // Maroon
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete user',
+            cancelButtonText: 'No, keep user',
+            width: '400px',
+            customClass: {
+                title: 'small-swal-title',
+                htmlContainer: 'small-swal-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'The user has been successfully removed.',
+                    icon: 'success',
+                    confirmButtonColor: '#4a1d1d'
+                }).then(() => {
+                    // Redirect to the list after deletion
+                    window.location.href = 'hr_employeelist.html';
+                });
+            }
+        });
+    });
 }
 
 function updateHRProfile() {
