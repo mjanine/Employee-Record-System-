@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applications Management | UPHSD</title>
-
+    <title>Applications Management | HR System</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/application_management/hr_appmanagement.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/application_management/hr_appmanagement.css">
 </head>
-
 <body>
 
 <div class="background"></div>
+
+<div id="toast-container"></div>
 
 <div class="dashboard-viewport">
 
@@ -23,11 +23,8 @@
                 <img src="../../static/img/general/uph.png" class="logo" alt="UPHSD Logo">
                 <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
-            <button class="close-btn" id="closeBtn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
+            <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
-
         <ul class="menu">
             <li><a href="../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
             <li><a href="../accounts/hr_profile_view.html" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
@@ -41,11 +38,8 @@
             <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
         </ul>
-
         <div class="bottom-section">
-            <a href="../login/login.html" class="menu-item logout">
-                <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
-            </a>
+            <a href="../login/login.html" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
         </div>
     </div>
 
@@ -80,58 +74,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="applicationTableBody">
-                        <tr>
-                            <td>001</td>
-                            <td>Dela Cruz, Juan</td>
-                            <td>CCS</td>
-                            <td>Instructor</td>
-                            <td>02/12/2026</td>
-                            <td>Stage 2 of 4</td>
-                            <td><span class="status-pill pending-hr">Pending - HR Evaluator</span></td>
-                            <td>
-                                <span class="action-link view-link">View Details</span>
-                                <div class="dropdown">
-                                    <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
-                                    <div class="dropdown-content">
-                                        <a href="#" class="approve-option">Approve</a>
-                                        <a href="#" class="reject-option">Reject</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>002</td>
-                            <td>Santos, Maria</td>
-                            <td>CBA</td>
-                            <td>Professor</td>
-                            <td>02/15/2026</td>
-                            <td>Stage 1 of 4</td>
-                            <td><span class="status-pill pending-head">Pending - Dept. Head</span></td>
-                            <td>
-                                <span class="action-link view-link">View Details</span>
-                                <div class="dropdown">
-                                    <button class="update-link">Update <i class="fas fa-caret-down"></i></button>
-                                    <div class="dropdown-content">
-                                        <a href="#" class="approve-option">Approve</a>
-                                        <a href="#" class="reject-option">Reject</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>003</td>
-                            <td>Reyes, Ricardo</td>
-                            <td>COE</td>
-                            <td>Registrar</td>
-                            <td>02/10/2026</td>
-                            <td>Completed</td>
-                            <td><span class="status-pill approved">Approved</span></td>
-                            <td>
-                                <span class="action-link view-link">View Details</span>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody id="applicationTableBody"></tbody>
                 </table>
             </div>
 
@@ -150,7 +93,7 @@
                 <div class="doc-tab-label">Supporting Document</div>
                 <div class="doc-box">
                     <div class="doc-header" id="modalFileName">Document.pdf</div>
-                    <div class="pdf-placeholder">
+                    <div class="pdf-placeholder" id="pdfPlaceholder">
                         <i class="fas fa-file-pdf"></i>
                         <p>Document Preview Mode</p>
                     </div>
@@ -180,15 +123,13 @@
                 </div>
                 <div class="info-item">
                     <label>Review Remarks</label>
-                    <p id="modalRemarks">Awaiting review.</p>
+                    <p id="modalRemarks" class="modal-text-unified">Awaiting review.</p>
                 </div>
-
                 <div class="modal-footer" id="modalActions">
-                    <button class="btn-approve" id="modalApproveBtn">Approve Request</button>
-                    <button class="btn-reject" id="modalRejectBtn">Reject Request</button>
+                    <button class="btn-approve" id="modalApproveBtn">Approve Application</button>
+                    <button class="btn-reject" id="modalRejectBtn">Reject Application</button>
                 </div>
-
-                <button class="modal-close-btn" onclick="closeViewModal()">Close View</button>
+                <button class="modal-close-btn" id="modalCloseBtn">Close View</button>
             </div>
         </div>
     </div>
@@ -234,14 +175,28 @@
                     <label>Reason</label>
                     <textarea rows="4" placeholder="Input reason..."></textarea>
                 </div>
-                <div class="modal-footer action-btns full-width">
-                    <button type="button" id="cancelRequest">Cancel</button>
-                    <button type="button" class="btn-save">Save</button>
+                <div class="action-btns full-width">
+                    <button id="cancelRequest">Cancel</button>
+                    <button class="btn-save">Save</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- ================= ROW TEMPLATE ================= -->
+<template id="appRowTemplate">
+    <tr>
+        <td class="col-id"></td>
+        <td class="col-name"></td>
+        <td class="col-dept"></td>
+        <td class="col-position"></td>
+        <td class="col-submitted"></td>
+        <td class="col-progress"></td>
+        <td class="col-status"></td>
+        <td class="col-actions"></td>
+    </tr>
+</template>
 
 <script src="../../static/js/application_management/hr_appmanagement.js"></script>
 
