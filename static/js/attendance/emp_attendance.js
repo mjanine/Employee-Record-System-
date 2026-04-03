@@ -91,22 +91,20 @@ function startTimer() {
 
 clockBtn.addEventListener("click", () => {
     if (!isClockedIn) {
-        // Clock In
         isClockedIn = true;
-        clockBtn.innerText        = "Clock out";
-        clockBtn.style.background = "#8b0000";
+        clockBtn.innerText = "Clock out";
+        clockBtn.classList.add("is-clocked-in");
 
         const now = new Date();
         timeInDisplay.innerText = `Time In: ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
 
         startTimer();
     } else {
-        // Clock Out
         if (confirm("Are you sure you want to clock out?")) {
             isClockedIn = false;
             clearInterval(timerInterval);
-            clockBtn.innerText        = "Clock in";
-            clockBtn.style.background = "#2d5a27";
+            clockBtn.innerText = "Clock in";
+            clockBtn.classList.remove("is-clocked-in");
             alert(`Shift completed! Total time: ${formatDuration(totalSeconds)}`);
         }
     }

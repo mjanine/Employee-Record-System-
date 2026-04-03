@@ -31,7 +31,7 @@
        <ul class="menu">
 
             <li>
-                <a href="emp_dash.html" class="menu-item active">
+                <a href="emp_dash.html" class="menu-item">
                     <i class="fas fa-border-all"></i>
                     <span>Dashboard</span>
                 </a>
@@ -54,7 +54,7 @@
             </li>
 
             <li>
-                <a href="../attendance/emp_attendance.html" class="menu-item">
+                <a href="../attendance/emp_attendance.html" class="menu-item active">
                     <i class="fas fa-calendar-check"></i>
                     <span>Attendance</span>
                 </a>
@@ -105,22 +105,39 @@
     <main class="main-container" id="mainContent">
 
         <div class="content-card header-banner">
-            <h1>Good morning, Juan! ☀️</h1>
+            <div class="header-banner-inner">
+                <div class="header-greeting">
+                    <p class="header-kicker">Employee portal</p>
+                    <h1>Good morning, Juan!</h1>
+                    <p class="header-sub">Track your time and weekly attendance at a glance.</p>
+                </div>
+                <div class="header-weather" aria-hidden="true"><i class="fas fa-sun"></i></div>
+            </div>
         </div>
 
         <div class="dashboard-grid">
 
             <div class="content-card attendance-section">
+                <div class="attendance-card-accent"></div>
                 <div class="card-header">
-                    <h2>Attendance</h2>
+                    <div class="card-title-group">
+                        <span class="card-icon-wrap" aria-hidden="true"><i class="fas fa-fingerprint"></i></span>
+                        <h2>Today’s attendance</h2>
+                    </div>
                     <span class="date-now">Monday, February 8 | 8:14 AM</span>
                 </div>
-                <p class="status-text">Let's get it started</p>
+                <p class="status-text">Ready when you are — clock in to start your shift.</p>
                 <div class="stats-row">
-                    <p id="workingTime">Working for: 0h</p>
-                    <p id="timeInDisplay">Time In: --</p>
+                    <div class="stat-chip">
+                        <span class="stat-chip-label"><i class="fas fa-stopwatch"></i> Session</span>
+                        <p id="workingTime" class="stat-chip-value">Working for: 0h</p>
+                    </div>
+                    <div class="stat-chip">
+                        <span class="stat-chip-label"><i class="fas fa-sign-in-alt"></i> Start</span>
+                        <p id="timeInDisplay" class="stat-chip-value">Time In: --</p>
+                    </div>
                 </div>
-                <button class="btn-clock-in" id="clockBtn">Clock in</button>
+                <button type="button" class="btn-clock-in" id="clockBtn">Clock in</button>
             </div>
 
             <div class="content-card profile-preview">
@@ -130,9 +147,9 @@
                     </div>
                     <div class="profile-details">
                         <h3>Juan Dela Cruz</h3>
-                        <p>Department Head</p>
+                        <p class="profile-role">Department Head</p>
                         <p class="emp-id">Employee ID: 001</p>
-                        <button class="btn-secondary">View Profile</button>
+                        <button type="button" class="btn-secondary">View Profile</button>
                     </div>
                 </div>
             </div>
@@ -141,11 +158,14 @@
 
         <div class="content-card summary-section">
             <div class="summary-header">
-                <h2>Weekly Summary</h2>
+                <div class="summary-title-wrap">
+                    <span class="card-icon-wrap card-icon-wrap--muted" aria-hidden="true"><i class="fas fa-calendar-week"></i></span>
+                    <h2>Weekly summary</h2>
+                </div>
                 <div class="week-picker">
-                    <i class="fas fa-chevron-left"></i>
+                    <button type="button" class="week-nav" aria-label="Previous week"><i class="fas fa-chevron-left"></i></button>
                     <span>Week 5</span>
-                    <i class="fas fa-chevron-right"></i>
+                    <button type="button" class="week-nav" aria-label="Next week"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
 
