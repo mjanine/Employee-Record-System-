@@ -654,6 +654,170 @@ hr {
     }
 }
 
+/* ============================================================
+   CLOCK OUT DIALOG (replaces browser confirm / alert)
+   ============================================================ */
+.clock-out-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(26, 18, 18, 0.55);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.clock-out-overlay--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.clock-out-dialog {
+    width: 100%;
+    max-width: 420px;
+    background: linear-gradient(165deg, #ffffff 0%, #f8f8f9 100%);
+    border-radius: var(--radius-lg);
+    padding: 32px 32px 28px;
+    box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.22),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    border: 1px solid var(--border);
+    transform: translateY(16px) scale(0.98);
+    transition: transform 0.32s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.clock-out-overlay--visible .clock-out-dialog {
+    transform: translateY(0) scale(1);
+}
+
+.clock-out-step {
+    text-align: center;
+}
+
+.clock-out-step--hidden {
+    display: none !important;
+}
+
+.clock-out-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+.clock-out-icon--confirm {
+    background: linear-gradient(145deg, #fff0f0 0%, #ffe4e4 100%);
+    color: #b91c1c;
+    border: 2px solid rgba(185, 28, 28, 0.2);
+    box-shadow: 0 8px 24px rgba(185, 28, 28, 0.15);
+}
+
+.clock-out-icon--success {
+    background: linear-gradient(145deg, #e8f7ec 0%, #d1fae5 100%);
+    color: var(--accent-green);
+    border: 2px solid rgba(30, 92, 58, 0.2);
+    box-shadow: 0 8px 24px rgba(30, 92, 58, 0.12);
+}
+
+.clock-out-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    line-height: 1.25;
+}
+
+.clock-out-message {
+    font-size: 0.94rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 26px;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.clock-out-duration {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--brand);
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+.clock-out-sub {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 26px;
+}
+
+.clock-out-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.clock-out-btn {
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.clock-out-btn:active {
+    transform: scale(0.98);
+}
+
+.clock-out-btn--ghost {
+    background: #fff;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.clock-out-btn--ghost:hover {
+    background: #f4f4f5;
+    color: var(--text);
+}
+
+.clock-out-btn--danger {
+    background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(185, 28, 28, 0.4);
+}
+
+.clock-out-btn--danger:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 6px 22px rgba(185, 28, 28, 0.45);
+}
+
+.clock-out-btn--primary {
+    width: 100%;
+    max-width: 280px;
+    background: linear-gradient(180deg, var(--accent-green-bright) 0%, var(--accent-green) 100%);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(30, 92, 58, 0.35);
+}
+
+.clock-out-btn--primary:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 6px 22px rgba(30, 92, 58, 0.4);
+}
+
 
 /* ============================================================
    HISTORY MODAL STYLES

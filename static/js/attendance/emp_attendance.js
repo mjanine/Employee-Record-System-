@@ -45,6 +45,14 @@ const totalHoursCount  = document.getElementById("totalHoursCount");
 const prevPeriodBtn    = document.getElementById("prevPeriod");
 const nextPeriodBtn    = document.getElementById("nextPeriod");
 
+const clockOutOverlay      = document.getElementById("clockOutOverlay");
+const clockOutConfirmStep  = document.getElementById("clockOutConfirmStep");
+const clockOutSuccessStep  = document.getElementById("clockOutSuccessStep");
+const clockOutCancelBtn    = document.getElementById("clockOutCancel");
+const clockOutConfirmBtn   = document.getElementById("clockOutConfirmBtn");
+const clockOutDismissBtn   = document.getElementById("clockOutDismiss");
+const clockOutDurationText = document.getElementById("clockOutDurationText");
+
 
 /* ── 2. SIDEBAR NAVIGATION ───────────────────────────────── */
 
@@ -87,6 +95,44 @@ function startTimer() {
     }, 1000);
 }
 
+function showClockOutOverlay() {
+    clockOutConfirmStep.classList.remove("clock-out-step--hidden");
+    clockOutSuccessStep.classList.add("clock-out-step--hidden");
+    clockOutSuccessStep.setAttribute("hidden", "");
+    clockOutOverlay.classList.add("clock-out-overlay--visible");
+    clockOutOverlay.setAttribute("aria-hidden", "false");
+    clockOutConfirmBtn.focus();
+}
+
+function hideClockOutOverlay() {
+    clockOutOverlay.classList.remove("clock-out-overlay--visible");
+    clockOutOverlay.setAttribute("aria-hidden", "true");
+    clockOutConfirmStep.classList.remove("clock-out-step--hidden");
+    clockOutSuccessStep.classList.add("clock-out-step--hidden");
+    clockOutSuccessStep.setAttribute("hidden", "");
+}
+
+function showClockOutSuccess(durationLabel) {
+    clockOutDurationText.innerText = `Total time: ${durationLabel}`;
+    clockOutConfirmStep.classList.add("clock-out-step--hidden");
+    clockOutSuccessStep.classList.remove("clock-out-step--hidden");
+    clockOutSuccessStep.removeAttribute("hidden");
+    clockOutDismissBtn.focus();
+}
+
+function completeClockOut() {
+    const durationLabel = formatDuration(totalSeconds);
+    isClockedIn = false;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    totalSeconds = 0;
+    clockBtn.innerText = "Clock in";
+    clockBtn.classList.remove("is-clocked-in");
+    workingTimeDisplay.innerText = "Working for: 0h 00m";
+    timeInDisplay.innerText = "Time In: --";
+    showClockOutSuccess(durationLabel);
+}
+
 clockBtn.addEventListener("click", () => {
     if (!isClockedIn) {
         isClockedIn = true;
@@ -98,13 +144,27 @@ clockBtn.addEventListener("click", () => {
 
         startTimer();
     } else {
-        if (confirm("Are you sure you want to clock out?")) {
-            isClockedIn = false;
-            clearInterval(timerInterval);
-            clockBtn.innerText = "Clock in";
-            clockBtn.classList.remove("is-clocked-in");
-            alert(`Shift completed! Total time: ${formatDuration(totalSeconds)}`);
-        }
+        showClockOutOverlay();
+    }
+});
+
+clockOutCancelBtn.addEventListener("click", hideClockOutOverlay);
+
+clockOutConfirmBtn.addEventListener("click", () => {
+    completeClockOut();
+});
+
+clockOutDismissBtn.addEventListener("click", hideClockOutOverlay);
+
+clockOutOverlay.addEventListener("click", (e) => {
+    if (e.target === clockOutOverlay) {
+        hideClockOutOverlay();
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && clockOutOverlay.classList.contains("clock-out-overlay--visible")) {
+        hideClockOutOverlay();
     }
 });
 
