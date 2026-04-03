@@ -321,6 +321,17 @@ document.addEventListener("DOMContentLoaded", () => {
     filterPopover.querySelector("#hfClear")?.addEventListener("click", () => {
         filterState.dept = "All";
         filterState.status = "All";
+        filterState.date = null;
+
+        if (searchInput) searchInput.value = "";
+        if (dateInput) dateInput.value = "";
+        setDateButtonLabel();
+
+        const deptSel = filterPopover.querySelector("#hfDept");
+        const statusSel = filterPopover.querySelector("#hfStatus");
+        if (deptSel) deptSel.value = "All";
+        if (statusSel) statusSel.value = "All";
+
         toggleFilterPopover(false);
         applyFilters();
     });
