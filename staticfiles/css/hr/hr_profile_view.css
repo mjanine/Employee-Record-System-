@@ -664,3 +664,10 @@ hr {
 .save-btn:hover {
     opacity: 0.9;
 }
+.status-dot.active-dot {
+    background-color: #8ddf9b;
+}
+
+.status-dot.inactive-dot {
+    background-color: #ff6b6b;
+}

@@ -31,4 +31,9 @@ urlpatterns = [
     path('accounts/edit-department/<int:dept_id>/', views.edit_department, name='edit_department'),
     path('accounts/get-department-data/<int:dept_id>/', views.get_department_data, name='get_department_data'),
     path('accounts/deactivate-department/<int:dept_id>/', views.deactivate_department, name='deactivate_department'),
+# Add these at the end of your urlpatterns list
+path('hr/employees/', views.employee_list, name='employee_list'),
+path('hr/employees/add/', views.add_employee, name='add_employee'),
+# Add this line to your urlpatterns
+path('hr/employees/profile/<int:user_id>/', views.employee_profile_view, name='employee_profile'),
 ]

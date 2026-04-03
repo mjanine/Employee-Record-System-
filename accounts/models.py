@@ -3,42 +3,36 @@ from django.db import models
 from django.utils import timezone
 
 class User(AbstractUser):
-    # Your existing custom fields (role, profile_pic, etc.)
     ROLE_CHOICES = (
         ('ADMIN', 'Admin'),
         ('HR', 'HR Staff'),
         ('HEAD', 'Department Head'),
         ('EMP', 'Employee'), 
-        ('SD', 'Software Developer'), # Added 'SD' role
+        ('SD', 'Software Developer'),
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='EMP')
     profile_pic = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-
-    # New fields for account management
-    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True) # Added department FK
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
+    
     is_locked = models.BooleanField(default=False)
     failed_login_attempts = models.IntegerField(default=0)
-    must_change_password = models.BooleanField(default=True) # Enforce password change on first login
+    must_change_password = models.BooleanField(default=True)
     last_password_change = models.DateTimeField(null=True, blank=True)
-    groups = models.ManyToManyField(
-        Group,
-        related_name="accounts_user_groups",  # Unique name
-        blank=True,
-        help_text="The groups this user belongs to.",
-        verbose_name="groups",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name="accounts_user_permissions",  # Unique name
-        blank=True,
-        help_text="Specific permissions for this user.",
-        verbose_name="user permissions",
-    )
+    
+    groups = models.ManyToManyField(Group, related_name="accounts_user_groups", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="accounts_user_permissions", blank=True)
 
     def save(self, *args, **kwargs):
-        if not self.pk: # Only on creation
+        is_new = not self.pk
+        if is_new:
             self.last_password_change = timezone.now()
+        
         super().save(*args, **kwargs)
+        
+        # AUTOMATIC PROFILE CREATION:
+        # Every time a User is created, they get a blank EmployeeProfile automatically
+        if is_new:
+            EmployeeProfile.objects.get_or_create(user=self)
 
 class Department(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -48,3 +42,31 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+
+# MOVED OUTSIDE: This is now a standalone class
+class EmployeeProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    
+    # Employment Details
+    employee_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    employment_type = models.CharField(max_length=20, choices=[
+        ('REG', 'Regular'), 
+        ('PROB', 'Probationary'), 
+        ('CONT', 'Contractual')
+    ], default='REG')
+    date_hired = models.DateField(default=timezone.now)
+    
+    # Personal Info
+    middle_name = models.CharField(max_length=100, blank=True, null=True)
+    contact_number = models.CharField(max_length=15, blank=True)
+    address = models.TextField(blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    
+    # Emergency Contact
+    emergency_contact_name = models.CharField(max_length=255, blank=True)
+    emergency_contact_num = models.CharField(max_length=15, blank=True)
+    
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user.get_full_name()} ({self.employee_id if self.employee_id else 'No ID'})"

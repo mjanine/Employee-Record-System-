@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | Sarah Miller</title>
-    <link rel="shortcut icon" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/hr/hr_profile_view.css">
+    <title>Profile | {{ employee.get_full_name }}</title>
+    <link rel="shortcut icon" href="{% static 'img/general/uph.png' %}">
+    <link rel="stylesheet" href="{% static 'css/hr/hr_profile_view.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -14,81 +15,24 @@
 <div class="background"></div>
 
 <div class="dashboard-viewport">
-        <div class="sidebar" id="sidebar">
-            <div class="top-section">
-                <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../../static/img/general/uph.png" class="logo">
-                    <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
+    <div class="sidebar" id="sidebar">
+        <div class="top-section">
+            <div class="logo-wrapper" id="logoToggle">
+                <img src="{% static 'img/general/uph.png' %}" class="logo">
+                <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
+            <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
+        </div>
 
-            <ul class="menu">
-                <li>
-                    <a href="/Employee-Record-System--main/templates/dashboards/emp_dash.html" class="menu-item">
-                        <i class="fas fa-border-all"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="emp_profile_view.html" class="menu-item active">
-                        <i class="fas fa-user"></i>
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <hr>
-           <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Position Change Request</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-file"></i>
-                    <span>Application Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-database"></i>
-                    <span>Employee Records</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>Attendance Monitoring</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Leave Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-star"></i>
-                    <span>Performance Evaluation</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Trainings</span>
-                </a>
-            </li>
-            <li>
-                <a href="hr_reports.html" class="menu-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Reports / Analytics</span>
-                </a>
-            </li>
+        <ul class="menu">
+            <li><a href="{% url 'admin_dashboard' %}" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <hr>
+            <li><a href="{% url 'employee_list' %}" class="menu-item active"><i class="fas fa-database"></i> <span>Employee Records</span></a></li>
+            <li><a href="{% url 'department_management' %}" class="menu-item"><i class="fas fa-sitemap"></i> <span>Departments</span></a></li>
         </ul>
 
         <div class="bottom-section">
-            <a href="#" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> <span>Log Out</span></a>
+            <a href="{% url 'logout' %}" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> <span>Log Out</span></a>
         </div>
     </div>
 
@@ -97,30 +41,36 @@
 
             <div class="profile-card">
                 <div class="profile-left">
-                    <img src="../../static/img/sample-profile-pic.jfif" class="profile-img">
+                    {% if employee.profile_pic %}
+                        <img src="{{ employee.profile_pic.url }}" class="profile-img">
+                    {% else %}
+                        <img src="{% static 'img/sample-profile-pic.jfif' %}" class="profile-img">
+                    {% endif %}
+                    
                     <div class="profile-info">
-                        <h2>Sarah Miller</h2>
-                        <p class="role">HR Manager</p>
-                        <p class="employee-id">Employee ID: HR-001</p>
+                        <h2>{{ employee.get_full_name }}</h2>
+                        <p class="role">{{ employee.get_role_display }}</p>
+                        <p class="employee-id">Employee ID: {{ employee.profile.employee_id|default:"---" }}</p>
 
                         <div class="employment-details">
-                            <p><strong>Status</strong> <span class="status-dot" style="background:#8ddf9b"></span> Active</p>
-                            <p><strong>Position</strong> HR Manager</p>
-                            <p><strong>Department</strong> Human Resources</p>
-                            <p><strong>Employment Type</strong> Full-time</p>
-                            <p><strong>Date Hired</strong> 2018-03-12</p>
+                            <p><strong>Status</strong> 
+                                <span class="status-dot {% if employee.is_active %}active-dot{% else %}inactive-dot{% endif %}"></span>
+                            </p>
+                            <p><strong>Department:</strong> {{ employee.department.name|default:"Not Assigned" }}</p>
+                            <p><strong>Employment Type:</strong> {{ employee.profile.get_employment_type_display|default:"---" }}</p>
+                            <p><strong>Date Hired:</strong> {{ employee.date_joined|date:"F d, Y" }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="profile-right">
-                    <a href="../hr/hr_profile_edit.html"><button class="edit-btn">Edit Profile</button></a>
+                    <a href="#"><button class="edit-btn">Edit Profile</button></a>
 
                     <div class="contact-info">
                         <h4>Contact Information</h4>
-                        <p><i class="fas fa-envelope"></i> sarah.miller@school.edu.ph</p>
-                        <p><i class="fas fa-phone"></i> +63 918 222 3333</p>
-                        <p><i class="fas fa-location-dot"></i> Las Piñas City, Metro Manila</p>
+                        <p><i class="fas fa-envelope"></i> {{ employee.email }}</p>
+                        <p><i class="fas fa-phone"></i> {{ employee.profile.contact_number|default:"+63 --- --- ----" }}</p>
+                        <p><i class="fas fa-location-dot"></i> {{ employee.profile.address|default:"No address saved" }}</p>
                     </div>
                 </div>
             </div>
@@ -132,66 +82,32 @@
             </div>
 
             <div class="tab-content">
-
                 <div class="tab-content-item active" id="dept">
                     <div class="info-card">
-                        <h4>Department Information</h4>
-                        <div class="info-row"><span>Department</span><span>Human Resources</span></div>
-                        <div class="info-row"><span>Code</span><span>HR-SEC</span></div>
-                        <div class="info-row"><span>Location</span><span>Ground Floor, Admin Building</span></div>
-                        <div class="info-row"><span>Email</span><span>hr@school.edu.ph</span></div>
-                        <div class="info-row"><span>Contact</span><span>(02) 888-1234</span></div>
+                        <h4>Department Details</h4>
+                        <div class="info-row"><span>Assigned Department</span><span>{{ employee.department.name|default:"Unassigned" }}</span></div>
+                        <div class="info-row"><span>Department Code</span><span>{{ employee.department.id|default:"N/A" }}</span></div>
+                        <div class="info-row"><span>Supervisor Status</span><span>{% if employee.role == 'ADM' %}Managerial{% else %}Staff{% endif %}</span></div>
                     </div>
                 </div>
 
                 <div class="tab-content-item" id="docs">
-                    <div class="doc-header"><span>2 of 3 uploaded</span></div>
+                    <div class="doc-header"><span>Employee Document Repository</span></div>
                     <table class="doc-table">
                         <thead>
                             <tr>
-                                <th>Document</th>
-                                <th>Type</th>
+                                <th>Document Name</th>
+                                <th>Format</th>
                                 <th>Status</th>
-                                <th>Date Uploaded</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Transcript of Records</td>
-                                <td>PDF</td>
-                                <td class="status-cell" id="status-tor" style="color: #28a745; font-weight: bold;">Valid</td>
-                                <td class="date-cell" id="date-tor">March 1, 2025</td>
-                                <td class="action-cell" id="action-tor">
-                                    <a href="../../../static/docs/tor_sample.pdf" target="_blank" title="View Document">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="#" download><i class="fas fa-download"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Licenses / Certification</td>
-                                <td>PDF</td>
-                                <td class="status-cell" id="status-lic" style="color: #ffc107; font-weight: bold;">Needs Update</td>
-                                <td class="date-cell" id="date-lic">February 10, 2025</td>
-                                <td class="action-cell" id="action-lic">
-                                    <label for="mgr-license-upload" class="add-file-label">
-                                        <i class="fas fa-file-upload"></i> Add File
-                                    </label>
-                                    <input type="file" id="mgr-license-upload" class="file-uploader" style="display: none;" accept=".pdf" onchange="handleFileUpload('lic')">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>NBI Clearance</td>
-                                <td>JPG</td>
-                                <td class="status-cell" id="status-nbi" style="color: #dc3545; font-weight: bold;">Missing</td>
-                                <td class="date-cell" id="date-nbi">------</td>
-                                <td class="action-cell" id="action-nbi">
-                                    <label for="nbi-upload" class="add-file-label">
-                                        <i class="fas fa-file-upload"></i> Add File
-                                    </label>
-                                    <input type="file" id="nbi-upload" class="file-uploader" style="display: none;" accept="image/*,.pdf" onchange="handleFileUpload('nbi')">
-                                </td>
+                                <td>Employee Information Form</td>
+                                <td>System Gen</td>
+                                <td style="color: #28a745; font-weight: bold;">Verified</td>
+                                <td><a href="#"><i class="fas fa-eye"></i></a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -199,7 +115,7 @@
 
                 <div class="tab-content-item" id="history">
                     <div class="history-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h4>Employment History</h4>
+                        <h4>Employment Timeline</h4>
                         <button class="add-event-btn" id="openHistoryModal">
                             <i class="fas fa-plus"></i> Add Event
                         </button>
@@ -207,20 +123,17 @@
 
                     <div class="timeline" id="timelineContainer">
                         <div class="timeline-item">
-                            <div class="timeline-date">2018</div>
+                            <div class="timeline-date">{{ employee.date_joined|date:"Y" }}</div>
                             <div class="timeline-content">
-                                <h4>Hired</h4>
-                                <p>Joined as HR Specialist</p>
+                                <h4>Onboarded</h4>
+                                <p>Officially joined the UPH HR System.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </main>
-
 </div>
 
 <div id="historyModal" class="modal" style="display:none;">
@@ -230,23 +143,15 @@
             <span class="close-modal" id="closeHistoryModal">&times;</span>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Date (Year)</label>
-                <input type="text" id="eventDate" placeholder="e.g. 2024">
-            </div>
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" id="eventTitle" placeholder="e.g. Promotion">
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea id="eventDesc" rows="3" placeholder="Describe the event..."></textarea>
-            </div>
-            <button id="saveEventBtn" class="save-btn">Save Event</button>
+            <div class="form-group"><label>Year</label><input type="text" id="eventDate" placeholder="2026"></div>
+            <div class="form-group"><label>Title</label><input type="text" id="eventTitle" placeholder="e.g., Promotion"></div>
+            <div class="form-group"><label>Description</label><textarea id="eventDesc" rows="3"></textarea></div>
+            <button id="saveEventBtn" class="save-btn">Save to Timeline</button>
         </div>
     </div>
 </div>
 
-<script src="../../static/js/hr/hr_profile_view.js"></script>
+<script src="{% static 'js/hr/hr_profile_view.js' %}"></script>
+
 </body>
 </html>
