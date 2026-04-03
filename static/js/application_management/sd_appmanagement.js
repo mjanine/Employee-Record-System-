@@ -283,16 +283,13 @@ function processApp(id, decision) {
     document.getElementById('modalReviewerText').innerHTML = '<small>Reviewed by: ' + app.reviewedBy + '</small>';
     document.getElementById('modalActions').style.display  = 'none';
 
-    const currentMode = document.getElementById('tab-new').classList.contains('active')
-        ? 'Active' : 'History';
-    renderTable(currentMode);
+    renderTable('Active');
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const sidebar   = document.getElementById('sidebar');
+    const sidebar     = document.getElementById('sidebar');
     const logoToggle  = document.getElementById('logoToggle');
     const closeBtn    = document.getElementById('closeBtn');
-    const tabNew      = document.getElementById('tab-new');
     const viewModal   = document.getElementById('viewModal');
 
     document.querySelectorAll('.menu-item').forEach(function (item) {
@@ -302,11 +299,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (closeBtn)   closeBtn.onclick   = function () { sidebar.classList.add('collapsed'); };
     if (logoToggle) logoToggle.onclick = function () { sidebar.classList.toggle('collapsed'); };
-
-    tabNew.addEventListener('click', function () {
-        tabNew.classList.add('active');
-        renderTable('Active');
-    });
 
     document.getElementById('modalApproveBtn').addEventListener('click', function () {
         processApp(activeAppId, 'Approved');
