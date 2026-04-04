@@ -6,33 +6,132 @@
     <title>Position Change Request | HR System</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/employee/emp_dash.css">
     <link rel="stylesheet" href="../../static/css/application_management/position_change_request.css">
 </head>
 <body>
 
 <div id="toast-container"></div>
 
-<!-- ================= PAGE WRAPPER ================= -->
-<div class="page-wrapper">
-    
-    <!-- TOP LOGO SECTION -->
-    <div class="top-header">
-        <img src="../../static/img/general/perpetual-logo.png" alt="Logo" class="header-logo">
+<!-- ================= SIDEBAR (emp_dash style) ================= -->
+<div class="sidebar" id="sidebar">
+    <div class="top-section">
+        <div class="logo-wrapper" id="logoToggle">
+            <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
+            <div class="open-icon">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        <button class="close-btn" id="closeBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
     </div>
 
-    <!-- MAIN FORM AREA -->
-    <div class="form-container">
-        
-        <!-- TITLE -->
-        <h1 class="form-title">Log New Position Change Request</h1>
+    <ul class="menu">
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fas fa-border-all"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+        <hr>
+        <li>
+            <a href="#" class="menu-item active">
+                <i class="fas fa-user-edit"></i>
+                <span>Position Change Request</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Attendance</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fas fa-plane-departure"></i>
+                <span>Leave Request</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fas fa-star"></i>
+                <span>Performance Evaluation</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Trainings</span>
+            </a>
+        </li>
+    </ul>
 
-        <!-- FORM CONTENT - TWO COLUMNS -->
-        <div class="form-content">
-            
-            <!-- LEFT COLUMN: EMPLOYEE INFORMATION -->
-            <div class="form-column">
-                <h2 class="column-title">Employee Information</h2>
-                
+    <div class="bottom-section">
+        <a href="#" class="menu-item logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+        </a>
+    </div>
+</div>
+
+<!-- ================= VIEWPORT (hr_appmanagement style) ================= -->
+<div class="dashboard-viewport">
+    <main class="main-content">
+        <div class="content-card">
+
+            <!-- HEADER -->
+            <div class="header">
+                <h1>Position Change Requests</h1>
+                <div class="search-add">
+                    <input type="text" placeholder="Search by Name / ID / Dept" id="searchInput">
+                    <button class="btn-new" id="newRequestBtn">New Request</button>
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="form-body">
+                <table id="positionChangeTable">
+                    <thead>
+                        <tr>
+                            <th>REQUEST ID</th>
+                            <th>EMPLOYEE NAME</th>
+                            <th>DEPARTMENT</th>
+                            <th>CURRENT POSITION</th>
+                            <th>REQUESTED POSITION</th>
+                            <th>EFFECTIVE DATE</th>
+                            <th>SUBMITTED</th>
+                            <th>STATUS</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="9" class="no-records">No position change requests yet. Click "New Request" to create one.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div id="requestModal" class="modal-overlay">
+    <div class="view-modal-content modal-sm">
+        <div class="modal-header">
+            <h3>Log New Position Change Request</h3>
+        </div>
+        <div class="modal-body-form">
+            <div class="log-request-grid">
+
                 <div class="form-group">
                     <label for="empName">Employee Name</label>
                     <input type="text" id="empName" placeholder="e.g. Dela Cruz, Juan">
@@ -47,12 +146,7 @@
                     <label for="currentPos">Current Position</label>
                     <input type="text" id="currentPos" disabled placeholder="Auto-filled">
                 </div>
-            </div>
 
-            <!-- RIGHT COLUMN: POSITION CHANGE DETAILS -->
-            <div class="form-column">
-                <h2 class="column-title">Position Change Details</h2>
-                
                 <div class="form-group">
                     <label for="currentDept">Department</label>
                     <input type="text" id="currentDept" disabled placeholder="Auto-filled">
@@ -77,26 +171,23 @@
                     <label for="effectiveDate">Effective Date</label>
                     <input type="date" id="effectiveDate">
                 </div>
+
+                <div class="form-group full-width">
+                    <label for="reason">Reason for Position Change</label>
+                    <textarea id="reason" rows="4" placeholder="Please provide a detailed reason for the position change..."></textarea>
+                </div>
+
+                <div class="action-btns">
+                    <button id="cancelRequest" class="btn-cancel">CANCEL</button>
+                    <button id="submitRequest" class="btn-save">SAVE</button>
+                </div>
+
             </div>
-
         </div>
-
-        <!-- REASON SECTION -->
-        <div class="reason-section">
-            <h2 class="section-title">Additional Information</h2>
-            <label for="reason">Reason for Position Change</label>
-            <textarea id="reason" rows="5" placeholder="Please provide a detailed reason for the position change..."></textarea>
-        </div>
-
-        <!-- ACTION BUTTONS -->
-        <div class="form-actions">
-            <button class="btn-cancel" id="cancelBtn">CANCEL</button>
-            <button class="btn-submit" id="submitBtn">SAVE</button>
-        </div>
-
     </div>
 </div>
 
+<script src="../../static/js/employee/emp_dash.js"></script>
 <script src="../../static/js/application_management/position_change_request.js"></script>
 
 </body>

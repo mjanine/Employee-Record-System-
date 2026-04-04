@@ -127,6 +127,45 @@ function removeToast(el) {
     setTimeout(function () { el.remove(); }, 350);
 }
 
+// ── Render Table ──
+function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    
+    if (positionChangeRequests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="no-records">No position change requests yet. Click "New Request" to create one.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = '';
+    positionChangeRequests.forEach(function (req) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${req.id}</strong></td>
+            <td>${req.empName}</td>
+            <td>${req.currentDept}</td>
+            <td>${req.currentPos}</td>
+            <td>${req.requestedPos}</td>
+            <td>${req.effectiveDate}</td>
+            <td>${req.submittedDate}</td>
+            <td><span class="status-pill pending">${req.status}</span></td>
+            <td><a class="action-link" onclick="openModal('${req.id}')">View</a></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// ── Modal Functions ──
+function openModal() {
+    const modal = document.getElementById('requestModal');
+    modal.classList.add('active');
+    resetForm();
+}
+
+function closeModal() {
+    const modal = document.getElementById('requestModal');
+    modal.classList.remove('active');
+}
+
 // ── Form Submission ──
 function submitRequest() {
     if (!validateForm()) {
@@ -151,7 +190,7 @@ function submitRequest() {
         effectiveDate: effectiveDate,
         reason: reason,
         submittedDate: new Date().toLocaleDateString(),
-        status: 'pending'
+        status: 'Pending'
     };
 
     positionChangeRequests.push(newRequest);
@@ -159,16 +198,38 @@ function submitRequest() {
     showToast('success', 'Request Submitted',
         'Position change request ' + newRequest.id + ' has been submitted successfully.');
 
+    renderTable();
     setTimeout(function () {
-        resetForm();
+        closeModal();
     }, 1500);
 }
 
 // ── DOM Ready ──
 document.addEventListener('DOMContentLoaded', function () {
     const empNameEl = document.getElementById('empName');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const submitBtn = document.getElementById('submitBtn');
+    const cancelBtn = document.getElementById('cancelRequest');
+    const submitBtn = document.getElementById('submitRequest');
+    const newRequestBtn = document.getElementById('newRequestBtn');
+    const modal = document.getElementById('requestModal');
+
+    // Open modal on new request
+    if (newRequestBtn) {
+        newRequestBtn.addEventListener('click', openModal);
+    }
+
+    // Close modal on cancel
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+
+    // Close modal on overlay click
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
 
     // Auto-fill employee details
     empNameEl.addEventListener('blur', function () {
@@ -187,16 +248,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Cancel button
-    cancelBtn.addEventListener('click', function () {
-        if (confirm('Are you sure you want to cancel? All data will be lost.')) {
-            resetForm();
-            showToast('info', 'Cancelled', 'Form has been reset.');
-        }
-    });
-
     // Submit button
-    submitBtn.addEventListener('click', submitRequest);
+    if (submitBtn) {
+        submitBtn.addEventListener('click', submitRequest);
+    }
 
     // Allow Enter key to submit in reason textarea
     document.getElementById('reason').addEventListener('keydown', function (e) {
@@ -204,4 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
             submitRequest();
         }
     });
+
+    // Initial render
+    renderTable();
 });
