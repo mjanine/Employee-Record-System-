@@ -270,6 +270,10 @@ body {
     background: rgba(255, 255, 255, 0.06);
 }
 
+.master-app-container {
+    display: flex;
+    height: 100vh;
+}
 .menu {
 
     list-style: none;
@@ -392,11 +396,12 @@ hr {
 .main-container {
     margin-left: 340px;
     height: 100vh;
-    padding: 30px;
+    padding: 20px;
     overflow: hidden;        /* ← change from overflow-y: auto */
     display: flex;           /* ← add */
     align-items: stretch;   /* ← add */
     transition: margin-left 0.35s ease;
+    flex: 1;
 }
 
 
