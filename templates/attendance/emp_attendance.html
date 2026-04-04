@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Portal | Attendance</title>
+    <title>Attendance Monitoring | Head System</title>
+     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/css/attendance/emp_attendance.css">
+    <!--
+        Place hr_attendance.css in:
+        static/css/attendance/hr_attendance.css
+        Then update this path accordingly:
+    -->
+    <link rel="stylesheet" href="../../static/css/attendance/head_attendancemonitoring.css">
 </head>
 <body>
 
@@ -14,22 +21,23 @@
     <nav class="sidebar" id="sidebar">
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <img src="../../static/img/general/uph.png" class="logo" alt="UPHSD Logo"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="logo-fallback">UPH</div>
                 <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
             <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
-        <ul class="menu">
+         <ul class="menu">
             <li>
-                <a href="#" class="menu-item">
+                <a href="head_dash.html" class="menu-item active">
                     <i class="fas fa-border-all"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="#" class="menu-item">
+                <a href="head_profile_view.html" class="menu-item">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
@@ -37,32 +45,32 @@
             <hr>
             <li>
                 <a href="#" class="menu-item">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Position Change Request</span>
+                    <i class="fas fa-file"></i>
+                    <span>Application Management</span>
                 </a>
             </li>
             <li>
-                <a href="#" class="menu-item active">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Attendance</span>
+                <a href="head_employeelist.html" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span>Employee Records</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="menu-item">
-                    <i class="fas fa-plane-departure"></i>
-                    <span>Leave Request</span>
+                    <i class="fas fa-calendar"></i>
+                    <span>Attendance Monitoring</span>
+                </a>
+            </li>
+            <li>
+                <a href="head_leaveselect.html" class="menu-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Leave Management</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="menu-item">
                     <i class="fas fa-star"></i>
                     <span>Performance Evaluation</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Documents</span>
                 </a>
             </li>
             <li>
@@ -74,116 +82,202 @@
         </ul>
 
         <div class="bottom-section">
-            <a href="#" class="menu-item logout">
+            <a href="../login/login.html" class="menu-item logout">
                 <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
             </a>
         </div>
     </nav>
 
     <main class="main-content">
-        <div class="white-container unified-dashboard">
-            
-            <div class="header-banner">
-                <div class="header-banner-inner">
-                    <div>
-                        <div class="header-kicker">Employee Portal</div>
-                        <h1>Good morning, Juan!</h1>
-                        <p class="header-sub">Track your time and weekly attendance at a glance.</p>
-                    </div>
-                    <div class="header-weather">
-                        <i class="fas fa-cog"></i>
-                    </div>
+        <div class="white-container">
+
+            <header class="dashboard-header">
+                <h1>Attendance Monitoring</h1>
+                <div class="search-pill">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search by Name / ID / Department / Position">
                 </div>
-            </div>
+            </header>
 
-            <div class="dashboard-grid">
-                
-                <div class="attendance-section">
-                    <div class="card-header">
-                        <div class="card-title-group">
-                            <div class="card-icon-wrap"><i class="fas fa-fingerprint"></i></div>
-                            <h2>Today's attendance</h2>
-                        </div>
-                        <div class="date-now" id="currentDateTime">Saturday, April 4 | 10:25 PM</div>
-                    </div>
-                    <p class="status-text">Ready when you are — clock in to start your shift.</p>
-                    
-                    <div class="stats-row">
-                        <div class="stat-chip">
-                            <div class="stat-chip-label"><i class="fas fa-stopwatch"></i> Session</div>
-                            <div class="stat-chip-value" id="sessionTime">Working for: 0h</div>
-                        </div>
-                        <div class="stat-chip">
-                            <div class="stat-chip-label"><i class="fas fa-sign-in-alt"></i> Start</div>
-                            <div class="stat-chip-value" id="startTime">Time In: --</div>
-                        </div>
-                    </div>
-
-                    <button class="btn-clock-in" id="clockInBtn">Clock in</button>
+            <section class="stats-container">
+                <div class="stat-card">
+                    <span class="label">Total Employees</span>
+                    <span class="value">-</span>
                 </div>
-
-                <div class="profile-preview">
-                    <div class="profile-flex">
-                        <div class="avatar-box">
-                            <img src="https://ui-avatars.com/api/?name=Juan+Dela+Cruz&background=4a1d1d&color=fff&size=108" alt="Profile">
-                        </div>
-                        <div class="profile-details">
-                            <h3>Juan Dela Cruz</h3>
-                            <div class="profile-role">Department Head</div>
-                            <div class="emp-id">Employee ID: 001</div>
-                            <a href="#" class="btn-secondary">View Profile</a>
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <span class="label">Present Today</span>
+                    <span class="value">-</span>
                 </div>
+                <div class="stat-card">
+                    <span class="label">Absent Today</span>
+                    <span class="value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="label">On Leave</span>
+                    <span class="value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="label">Late Arrivals</span>
+                    <span class="value">-</span>
+                </div>
+            </section>
 
-            </div>
-
-            <div class="summary-section">
-                <div class="summary-header">
-                    <div class="summary-title-wrap">
-                        <div class="card-icon-wrap card-icon-wrap--muted"><i class="far fa-calendar-alt"></i></div>
-                        <h2>Weekly summary</h2>
-                    </div>
-                    <div class="week-picker">
-                        <button class="week-nav"><i class="fas fa-chevron-left"></i></button>
+            <section class="controls-row">
+                <div class="active-filters">
+                    <button class="filter-tag">Sample Filter <i class="fas fa-times"></i></button>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-action"><i class="fas fa-filter"></i> Filter</button>
+                    <button class="btn-action"><i class="fas fa-calendar-alt"></i> Sample Date</button>
+                    <input id="sampleDateInput" type="date" class="head-hidden-date" aria-hidden="true" tabindex="-1">
+                    <div class="pagination">
+                        <i class="fas fa-chevron-left"></i>
                         <span>Week 5</span>
-                        <button class="week-nav"><i class="fas fa-chevron-right"></i></button>
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
+            </section>
 
-                <div class="table-wrapper">
-                    <table class="attendance-table">
-                        <thead>
-                            <tr>
-                                <th>Week</th>
-                                <th>Sunday</th>
-                                <th>Monday</th>
-                                <th>Tuesday</th>
-                                <th>Wednesday</th>
-                                <th>Thursday</th>
-                                <th>Friday</th>
-                                <th>Saturday</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="week-label">Feb 3 — Feb 10</td>
-                                <td>2</td>
-                                <td><span class="pill pill-warning">4h 36m</span></td>
-                                <td><span class="pill pill-purple">Leave</span></td>
-                                <td><span class="pill pill-success-check">8h 39m</span></td>
-                                <td><span class="pill pill-success-check">8 hours</span></td>
-                                <td><span class="pill pill-active">Active</span></td>
-                                <td>8</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-card">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Employee</th>
+                            <th>Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar"><i class="fas fa-user"></i></div>
+                                    <div class="user-info">
+                                        <span class="name">Juan Dela Cruz</span>
+                                        <span class="title">Instructor</span>
+                                        <span class="dept-badge">CCS</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="day-num">2</span></td>
+                            <td><span class="day-num">3</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">4</span><div class="pill pill-tan"><i class="far fa-clock"></i> 4h 36m</div></td>
+                            <td><span class="day-num">5</span><div class="pill pill-purple"><i class="far fa-smile"></i> Leave</div></td>
+                            <td><span class="day-num">6</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8h 39m</div></td>
+                            <td><span class="day-num">7</span><div class="pill pill-green">Active</div></td>
+                            <td><span class="day-num">8</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar"><i class="fas fa-user-tie"></i></div>
+                                    <div class="user-info">
+                                        <span class="name">Maria Santos</span>
+                                        <span class="title">Admin Staff</span>
+                                        <span class="dept-badge">HR</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="day-num">2</span></td>
+                            <td><span class="day-num">3</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 9 hours</div></td>
+                            <td><span class="day-num">4</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">5</span><div class="pill pill-red"><i class="fas fa-times-circle"></i> Absent</div></td>
+                            <td><span class="day-num">6</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">7</span><div class="pill pill-green">Active</div></td>
+                            <td><span class="day-num">8</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                                    <div class="user-info">
+                                        <span class="name">Yang Jungwon</span>
+                                        <span class="title">Assistant Professor</span>
+                                        <span class="dept-badge">CBA</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="day-num">2</span></td>
+                            <td><span class="day-num">3</span><div class="pill pill-tan"><i class="far fa-clock"></i> 6h 15m</div></td>
+                            <td><span class="day-num">4</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">5</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">6</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">7</span><div class="pill pill-green">Active</div></td>
+                            <td><span class="day-num">8</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
     </main>
 
-    <script src="static/js/attendance/emp_attendance.js"></script>
+    <!-- MODAL -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-main">
+                    <div class="modal-header-row">
+                        <h2 id="modalEmployeeName">Employee Name</h2>
+                        <div class="view-toggles">
+                            <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
+                            <button class="view-btn" id="monthlyViewBtn">Monthly View</button>
+                        </div>
+                        <div class="date-pager">
+                            <i class="fas fa-chevron-left"></i>
+                            <span id="dateRangeText">February 4 - 10, 2026</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="modal-table-wrapper">
+                        <table class="modal-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Time In</th>
+                                    <th>Time Out</th>
+                                    <th>Total Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="total-hours-footer">
+                        Total Hours This <span id="periodText">Week</span>: <span id="totalHoursValue">XX</span>
+                    </div>
+                </div>
+                <div class="modal-sidebar">
+                    <h3>Employee Details</h3>
+                    <div class="detail-avatar"><i class="fas fa-user"></i></div>
+                    <div class="info-group">
+                        <label>Employee ID</label>
+                        <span id="detID">001</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Position</label>
+                        <span id="detPos">Instructor</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Department</label>
+                        <span id="detDept">College of Computer Studies</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Employment Type</label>
+                        <span>Full-Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../static/js/attendance/head_attendancemonitoring.js"></script>
 </body>
 </html>
