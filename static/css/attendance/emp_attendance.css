@@ -261,7 +261,7 @@ body {
     border: none;
 }
 /* replace .main-container::-webkit-scrollbar with: */
-.master-content-wrapper::-webkit-scrollbar { width: 8px; }
+.master-content-wrapper::-webkit-scrollbar { width: 0px; }
 .master-content-wrapper::-webkit-scrollbar-thumb {
     background: rgba(74, 29, 29, 0.25);
     border-radius: 10px;
