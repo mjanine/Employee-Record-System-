@@ -200,6 +200,8 @@ hr {
     height: 100%;
     margin-left: 320px; /* 300 sidebar + 20 gap */
     display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 0;
     transition: margin-left 0.35s ease;
 }
@@ -232,7 +234,8 @@ hr {
     border-radius: 25px;
     padding: 25px 30px;
     width: 100%;
-    height: 100%;
+    max-width: 600px;
+    height: auto;
     flex: 1;
     min-width: 0;
     display: flex;
@@ -253,14 +256,6 @@ hr {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto;
-    padding-right: 5px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.position-form::-webkit-scrollbar {
-    display: none;
 }
 
 .form-row {
