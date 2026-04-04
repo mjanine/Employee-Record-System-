@@ -1,521 +1,827 @@
-/* ============================================================
-   head_attendancemonitoring.js
-   Path: static/js/attendance/head_attendancemonitoring.js
-   ============================================================ */
+/**
 
-document.addEventListener("DOMContentLoaded", () => {
-    const sidebar    = document.getElementById("sidebar");
-    const logoToggle = document.getElementById("logoToggle");
-    const closeBtn   = document.getElementById("closeBtn");
-    const menuItems  = document.querySelectorAll(".menu-item");
+ * emp_attendance.js
 
-    const searchInput = document.querySelector(".search-pill input");
+ * Place at: static/js/attendance/emp_attendance.js
 
-    const statCards = Array.from(document.querySelectorAll(".stats-container .stat-card"));
+ * ============================================================
 
-    const activeFiltersWrap = document.querySelector(".active-filters");
-    const actionButtons = Array.from(document.querySelectorAll(".action-buttons .btn-action"));
-    const filterBtn = actionButtons[0] || null;
-    const dateBtn   = actionButtons[1] || null;
+ * Sections:
 
-    const pager      = document.querySelector(".action-buttons .pagination");
-    const pagerPrev  = pager ? pager.querySelector(".fa-chevron-left") : null;
-    const pagerNext  = pager ? pager.querySelector(".fa-chevron-right") : null;
-    const pagerLabel = pager ? pager.querySelector("span") : null;
+ *   1. Element Selectors
 
-    const table = document.querySelector(".attendance-table");
-    const tbody = table ? table.querySelector("tbody") : null;
-    const tableRows = tbody ? Array.from(tbody.querySelectorAll("tr")) : [];
+ *   2. Sidebar Navigation
 
-    const modal      = document.getElementById("employeeModal");
-    const closeSpan  = document.querySelector(".close-modal");
-    const weeklyBtn  = document.getElementById("weeklyViewBtn");
-    const monthlyBtn = document.getElementById("monthlyViewBtn");
-    const modalPrev  = modal ? modal.querySelector(".date-pager .fa-chevron-left") : null;
-    const modalNext  = modal ? modal.querySelector(".date-pager .fa-chevron-right") : null;
+ *   3. Real-Time Clock Logic
 
-    // ---------- Sidebar ----------
-    if (closeBtn) closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
-    if (logoToggle) logoToggle.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
+ *   4. Header Date/Time Updater
 
-    menuItems.forEach(item => {
-        const span = item.querySelector("span");
-        if (span) item.setAttribute("data-text", span.innerText.trim());
+ *   5. History Modal – Data
+
+ *   6. History Modal – Render Weekly
+
+ *   7. History Modal – Render Monthly
+
+ *   8. History Modal – View Switcher
+
+ *   9. History Modal – Navigation
+
+ *  10. History Modal – Open / Close
+
+ *  11. Init
+
+ * ============================================================
+
+ */
+
+
+
+
+
+/* ── 1. ELEMENT SELECTORS ────────────────────────────────── */
+
+
+
+// Sidebar
+
+const sidebar    = document.getElementById("sidebar");
+
+const logoToggle = document.getElementById("logoToggle");
+
+const closeBtn   = document.getElementById("closeBtn");
+
+const menuItems  = document.querySelectorAll(".menu-item");
+
+
+
+// Attendance clock
+
+const clockBtn           = document.getElementById("clockBtn");
+
+const workingTimeDisplay = document.getElementById("workingTime");
+
+const timeInDisplay      = document.getElementById("timeInDisplay");
+
+
+
+// History modal
+
+const historyModal     = document.getElementById("historyModal");
+
+const openHistoryBtn   = document.getElementById("openHistory");
+
+const closeHistoryBtn  = document.getElementById("closeHistory");
+
+const weeklyViewBtn    = document.getElementById("weeklyViewBtn");
+
+const monthlyViewBtn   = document.getElementById("monthlyViewBtn");
+
+const historyDateRange = document.getElementById("historyDateRange");
+
+const weeklyTable      = document.getElementById("weeklyTable");
+
+const weeklyTableBody  = document.getElementById("weeklyTableBody");
+
+const monthlyGrid      = document.getElementById("monthlyGrid");
+
+const totalHoursCount  = document.getElementById("totalHoursCount");
+
+const prevPeriodBtn    = document.getElementById("prevPeriod");
+
+const nextPeriodBtn    = document.getElementById("nextPeriod");
+
+
+
+const clockOutOverlay      = document.getElementById("clockOutOverlay");
+
+const clockOutConfirmStep  = document.getElementById("clockOutConfirmStep");
+
+const clockOutSuccessStep  = document.getElementById("clockOutSuccessStep");
+
+const clockOutCancelBtn    = document.getElementById("clockOutCancel");
+
+const clockOutConfirmBtn   = document.getElementById("clockOutConfirmBtn");
+
+const clockOutDismissBtn   = document.getElementById("clockOutDismiss");
+
+const clockOutDurationText = document.getElementById("clockOutDurationText");
+
+
+
+
+
+/* ── 2. SIDEBAR NAVIGATION ───────────────────────────────── */
+
+
+
+closeBtn.addEventListener("click", () => {
+
+    sidebar.classList.add("collapsed");
+
+});
+
+
+
+logoToggle.addEventListener("click", () => {
+
+    sidebar.classList.toggle("collapsed");
+
+});
+
+
+
+// Active state + tooltip data-text
+
+menuItems.forEach(item => {
+
+    const spanEl = item.querySelector("span");
+
+    if (spanEl) item.setAttribute("data-text", spanEl.innerText);
+
+
+
+    item.addEventListener("click", () => {
+
+        document.querySelector(".menu-item.active")?.classList.remove("active");
+
+        item.classList.add("active");
+
     });
 
-    // ---------- State ----------
-    const baseWeekStart = new Date(2026, 1, 2); // Feb 2, 2026 (Sunday) for sample Week 5 row
-    let weekOffset = 0;
+});
 
-    const filterState = {
-        dept: "All",
-        status: "All",
-        date: null
-    };
 
-    // ---------- Filter popover (created by JS) ----------
-    const filterPopover = document.createElement("div");
-    filterPopover.className = "head-filter-popover";
-    filterPopover.style.display = "none";
-    filterPopover.innerHTML = `
-        <div class="head-filter-title">Filters</div>
-        <div class="head-filter-grid">
-            <label class="head-filter-label">Department</label>
-            <select id="hfDept" class="head-filter-select">
-                <option>All</option>
-                <option>CCS</option>
-                <option>CBA</option>
-                <option>CAS</option>
-                <option>COE</option>
-                <option>HR</option>
-                <option>CON</option>
-            </select>
 
-            <label class="head-filter-label">Status (Selected day)</label>
-            <select id="hfStatus" class="head-filter-select">
-                <option>All</option>
-                <option>Present</option>
-                <option>Late</option>
-                <option>Absent</option>
-                <option>Leave</option>
-                <option>Active</option>
-            </select>
-        </div>
-        <div class="head-filter-actions">
-            <button type="button" class="head-filter-btn head-filter-btn-ghost" id="hfClear">Clear</button>
-            <button type="button" class="head-filter-btn head-filter-btn-primary" id="hfApply">Apply</button>
-        </div>
+
+
+/* ── 3. REAL-TIME ATTENDANCE CLOCK ───────────────────────── */
+
+
+
+let timerInterval = null;
+
+let totalSeconds  = 0;
+
+let isClockedIn   = false;
+
+
+
+function formatDuration(seconds) {
+
+    const hrs  = Math.floor(seconds / 3600);
+
+    const mins = Math.floor((seconds % 3600) / 60);
+
+    return `${hrs}h ${mins.toString().padStart(2, "0")}m`;
+
+}
+
+
+
+function startTimer() {
+
+    timerInterval = setInterval(() => {
+
+        totalSeconds++;
+
+        workingTimeDisplay.innerText = `Working for: ${formatDuration(totalSeconds)}`;
+
+    }, 1000);
+
+}
+
+
+
+function showClockOutOverlay() {
+
+    clockOutConfirmStep.classList.remove("clock-out-step--hidden");
+
+    clockOutSuccessStep.classList.add("clock-out-step--hidden");
+
+    clockOutSuccessStep.setAttribute("hidden", "");
+
+    clockOutOverlay.classList.add("clock-out-overlay--visible");
+
+    clockOutOverlay.setAttribute("aria-hidden", "false");
+
+    clockOutConfirmBtn.focus();
+
+}
+
+
+
+function hideClockOutOverlay() {
+
+    clockOutOverlay.classList.remove("clock-out-overlay--visible");
+
+    clockOutOverlay.setAttribute("aria-hidden", "true");
+
+    clockOutConfirmStep.classList.remove("clock-out-step--hidden");
+
+    clockOutSuccessStep.classList.add("clock-out-step--hidden");
+
+    clockOutSuccessStep.setAttribute("hidden", "");
+
+}
+
+
+
+function showClockOutSuccess(durationLabel) {
+
+    clockOutDurationText.innerText = `Total time: ${durationLabel}`;
+
+    clockOutConfirmStep.classList.add("clock-out-step--hidden");
+
+    clockOutSuccessStep.classList.remove("clock-out-step--hidden");
+
+    clockOutSuccessStep.removeAttribute("hidden");
+
+    clockOutDismissBtn.focus();
+
+}
+
+
+
+function completeClockOut() {
+
+    const durationLabel = formatDuration(totalSeconds);
+
+    isClockedIn = false;
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    totalSeconds = 0;
+
+    clockBtn.innerText = "Clock in";
+
+    clockBtn.classList.remove("is-clocked-in");
+
+    workingTimeDisplay.innerText = "Working for: 0h 00m";
+
+    timeInDisplay.innerText = "Time In: --";
+
+    showClockOutSuccess(durationLabel);
+
+}
+
+
+
+clockBtn.addEventListener("click", () => {
+
+    if (!isClockedIn) {
+
+        isClockedIn = true;
+
+        clockBtn.innerText = "Clock out";
+
+        clockBtn.classList.add("is-clocked-in");
+
+
+
+        const now = new Date();
+
+        timeInDisplay.innerText = `Time In: ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+
+
+
+        startTimer();
+
+    } else {
+
+        showClockOutOverlay();
+
+    }
+
+});
+
+
+
+clockOutCancelBtn.addEventListener("click", hideClockOutOverlay);
+
+
+
+clockOutConfirmBtn.addEventListener("click", () => {
+
+    completeClockOut();
+
+});
+
+
+
+clockOutDismissBtn.addEventListener("click", hideClockOutOverlay);
+
+
+
+clockOutOverlay.addEventListener("click", (e) => {
+
+    if (e.target === clockOutOverlay) {
+
+        hideClockOutOverlay();
+
+    }
+
+});
+
+
+
+document.addEventListener("keydown", (e) => {
+
+    if (e.key === "Escape" && clockOutOverlay.classList.contains("clock-out-overlay--visible")) {
+
+        hideClockOutOverlay();
+
+    }
+
+});
+
+
+
+
+
+/* ── 4. HEADER DATE/TIME UPDATER ─────────────────────────── */
+
+
+
+function updateHeader() {
+
+    const dateElement = document.querySelector(".date-now");
+
+    if (dateElement) {
+
+        const now     = new Date();
+
+        const dateStr = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+
+        const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+        dateElement.innerText = `${dateStr} | ${timeStr}`;
+
+    }
+
+}
+
+
+
+setInterval(updateHeader, 60000);
+
+updateHeader();
+
+
+
+
+
+/* ── 5. HISTORY MODAL – DATA ─────────────────────────────── */
+
+
+
+/**
+
+ * Weekly records. Key = offset from current week (0 = latest).
+
+ * Extend with real API data as needed.
+
+ */
+
+const weeklyData = {
+
+    0: {
+
+        label: "February 4 – 10, 2026",
+
+        rows: [
+
+            { date: "February 4, 2026",  day: "Tuesday",   timeIn: "8:03 AM", timeOut: "5:02 PM", hours: "8h 59m", status: "present" },
+
+            { date: "February 5, 2026",  day: "Wednesday", timeIn: "8:15 AM", timeOut: "5:10 PM", hours: "8h 55m", status: "present" },
+
+            { date: "February 6, 2026",  day: "Thursday",  timeIn: "8:00 AM", timeOut: "5:00 PM", hours: "9h 00m", status: "present" },
+
+            { date: "February 7, 2026",  day: "Friday",    timeIn: "8:45 AM", timeOut: "5:00 PM", hours: "8h 15m", status: "late"    },
+
+            { date: "February 8, 2026",  day: "Saturday",  timeIn: "--",      timeOut: "--",       hours: "--",     status: "leave"   },
+
+            { date: "February 9, 2026",  day: "Sunday",    timeIn: "--",      timeOut: "--",       hours: "--",     status: "holiday" },
+
+            { date: "February 10, 2026", day: "Monday",    timeIn: "8:03 AM", timeOut: "5:02 PM", hours: "8h 59m", status: "present" },
+
+        ],
+
+        total: "42h 15m"
+
+    },
+
+    1: {
+
+        label: "January 28 – February 3, 2026",
+
+        rows: [
+
+            { date: "January 28, 2026", day: "Wednesday", timeIn: "8:10 AM", timeOut: "5:05 PM", hours: "8h 55m", status: "present" },
+
+            { date: "January 29, 2026", day: "Thursday",  timeIn: "8:00 AM", timeOut: "5:00 PM", hours: "9h 00m", status: "present" },
+
+            { date: "January 30, 2026", day: "Friday",    timeIn: "--",      timeOut: "--",       hours: "--",     status: "absent"  },
+
+            { date: "January 31, 2026", day: "Saturday",  timeIn: "--",      timeOut: "--",       hours: "--",     status: "holiday" },
+
+            { date: "February 1, 2026", day: "Sunday",    timeIn: "--",      timeOut: "--",       hours: "--",     status: "holiday" },
+
+            { date: "February 2, 2026", day: "Monday",    timeIn: "8:03 AM", timeOut: "5:02 PM", hours: "8h 59m", status: "present" },
+
+            { date: "February 3, 2026", day: "Tuesday",   timeIn: "8:20 AM", timeOut: "5:15 PM", hours: "8h 55m", status: "present" },
+
+        ],
+
+        total: "35h 49m"
+
+    }
+
+};
+
+
+
+/**
+
+ * Monthly records. Key = offset from current month (0 = latest).
+
+ */
+
+const monthlyData = {
+
+    0: {
+
+        label: "February 2026",
+
+        firstDayOfWeek: 0,   // Feb 1, 2026 = Sunday
+
+        daysInMonth: 28,
+
+        attendance: {
+
+            3:  { status: "present", hours: "8h 59m" },
+
+            4:  { status: "present", hours: "8h 55m" },
+
+            5:  { status: "present", hours: "9h 00m" },
+
+            6:  { status: "late",    hours: "8h 15m" },
+
+            7:  { status: "leave",   hours: "--"      },
+
+            8:  { status: "holiday", hours: "--"      },
+
+            9:  { status: "absent",  hours: "--"      },
+
+            10: { status: "present", hours: "8h 59m" },
+
+            11: { status: "present", hours: "9h 00m" },
+
+            12: { status: "present", hours: "8h 45m" },
+
+            13: { status: "present", hours: "8h 59m" },
+
+            14: { status: "present", hours: "9h 00m" },
+
+            15: { status: "leave",   hours: "--"      },
+
+            16: { status: "holiday", hours: "--"      },
+
+        },
+
+        total: "152h 30m"
+
+    },
+
+    1: {
+
+        label: "January 2026",
+
+        firstDayOfWeek: 4,   // Jan 1, 2026 = Thursday
+
+        daysInMonth: 31,
+
+        attendance: {
+
+            5:  { status: "present", hours: "9h 00m" },
+
+            6:  { status: "present", hours: "8h 55m" },
+
+            7:  { status: "present", hours: "8h 40m" },
+
+            8:  { status: "present", hours: "9h 00m" },
+
+            9:  { status: "present", hours: "8h 59m" },
+
+            12: { status: "present", hours: "9h 00m" },
+
+            13: { status: "present", hours: "8h 50m" },
+
+            14: { status: "late",    hours: "8h 20m" },
+
+            15: { status: "present", hours: "8h 59m" },
+
+            16: { status: "present", hours: "9h 00m" },
+
+        },
+
+        total: "148h 02m"
+
+    }
+
+};
+
+
+
+// State
+
+let currentView = "weekly";
+
+let weekOffset  = 0;
+
+let monthOffset = 0;
+
+
+
+
+
+/* ── 6. HISTORY MODAL – RENDER WEEKLY ───────────────────── */
+
+
+
+function renderWeekly() {
+
+    const data = weeklyData[weekOffset] ?? weeklyData[0];
+
+    historyDateRange.textContent = data.label;
+
+    totalHoursCount.textContent  = data.total;
+
+
+
+    const rows = data.rows.map(r => `
+
+        <tr>
+
+            <td>${r.date}</td>
+
+            <td>${r.day}</td>
+
+            <td>${r.timeIn}</td>
+
+            <td>${r.timeOut}</td>
+
+            <td>${r.hours}</td>
+
+            <td><span class="status-badge ${r.status}">${capitalize(r.status)}</span></td>
+
+        </tr>
+
+    `).join("");
+
+
+
+    const totalRow = `
+
+        <tr class="total-row">
+
+            <td colspan="4">Total Hours This Week</td>
+
+            <td colspan="2">${data.total}</td>
+
+        </tr>
+
     `;
 
-    const controlsRow = document.querySelector(".controls-row");
-    if (controlsRow) {
-        controlsRow.style.position = "relative";
-        controlsRow.appendChild(filterPopover);
+
+
+    weeklyTableBody.innerHTML = rows + totalRow;
+
+}
+
+
+
+
+
+/* ── 7. HISTORY MODAL – RENDER MONTHLY ──────────────────── */
+
+
+
+function renderMonthly() {
+
+    const data = monthlyData[monthOffset] ?? monthlyData[0];
+
+    historyDateRange.textContent = data.label;
+
+    totalHoursCount.textContent  = data.total;
+
+
+
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    let html = dayNames.map(d => `<div class="month-day-header">${d}</div>`).join("");
+
+
+
+    // Leading empty cells
+
+    for (let i = 0; i < data.firstDayOfWeek; i++) {
+
+        html += `<div class="month-day-cell empty"></div>`;
+
     }
 
-    function toggleFilterPopover(forceOpen) {
-        const open = typeof forceOpen === "boolean" ? forceOpen : filterPopover.style.display !== "block";
-        filterPopover.style.display = open ? "block" : "none";
+
+
+    for (let d = 1; d <= data.daysInMonth; d++) {
+
+        const dayOfWeek  = (data.firstDayOfWeek + d - 1) % 7;
+
+        const isWeekend  = dayOfWeek === 0 || dayOfWeek === 6;
+
+        const att        = data.attendance[d];
+
+
+
+        const statusClass = att ? att.status : (isWeekend ? "weekend" : "");
+
+        const statusLabel = att ? capitalize(att.status) : (isWeekend ? "Off" : "");
+
+        const hoursLabel  = att ? att.hours : "";
+
+
+
+        html += `
+
+            <div class="month-day-cell">
+
+                <span class="day-num">${d}</span>
+
+                ${statusClass ? `<span class="day-status ${statusClass}">${statusLabel}</span>` : ""}
+
+                ${hoursLabel  ? `<span class="day-hours">${hoursLabel}</span>` : ""}
+
+            </div>
+
+        `;
+
     }
 
-    // ---------- Date picker (Sample Date) ----------
-    // Uses a real hidden input in the Head HTML for better browser support.
-    const dateInput = document.getElementById("sampleDateInput");
 
-    function setDateButtonLabel() {
-        if (!dateBtn) return;
-        if (!filterState.date) {
-            dateBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Sample Date';
-            return;
-        }
-        const d = filterState.date;
-        const label = d.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
-        dateBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> ' + label;
+
+    monthlyGrid.innerHTML = html;
+
+}
+
+
+
+
+
+/* ── 8. HISTORY MODAL – VIEW SWITCHER ───────────────────── */
+
+
+
+function switchView(view) {
+
+    currentView = view;
+
+
+
+    if (view === "weekly") {
+
+        weeklyViewBtn.classList.add("active");
+
+        monthlyViewBtn.classList.remove("active");
+
+        weeklyTable.style.display = "table";
+
+        monthlyGrid.classList.remove("active");
+
+        renderWeekly();
+
+    } else {
+
+        monthlyViewBtn.classList.add("active");
+
+        weeklyViewBtn.classList.remove("active");
+
+        weeklyTable.style.display = "none";
+
+        monthlyGrid.classList.add("active");
+
+        renderMonthly();
+
     }
 
-    // ---------- Helpers ----------
-    function stripTime(d) {
-        const x = new Date(d);
-        x.setHours(0, 0, 0, 0);
-        return x;
+}
+
+
+
+weeklyViewBtn.addEventListener("click",  () => switchView("weekly"));
+
+monthlyViewBtn.addEventListener("click", () => switchView("monthly"));
+
+
+
+
+
+/* ── 9. HISTORY MODAL – NAVIGATION ──────────────────────── */
+
+
+
+prevPeriodBtn.addEventListener("click", () => {
+
+    if (currentView === "weekly") {
+
+        weekOffset = Math.min(weekOffset + 1, Object.keys(weeklyData).length - 1);
+
+        renderWeekly();
+
+    } else {
+
+        monthOffset = Math.min(monthOffset + 1, Object.keys(monthlyData).length - 1);
+
+        renderMonthly();
+
     }
 
-    function getWeekStartDate() {
-        const d = new Date(baseWeekStart);
-        d.setDate(d.getDate() + weekOffset * 7);
-        return d;
-    }
-
-    function formatWeekRange(startDate) {
-        const end = new Date(startDate);
-        end.setDate(end.getDate() + 6);
-        const left  = startDate.toLocaleDateString("en-US", { month: "long", day: "numeric" });
-        const right = end.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-        return `${left} - ${right}`;
-    }
-
-    function getSelectedColumnIndex(startDate) {
-        const basis = filterState.date || new Date();
-        const diffDays = Math.floor((stripTime(basis) - stripTime(startDate)) / (24 * 3600 * 1000));
-        // Table cols: 0 employee, 1 Sun, 2 Mon ... 7 Sat
-        if (diffDays < 0 || diffDays > 6) return 2; // default Monday
-        return 1 + diffDays;
-    }
-
-    function getCellStatus(cell) {
-        const pill = cell ? cell.querySelector(".pill") : null;
-        if (!pill) return "None";
-        const text = (pill.textContent || "").trim().toLowerCase();
-        if (pill.classList.contains("pill-red") || text.includes("absent")) return "Absent";
-        if (pill.classList.contains("pill-purple") || text.includes("leave")) return "Leave";
-        if (pill.classList.contains("pill-tan") || text.includes("late") || /\\d+h/.test(text)) return "Late";
-        if (text.includes("active")) return "Active";
-        return "Present";
-    }
-
-    // ---------- Week pagination: update day numbers ----------
-    function updateDayNumbers() {
-        const start = getWeekStartDate();
-        tableRows.forEach(row => {
-            const nums = Array.from(row.querySelectorAll(".day-num"));
-            nums.forEach((span, idx) => {
-                const d = new Date(start);
-                d.setDate(d.getDate() + idx);
-                span.textContent = String(d.getDate());
-            });
-        });
-
-        if (pagerLabel) {
-            const baseWeekNum = 5;
-            pagerLabel.textContent = `Week ${baseWeekNum + weekOffset}`;
-        }
-    }
-
-    // ---------- Stats ----------
-    function setStatValue(index, value) {
-        const card = statCards[index];
-        const el = card ? card.querySelector(".value") : null;
-        if (el) el.textContent = String(value);
-    }
-
-    function updateStats() {
-        if (statCards.length < 5) return;
-        const start = getWeekStartDate();
-        const colIdx = getSelectedColumnIndex(start);
-
-        const visibleRows = tableRows.filter(r => r.style.display !== "none");
-
-        let present = 0;
-        let absent = 0;
-        let leave = 0;
-        let late = 0;
-
-        visibleRows.forEach(row => {
-            const cells = Array.from(row.querySelectorAll("td"));
-            const status = getCellStatus(cells[colIdx]);
-            if (status === "Absent") absent++;
-            else if (status === "Leave") leave++;
-            else if (status === "Late") late++;
-            else if (status === "Present" || status === "Active") present++;
-        });
-
-        setStatValue(0, visibleRows.length);
-        setStatValue(1, present);
-        setStatValue(2, absent);
-        setStatValue(3, leave);
-        setStatValue(4, late);
-    }
-
-    // ---------- Filter tags ----------
-    function createFilterTag(label, onRemove) {
-        if (!activeFiltersWrap) return;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "filter-tag";
-        btn.innerHTML = `${label} <i class="fas fa-times"></i>`;
-        btn.querySelector(".fa-times")?.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onRemove();
-        });
-        activeFiltersWrap.appendChild(btn);
-    }
-
-    function syncFilterTags() {
-        if (!activeFiltersWrap) return;
-        activeFiltersWrap.innerHTML = "";
-
-        if (filterState.dept !== "All") {
-            createFilterTag(`Dept: ${filterState.dept}`, () => {
-                filterState.dept = "All";
-                applyFilters();
-            });
-        }
-
-        if (filterState.status !== "All") {
-            createFilterTag(`Status: ${filterState.status}`, () => {
-                filterState.status = "All";
-                applyFilters();
-            });
-        }
-
-        if (filterState.date) {
-            const label = filterState.date.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
-            createFilterTag(`Date: ${label}`, () => {
-                filterState.date = null;
-                if (dateInput) dateInput.value = "";
-                setDateButtonLabel();
-                applyFilters();
-            });
-        }
-    }
-
-    // ---------- Apply filters ----------
-    function rowMatchesFilters(row) {
-        const dept = (row.querySelector(".dept-badge")?.textContent || "").trim();
-        const name = (row.querySelector(".name")?.textContent || "").trim();
-        const title = (row.querySelector(".title")?.textContent || "").trim();
-
-        const q = (searchInput?.value || "").trim().toLowerCase();
-        if (q) {
-            const combined = (name + " " + dept + " " + title).toLowerCase();
-            if (!combined.includes(q)) return false;
-        }
-
-        if (filterState.dept !== "All" && dept !== filterState.dept) return false;
-
-        if (filterState.status !== "All") {
-            const start = getWeekStartDate();
-            const colIdx = getSelectedColumnIndex(start);
-            const cells = Array.from(row.querySelectorAll("td"));
-            const status = getCellStatus(cells[colIdx]);
-            if (status !== filterState.status) return false;
-        }
-
-        return true;
-    }
-
-    function applyFilters() {
-        tableRows.forEach(row => {
-            row.style.display = rowMatchesFilters(row) ? "" : "none";
-        });
-        syncFilterTags();
-        updateStats();
-    }
-
-    // ---------- Wire: Search ----------
-    if (searchInput) {
-        searchInput.addEventListener("input", applyFilters);
-    }
-
-    // ---------- Wire: Filter popover ----------
-    if (filterBtn) {
-        filterBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const deptSel = filterPopover.querySelector("#hfDept");
-            const statusSel = filterPopover.querySelector("#hfStatus");
-            if (deptSel) deptSel.value = filterState.dept;
-            if (statusSel) statusSel.value = filterState.status;
-
-            toggleFilterPopover();
-        });
-    }
-
-    document.addEventListener("click", (e) => {
-        if (filterPopover.style.display !== "block") return;
-        if (filterPopover.contains(e.target)) return;
-        if (filterBtn && filterBtn.contains(e.target)) return;
-        toggleFilterPopover(false);
-    });
-
-    filterPopover.querySelector("#hfApply")?.addEventListener("click", () => {
-        const deptSel = filterPopover.querySelector("#hfDept");
-        const statusSel = filterPopover.querySelector("#hfStatus");
-        filterState.dept = deptSel ? deptSel.value : "All";
-        filterState.status = statusSel ? statusSel.value : "All";
-        toggleFilterPopover(false);
-        applyFilters();
-    });
-
-    filterPopover.querySelector("#hfClear")?.addEventListener("click", () => {
-        filterState.dept = "All";
-        filterState.status = "All";
-        filterState.date = null;
-
-        if (searchInput) searchInput.value = "";
-        if (dateInput) dateInput.value = "";
-        setDateButtonLabel();
-
-        const deptSel = filterPopover.querySelector("#hfDept");
-        const statusSel = filterPopover.querySelector("#hfStatus");
-        if (deptSel) deptSel.value = "All";
-        if (statusSel) statusSel.value = "All";
-
-        toggleFilterPopover(false);
-        applyFilters();
-    });
-
-    // ---------- Wire: Date button ----------
-    if (dateBtn && dateInput) {
-        dateBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            // keep input value in sync so picker opens at current selection
-            if (filterState.date) {
-                const y = filterState.date.getFullYear();
-                const m = String(filterState.date.getMonth() + 1).padStart(2, "0");
-                const d = String(filterState.date.getDate()).padStart(2, "0");
-                dateInput.value = `${y}-${m}-${d}`;
-            } else {
-                dateInput.value = "";
-            }
-
-            // Some browsers block programmatic click on hidden inputs; showPicker is best.
-            if (typeof dateInput.showPicker === "function") {
-                dateInput.showPicker();
-            } else {
-                dateInput.focus({ preventScroll: true });
-                dateInput.click();
-            }
-        });
-    }
-
-    if (dateInput) {
-        dateInput.addEventListener("change", () => {
-            if (!dateInput.value) return;
-            const picked = new Date(dateInput.value + "T12:00:00");
-            filterState.date = picked;
-            setDateButtonLabel();
-
-            // Jump table pager to the week containing the picked date
-            const diffDays = Math.floor((stripTime(picked) - stripTime(baseWeekStart)) / (24 * 3600 * 1000));
-            weekOffset = Math.floor(diffDays / 7);
-
-            updateDayNumbers();
-            applyFilters();
-        });
-    }
-
-    // ---------- Wire: Week pager ----------
-    if (pagerPrev) {
-        pagerPrev.addEventListener("click", () => {
-            weekOffset -= 1;
-            updateDayNumbers();
-            applyFilters();
-        });
-    }
-
-    if (pagerNext) {
-        pagerNext.addEventListener("click", () => {
-            weekOffset += 1;
-            updateDayNumbers();
-            applyFilters();
-        });
-    }
-
-    // ---------- Modal ----------
-    let modalMode = "weekly"; // weekly | monthly
-    let modalOffset = 0;
-
-    function renderModal() {
-        const rangeText  = document.getElementById("dateRangeText");
-        const periodText = document.getElementById("periodText");
-        const totalValue = document.getElementById("totalHoursValue");
-        const tbodyEl    = document.getElementById("modalTableBody");
-        if (!tbodyEl) return;
-
-        tbodyEl.innerHTML = "";
-
-        if (modalMode === "weekly") {
-            const start = getWeekStartDate();
-            start.setDate(start.getDate() + modalOffset * 7);
-
-            if (rangeText) rangeText.textContent = formatWeekRange(start);
-            if (periodText) periodText.textContent = "Week";
-            if (totalValue) totalValue.textContent = "42h 15m";
-
-            for (let i = 0; i < 7; i++) {
-                const d = new Date(start);
-                d.setDate(d.getDate() + i);
-                const dateText = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-                const dayText  = d.toLocaleDateString("en-US", { weekday: "long" });
-                tbodyEl.insertAdjacentHTML("beforeend", `
-                    <tr>
-                        <td>${dateText}</td>
-                        <td>${dayText}</td>
-                        <td>8:03 AM</td>
-                        <td>5:02 PM</td>
-                        <td>8h 59m</td>
-                        <td><span class="pill pill-green">Present</span></td>
-                    </tr>
-                `);
-            }
-        } else {
-            const monthBase = new Date(2026, 1, 1);
-            monthBase.setMonth(monthBase.getMonth() + modalOffset);
-
-            const monthLabel = monthBase.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-            if (rangeText) rangeText.textContent = monthLabel;
-            if (periodText) periodText.textContent = "Month";
-            if (totalValue) totalValue.textContent = "160h 00m";
-
-            for (let i = 1; i <= 20; i++) {
-                const d = new Date(monthBase);
-                d.setDate(i);
-                const dateText = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-                const dayText  = d.toLocaleDateString("en-US", { weekday: "long" });
-                tbodyEl.insertAdjacentHTML("beforeend", `
-                    <tr>
-                        <td>${dateText}</td>
-                        <td>${dayText}</td>
-                        <td>8:10 AM</td>
-                        <td>5:00 PM</td>
-                        <td>8h 50m</td>
-                        <td><span class="pill pill-green">Present</span></td>
-                    </tr>
-                `);
-            }
-        }
-    }
-
-    function setModalView(type) {
-        modalMode = type;
-        modalOffset = 0;
-        weeklyBtn?.classList.toggle("active", type === "weekly");
-        monthlyBtn?.classList.toggle("active", type === "monthly");
-        renderModal();
-    }
-
-    function openModalForRow(row) {
-        if (!modal) return;
-        const name     = row.querySelector(".name")?.innerText || "Employee Name";
-        const position = row.querySelector(".title")?.innerText || "—";
-        const dept     = row.querySelector(".dept-badge")?.innerText || "—";
-
-        document.getElementById("modalEmployeeName").innerText = name;
-        document.getElementById("detPos").innerText            = position;
-        document.getElementById("detDept").innerText           = dept;
-
-        modal.style.display = "block";
-        setModalView("weekly");
-    }
-
-    tableRows.forEach(row => {
-        row.style.cursor = "pointer";
-        row.addEventListener("click", () => openModalForRow(row));
-    });
-
-    if (closeSpan) closeSpan.addEventListener("click", () => (modal.style.display = "none"));
-    window.addEventListener("click", (event) => {
-        if (event.target === modal) modal.style.display = "none";
-    });
-
-    weeklyBtn?.addEventListener("click", (e) => { e.stopPropagation(); setModalView("weekly"); });
-    monthlyBtn?.addEventListener("click", (e) => { e.stopPropagation(); setModalView("monthly"); });
-
-    modalPrev?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        modalOffset -= 1;
-        renderModal();
-    });
-    modalNext?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        modalOffset += 1;
-        renderModal();
-    });
-
-    // ---------- Responsive sidebar ----------
-    const handleResize = () => {
-        if (!sidebar) return;
-        if (window.innerWidth <= 1100) sidebar.classList.add("collapsed");
-        else sidebar.classList.remove("collapsed");
-    };
-    window.addEventListener("resize", handleResize);
-
-    // ---------- Init ----------
-    setDateButtonLabel();
-    updateDayNumbers();
-    applyFilters();
-    handleResize();
 });
+
+
+
+nextPeriodBtn.addEventListener("click", () => {
+
+    if (currentView === "weekly") {
+
+        weekOffset = Math.max(weekOffset - 1, 0);
+
+        renderWeekly();
+
+    } else {
+
+        monthOffset = Math.max(monthOffset - 1, 0);
+
+        renderMonthly();
+
+    }
+
+});
+
+
+
+
+
+/* ── 10. HISTORY MODAL – OPEN / CLOSE ───────────────────── */
+
+
+
+openHistoryBtn.addEventListener("click", () => {
+
+    historyModal.classList.add("open");
+
+});
+
+
+
+closeHistoryBtn.addEventListener("click", () => {
+
+    historyModal.classList.remove("open");
+
+});
+
+
+
+// Close on overlay click
+
+historyModal.addEventListener("click", (e) => {
+
+    if (e.target === historyModal) {
+
+        historyModal.classList.remove("open");
+
+    }
+
+});
+
+
+
+
+
+/* ── 11. HELPERS & INIT ──────────────────────────────────── */
+
+
+
+function capitalize(str) {
+
+    return str.charAt(0).toUpperCase() + str.slice(1);
+
+}
+
+
+
+// Boot the modal in weekly view
+
+switchView("weekly");
+
+
