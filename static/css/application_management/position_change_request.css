@@ -458,14 +458,14 @@ hr {
 }
 
 .confirm-icon {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 50px;
+    margin: 0 auto 15px;
+    font-size: 40px;
 }
 
 .confirm-icon.warning {
