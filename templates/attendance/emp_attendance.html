@@ -91,7 +91,6 @@
 
             <div class="master-content-wrapper">
 
-                <!-- HEADER BANNER -->
                 <div class="content-card header-banner">
                     <div class="header-banner-inner">
                         <div class="header-greeting">
@@ -103,14 +102,13 @@
                     </div>
                 </div>
 
-                <!-- DASHBOARD GRID: Clock-in card + Profile card -->
                 <div class="dashboard-grid">
                     <div class="content-card attendance-section">
                         <div class="attendance-card-accent"></div>
                         <div class="card-header">
                             <div class="card-title-group">
                                 <span class="card-icon-wrap" aria-hidden="true"><i class="fas fa-fingerprint"></i></span>
-                                <h2>Today's attendance</h2>
+                                <h2>Today’s attendance</h2>
                             </div>
                             <span class="date-now">Monday, February 8 | 8:14 AM</span>
                         </div>
@@ -143,7 +141,6 @@
                     </div>
                 </div>
 
-                <!-- WEEKLY SUMMARY -->
                 <div class="content-card summary-section">
                     <div class="summary-header">
                         <div class="summary-title-wrap">
@@ -174,13 +171,13 @@
                             <tbody>
                                 <tr>
                                     <td class="week-label">Feb 3 — Feb 10</td>
-                                    <td>—</td>
+                                    <td>2</td>
                                     <td><span class="pill pill-warning">4h 36m</span></td>
                                     <td><span class="pill pill-purple">Leave</span></td>
                                     <td><span class="pill pill-success-check">8h 39m</span></td>
                                     <td><span class="pill pill-success-check">8 hours</span></td>
                                     <td><span class="pill pill-active">Active</span></td>
-                                    <td>—</td>
+                                    <td>8</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -191,10 +188,9 @@
                     </div>
                 </div>
 
-            </div>
-        </main>
+            </div> 
+            </main>
 
-        <!-- HISTORY MODAL -->
         <div class="history-modal" id="historyModal">
             <div class="history-modal-content">
                 <div class="history-modal-header">
@@ -226,9 +222,11 @@
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody id="weeklyTableBody"></tbody>
+                                <tbody id="weeklyTableBody">
+                                    </tbody>
                             </table>
-                            <div class="monthly-grid" id="monthlyGrid"></div>
+                            <div class="monthly-grid" id="monthlyGrid">
+                                </div>
                         </div>
 
                         <aside class="history-sidebar">
@@ -254,7 +252,6 @@
             </div>
         </div>
 
-        <!-- CLOCK OUT DIALOG -->
         <div id="clockOutOverlay" class="clock-out-overlay" aria-hidden="true">
             <div class="clock-out-dialog" role="dialog" aria-modal="true" aria-labelledby="clockOutDialogTitle">
                 <div id="clockOutConfirmStep" class="clock-out-step">
@@ -262,7 +259,7 @@
                         <i class="fas fa-door-open"></i>
                     </div>
                     <h2 id="clockOutDialogTitle" class="clock-out-title">Clock out now?</h2>
-                    <p class="clock-out-message">Your shift will end and today's working time will be recorded.</p>
+                    <p class="clock-out-message">Your shift will end and today’s working time will be recorded.</p>
                     <div class="clock-out-actions">
                         <button type="button" class="clock-out-btn clock-out-btn--ghost" id="clockOutCancel">Cancel</button>
                         <button type="button" class="clock-out-btn clock-out-btn--danger" id="clockOutConfirmBtn">Yes, clock out</button>
@@ -272,7 +269,7 @@
                     <div class="clock-out-icon clock-out-icon--success">
                         <i class="fas fa-check"></i>
                     </div>
-                    <h2 class="clock-out-title">You're clocked out</h2>
+                    <h2 class="clock-out-title">You’re clocked out</h2>
                     <p class="clock-out-duration" id="clockOutDurationText">Total time: 0h 00m</p>
                     <p class="clock-out-sub">Shift saved. See you next time.</p>
                     <button type="button" class="clock-out-btn clock-out-btn--primary" id="clockOutDismiss">Done</button>
@@ -280,7 +277,7 @@
             </div>
         </div>
 
-    </div>
+    </div> 
     <script src="../../static/js/attendance/emp_attendance.js"></script>
 </body>
 </html>
