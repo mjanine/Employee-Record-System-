@@ -1,6 +1,5 @@
 /* ============================================================
    emp_attendance.css
-   Place at: static/css/attendance/emp_attendance.css
    ============================================================ */
 
 :root {
@@ -43,13 +42,20 @@ body {
     z-index: -1;
 }
 
+/* ── APP CONTAINER WRAPPER ───────────────────────────────── */
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
 /* ── SIDEBAR ─────────────────────────────────────────────── */
 .sidebar {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    height: calc(100% - 40px);
+    margin: 20px 0 20px 20px;
+    height: calc(100vh - 40px);
     width: 300px;
+    flex-shrink: 0;
     padding: 25px;
     border-radius: 20px;
     display: flex;
@@ -177,14 +183,21 @@ hr {
 
 /* ── MAIN CONTAINER ──────────────────────────────────────── */
 .main-container {
-    margin-left: 340px;
+    flex-grow: 1;
     height: 100vh;
     padding: 30px;
     overflow-y: auto;
-    transition: margin-left 0.35s ease;
+    transition: all 0.35s ease;
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
 }
 
-.sidebar.collapsed ~ .main-container { margin-left: 130px; }
+/* Hide scrollbar for Chrome, Safari and Opera */
+.main-container::-webkit-scrollbar {
+    display: none;
+}
 
 /* ── CONTENT CARDS ───────────────────────────────────────── */
 .content-card {
@@ -636,16 +649,6 @@ a.btn-secondary:visited {
     box-shadow: 0 8px 22px rgba(74, 29, 29, 0.35);
 }
 
-/* Scrollbar */
-.main-container::-webkit-scrollbar { width: 8px; }
-.main-container::-webkit-scrollbar-thumb {
-    background: rgba(74, 29, 29, 0.25);
-    border-radius: 10px;
-}
-.main-container::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.06);
-}
-
 @media (max-width: 960px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
@@ -662,7 +665,7 @@ a.btn-secondary:visited {
 }
 
 /* ============================================================
-   CLOCK OUT DIALOG (replaces browser confirm / alert)
+   CLOCK OUT DIALOG
    ============================================================ */
 .clock-out-overlay {
     position: fixed;
@@ -830,7 +833,6 @@ a.btn-secondary:visited {
    HISTORY MODAL STYLES
    ============================================================ */
 
-/* ── Overlay ── */
 .history-modal {
     display: none;
     position: fixed;
@@ -847,7 +849,6 @@ a.btn-secondary:visited {
     display: flex;
 }
 
-/* ── Modal Box ── */
 .history-modal-content {
     background: linear-gradient(180deg, #fafafa 0%, #f2f2f3 100%);
     border-radius: var(--radius-lg);
@@ -861,7 +862,6 @@ a.btn-secondary:visited {
     border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-/* ── Modal Header ── */
 .history-modal-header {
     display: flex;
     align-items: center;
@@ -890,7 +890,6 @@ a.btn-secondary:visited {
     flex-wrap: wrap;
 }
 
-/* View Toggle */
 .view-toggle {
     display: flex;
     border-radius: 10px;
@@ -912,7 +911,6 @@ a.btn-secondary:visited {
 .view-btn:first-child { border-right: 1px solid #ccc; }
 .view-btn.active { background: var(--brand); color: #fff; font-weight: 600; }
 
-/* Date Navigator */
 .date-navigator {
     display: flex;
     align-items: center;
@@ -933,7 +931,6 @@ a.btn-secondary:visited {
 
 .date-navigator i:hover { background: #e0e0e0; }
 
-/* Close Button */
 .close-history {
     font-size: 26px;
     cursor: pointer;
@@ -946,7 +943,6 @@ a.btn-secondary:visited {
 
 .close-history:hover { background: #ddd; color: #111; }
 
-/* ── Modal Body ── */
 .history-modal-body {
     padding: 22px 26px;
     overflow-y: auto;
@@ -954,14 +950,12 @@ a.btn-secondary:visited {
     background: #f4f4f5;
 }
 
-/* ── Layout Grid ── */
 .history-layout-grid {
     display: grid;
     grid-template-columns: 1fr 260px;
     gap: 20px;
 }
 
-/* ── Table Section ── */
 .table-section {
     background: #fff;
     border-radius: 14px;
@@ -1002,7 +996,6 @@ a.btn-secondary:visited {
 .history-log-table tbody tr:last-child td { border-bottom: none; }
 .history-log-table tbody tr:hover { background: #fafafa; }
 
-/* Status Badges */
 .status-badge {
     display: inline-block;
     padding: 5px 14px;
@@ -1017,7 +1010,6 @@ a.btn-secondary:visited {
 .status-badge.late    { background: #fff3cd; color: #856404; }
 .status-badge.holiday { background: #e3f2fd; color: #0d47a1; }
 
-/* Total Row */
 .total-row { background: #ebebeb !important; }
 .total-row td {
     font-weight: 700 !important;
@@ -1027,7 +1019,6 @@ a.btn-secondary:visited {
     border-bottom: none !important;
 }
 
-/* ── History Sidebar ── */
 .history-sidebar {
     display: flex;
     flex-direction: column;
@@ -1090,7 +1081,6 @@ a.btn-secondary:visited {
     font-weight: 600;
 }
 
-/* Hours Summary Box */
 .hours-summary-box {
     background: #e4e4e4;
     border: 1px solid #ccc;
@@ -1110,7 +1100,6 @@ a.btn-secondary:visited {
     margin-top: 4px;
 }
 
-/* ── Monthly Calendar Grid ── */
 .monthly-grid {
     display: none;
     grid-template-columns: repeat(7, 1fr);
@@ -1163,7 +1152,6 @@ a.btn-secondary:visited {
 
 .day-hours { font-size: 0.68rem; color: #777; }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
     .history-layout-grid { grid-template-columns: 1fr; }
     .history-sidebar { flex-direction: row; flex-wrap: wrap; }

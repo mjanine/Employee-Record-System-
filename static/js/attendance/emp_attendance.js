@@ -1,37 +1,19 @@
 /**
  * emp_attendance.js
- * Place at: static/js/attendance/emp_attendance.js
- * ============================================================
- * Sections:
- *   1. Element Selectors
- *   2. Sidebar Navigation
- *   3. Real-Time Clock Logic
- *   4. Header Date/Time Updater
- *   5. History Modal – Data
- *   6. History Modal – Render Weekly
- *   7. History Modal – Render Monthly
- *   8. History Modal – View Switcher
- *   9. History Modal – Navigation
- *  10. History Modal – Open / Close
- *  11. Init
  * ============================================================
  */
 
-
 /* ── 1. ELEMENT SELECTORS ────────────────────────────────── */
 
-// Sidebar
 const sidebar    = document.getElementById("sidebar");
 const logoToggle = document.getElementById("logoToggle");
 const closeBtn   = document.getElementById("closeBtn");
 const menuItems  = document.querySelectorAll(".menu-item");
 
-// Attendance clock
 const clockBtn           = document.getElementById("clockBtn");
 const workingTimeDisplay = document.getElementById("workingTime");
 const timeInDisplay      = document.getElementById("timeInDisplay");
 
-// History modal
 const historyModal     = document.getElementById("historyModal");
 const openHistoryBtn   = document.getElementById("openHistory");
 const closeHistoryBtn  = document.getElementById("closeHistory");
@@ -64,7 +46,6 @@ logoToggle.addEventListener("click", () => {
     sidebar.classList.toggle("collapsed");
 });
 
-// Active state + tooltip data-text
 menuItems.forEach(item => {
     const spanEl = item.querySelector("span");
     if (spanEl) item.setAttribute("data-text", spanEl.innerText);
@@ -149,11 +130,7 @@ clockBtn.addEventListener("click", () => {
 });
 
 clockOutCancelBtn.addEventListener("click", hideClockOutOverlay);
-
-clockOutConfirmBtn.addEventListener("click", () => {
-    completeClockOut();
-});
-
+clockOutConfirmBtn.addEventListener("click", () => completeClockOut());
 clockOutDismissBtn.addEventListener("click", hideClockOutOverlay);
 
 clockOutOverlay.addEventListener("click", (e) => {
@@ -187,10 +164,6 @@ updateHeader();
 
 /* ── 5. HISTORY MODAL – DATA ─────────────────────────────── */
 
-/**
- * Weekly records. Key = offset from current week (0 = latest).
- * Extend with real API data as needed.
- */
 const weeklyData = {
     0: {
         label: "February 4 – 10, 2026",
@@ -220,13 +193,10 @@ const weeklyData = {
     }
 };
 
-/**
- * Monthly records. Key = offset from current month (0 = latest).
- */
 const monthlyData = {
     0: {
         label: "February 2026",
-        firstDayOfWeek: 0,   // Feb 1, 2026 = Sunday
+        firstDayOfWeek: 0, 
         daysInMonth: 28,
         attendance: {
             3:  { status: "present", hours: "8h 59m" },
@@ -248,7 +218,7 @@ const monthlyData = {
     },
     1: {
         label: "January 2026",
-        firstDayOfWeek: 4,   // Jan 1, 2026 = Thursday
+        firstDayOfWeek: 4, 
         daysInMonth: 31,
         attendance: {
             5:  { status: "present", hours: "9h 00m" },
@@ -266,7 +236,6 @@ const monthlyData = {
     }
 };
 
-// State
 let currentView = "weekly";
 let weekOffset  = 0;
 let monthOffset = 0;
@@ -311,7 +280,6 @@ function renderMonthly() {
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     let html = dayNames.map(d => `<div class="month-day-header">${d}</div>`).join("");
 
-    // Leading empty cells
     for (let i = 0; i < data.firstDayOfWeek; i++) {
         html += `<div class="month-day-cell empty"></div>`;
     }
@@ -395,7 +363,6 @@ closeHistoryBtn.addEventListener("click", () => {
     historyModal.classList.remove("open");
 });
 
-// Close on overlay click
 historyModal.addEventListener("click", (e) => {
     if (e.target === historyModal) {
         historyModal.classList.remove("open");
@@ -409,5 +376,4 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Boot the modal in weekly view
 switchView("weekly");

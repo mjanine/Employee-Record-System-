@@ -12,210 +12,187 @@
 
     <div class="background"></div>
 
-    <!-- ═══════════════════════════════════════
-         SIDEBAR
-    ════════════════════════════════════════ -->
-    <div class="sidebar" id="sidebar">
-        <div class="top-section">
-            <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
-                <div class="open-icon">
-                    <i class="fas fa-chevron-right"></i>
+    <div class="app-container">
+
+        <div class="sidebar" id="sidebar">
+            <div class="top-section">
+                <div class="logo-wrapper" id="logoToggle">
+                    <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
+                    <div class="open-icon">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
                 </div>
+                <button class="close-btn" id="closeBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
             </div>
-            <button class="close-btn" id="closeBtn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-        </div>
 
-       <ul class="menu">
+           <ul class="menu">
+                <li>
+                    <a href="emp_dash.html" class="menu-item">
+                        <i class="fas fa-border-all"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../employee/emp_profile_view.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a href="ENTER" class="menu-item">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Position Change Request</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../attendance/emp_attendance.html" class="menu-item active">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Attendance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../leave/hr_leaveselect.html" class="menu-item">
+                        <i class="fas fa-plane-departure"></i>
+                        <span>Leave Request</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ENTER" class="menu-item">
+                        <i class="fas fa-star"></i>
+                        <span>Performance Evaluation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ENTER" class="menu-item">
+                        <i class="fas fa-folder-open"></i>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../training_management/emp_training.html" class="menu-item">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Trainings</span>
+                    </a>
+                </li>
+            </ul>
 
-            <li>
-                <a href="emp_dash.html" class="menu-item">
-                    <i class="fas fa-border-all"></i>
-                    <span>Dashboard</span>
+            <div class="bottom-section">
+                <a href="../login/login.html" class="menu-item logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
-            </li>
-
-            <li>
-                <a href="../employee/emp_profile_view.html" class="menu-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-
-            <hr>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Position Change Request</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="../attendance/emp_attendance.html" class="menu-item active">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Attendance</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="../leave/hr_leaveselect.html" class="menu-item">
-                    <i class="fas fa-plane-departure"></i>
-                    <span>Leave Request</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-star"></i>
-                    <span>Performance Evaluation</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="ENTER" class="menu-item">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Documents</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="../training_management/emp_training.html" class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Trainings</span>
-                </a>
-            </li>
-
-        </ul>
-
-
-        <div class="bottom-section">
-            <a href="../login/login.html" class="menu-item logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════
-         MAIN CONTENT
-    ════════════════════════════════════════ -->
-    <main class="main-container" id="mainContent">
-
-        <div class="content-card header-banner">
-            <div class="header-banner-inner">
-                <div class="header-greeting">
-                    <p class="header-kicker">Employee portal</p>
-                    <h1>Good morning, Juan!</h1>
-                    <p class="header-sub">Track your time and weekly attendance at a glance.</p>
-                </div>
-                <div class="header-weather" aria-hidden="true"><i class="fas fa-sun"></i></div>
             </div>
         </div>
 
-        <div class="dashboard-grid">
+        <main class="main-container" id="mainContent">
 
-            <div class="content-card attendance-section">
-                <div class="attendance-card-accent"></div>
-                <div class="card-header">
-                    <div class="card-title-group">
-                        <span class="card-icon-wrap" aria-hidden="true"><i class="fas fa-fingerprint"></i></span>
-                        <h2>Today’s attendance</h2>
+            <div class="content-card header-banner">
+                <div class="header-banner-inner">
+                    <div class="header-greeting">
+                        <p class="header-kicker">Employee portal</p>
+                        <h1>Good morning, Juan!</h1>
+                        <p class="header-sub">Track your time and weekly attendance at a glance.</p>
                     </div>
-                    <span class="date-now">Monday, February 8 | 8:14 AM</span>
-                </div>
-                <p class="status-text">Ready when you are — clock in to start your shift.</p>
-                <div class="stats-row">
-                    <div class="stat-chip">
-                        <span class="stat-chip-label"><i class="fas fa-stopwatch"></i> Session</span>
-                        <p id="workingTime" class="stat-chip-value">Working for: 0h</p>
-                    </div>
-                    <div class="stat-chip">
-                        <span class="stat-chip-label"><i class="fas fa-sign-in-alt"></i> Start</span>
-                        <p id="timeInDisplay" class="stat-chip-value">Time In: --</p>
-                    </div>
-                </div>
-                <button type="button" class="btn-clock-in" id="clockBtn">Clock in</button>
-            </div>
-
-            <div class="content-card profile-preview">
-                <div class="profile-flex">
-                    <div class="avatar-box">
-                        <img src="../../static/img/man.jpeg" alt="Juan Dela Cruz">
-                    </div>
-                    <div class="profile-details">
-                        <h3>Juan Dela Cruz</h3>
-                        <p class="profile-role">Department Head</p>
-                        <p class="emp-id">Employee ID: 001</p>
-                        <a href="../employee/emp_profile_view.html" class="btn-secondary">View Profile</a>
-                    </div>
+                    <div class="header-weather" aria-hidden="true"><i class="fas fa-sun"></i></div>
                 </div>
             </div>
 
-        </div>
+            <div class="dashboard-grid">
 
-        <div class="content-card summary-section">
-            <div class="summary-header">
-                <div class="summary-title-wrap">
-                    <span class="card-icon-wrap card-icon-wrap--muted" aria-hidden="true"><i class="fas fa-calendar-week"></i></span>
-                    <h2>Weekly summary</h2>
+                <div class="content-card attendance-section">
+                    <div class="attendance-card-accent"></div>
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="card-icon-wrap" aria-hidden="true"><i class="fas fa-fingerprint"></i></span>
+                            <h2>Today’s attendance</h2>
+                        </div>
+                        <span class="date-now">Monday, February 8 | 8:14 AM</span>
+                    </div>
+                    <p class="status-text">Ready when you are — clock in to start your shift.</p>
+                    <div class="stats-row">
+                        <div class="stat-chip">
+                            <span class="stat-chip-label"><i class="fas fa-stopwatch"></i> Session</span>
+                            <p id="workingTime" class="stat-chip-value">Working for: 0h</p>
+                        </div>
+                        <div class="stat-chip">
+                            <span class="stat-chip-label"><i class="fas fa-sign-in-alt"></i> Start</span>
+                            <p id="timeInDisplay" class="stat-chip-value">Time In: --</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-clock-in" id="clockBtn">Clock in</button>
                 </div>
-                <div class="week-picker">
-                    <button type="button" class="week-nav" aria-label="Previous week"><i class="fas fa-chevron-left"></i></button>
-                    <span>Week 5</span>
-                    <button type="button" class="week-nav" aria-label="Next week"><i class="fas fa-chevron-right"></i></button>
+
+                <div class="content-card profile-preview">
+                    <div class="profile-flex">
+                        <div class="avatar-box">
+                            <img src="../../static/img/man.jpeg" alt="Juan Dela Cruz">
+                        </div>
+                        <div class="profile-details">
+                            <h3>Juan Dela Cruz</h3>
+                            <p class="profile-role">Department Head</p>
+                            <p class="emp-id">Employee ID: 001</p>
+                            <a href="../employee/emp_profile_view.html" class="btn-secondary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content-card summary-section">
+                <div class="summary-header">
+                    <div class="summary-title-wrap">
+                        <span class="card-icon-wrap card-icon-wrap--muted" aria-hidden="true"><i class="fas fa-calendar-week"></i></span>
+                        <h2>Weekly summary</h2>
+                    </div>
+                    <div class="week-picker">
+                        <button type="button" class="week-nav" aria-label="Previous week"><i class="fas fa-chevron-left"></i></button>
+                        <span>Week 5</span>
+                        <button type="button" class="week-nav" aria-label="Next week"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Sunday</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                                <th>Saturday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="week-label">Feb 3 — Feb 10</td>
+                                <td>2</td>
+                                <td><span class="pill pill-warning">4h 36m</span></td>
+                                <td><span class="pill pill-purple">Leave</span></td>
+                                <td><span class="pill pill-success-check">8h 39m</span></td>
+                                <td><span class="pill pill-success-check">8 hours</span></td>
+                                <td><span class="pill pill-active">Active</span></td>
+                                <td>8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer-actions">
+                    <button class="btn-history" id="openHistory">View Full History</button>
                 </div>
             </div>
 
-            <div class="table-wrapper">
-                <table class="attendance-table">
-                    <thead>
-                        <tr>
-                            <th>Week</th>
-                            <th>Sunday</th>
-                            <th>Monday</th>
-                            <th>Tuesday</th>
-                            <th>Wednesday</th>
-                            <th>Thursday</th>
-                            <th>Friday</th>
-                            <th>Saturday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="week-label">Feb 3 — Feb 10</td>
-                            <td>2</td>
-                            <td><span class="pill pill-warning">4h 36m</span></td>
-                            <td><span class="pill pill-purple">Leave</span></td>
-                            <td><span class="pill pill-success-check">8h 39m</span></td>
-                            <td><span class="pill pill-success-check">8 hours</span></td>
-                            <td><span class="pill pill-active">Active</span></td>
-                            <td>8</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="footer-actions">
-                <!-- id="openHistory" is what triggers the modal -->
-                <button class="btn-history" id="openHistory">View Full History</button>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- ═══════════════════════════════════════
-         HISTORY MODAL
-    ════════════════════════════════════════ -->
-    <div class="history-modal" id="historyModal">
+        </main>
+    </div> <div class="history-modal" id="historyModal">
         <div class="history-modal-content">
-
-            <!-- Header -->
             <div class="history-modal-header">
                 <div class="employee-tab">Dela Cruz, Juan</div>
-
                 <div class="header-controls">
                     <div class="view-toggle">
                         <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
@@ -227,18 +204,12 @@
                         <i class="fas fa-chevron-right" id="nextPeriod"></i>
                     </div>
                 </div>
-
                 <span class="close-history" id="closeHistory">&times;</span>
             </div>
 
-            <!-- Body -->
             <div class="history-modal-body">
                 <div class="history-layout-grid">
-
-                    <!-- Table Section -->
                     <div class="table-section">
-
-                        <!-- Weekly Table -->
                         <table class="history-log-table" id="weeklyTable">
                             <thead>
                                 <tr>
@@ -251,18 +222,13 @@
                                 </tr>
                             </thead>
                             <tbody id="weeklyTableBody">
-                                <!-- Populated by JS -->
-                            </tbody>
+                                </tbody>
                         </table>
 
-                        <!-- Monthly Calendar Grid -->
                         <div class="monthly-grid" id="monthlyGrid">
-                            <!-- Populated by JS -->
-                        </div>
-
+                            </div>
                     </div>
 
-                    <!-- Sidebar -->
                     <aside class="history-sidebar">
                         <div class="employee-details-card">
                             <h3>Employee Details</h3>
@@ -294,13 +260,10 @@
                             <span id="totalHoursCount">42h 15m</span>
                         </div>
                     </aside>
-
                 </div>
             </div>
-
         </div>
     </div>
-    <!-- END HISTORY MODAL -->
 
     <div id="clockOutOverlay" class="clock-out-overlay" aria-hidden="true">
         <div class="clock-out-dialog" role="dialog" aria-modal="true" aria-labelledby="clockOutDialogTitle">
