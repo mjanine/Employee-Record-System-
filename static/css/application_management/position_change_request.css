@@ -469,8 +469,9 @@ hr {
 }
 
 .confirm-icon.warning {
-    background: #f39c12;
-    color: white;
+    font-size: 60px;
+    color: #f39c12;
+    margin-bottom: 20px;
 }
 
 .confirm-icon.success {
