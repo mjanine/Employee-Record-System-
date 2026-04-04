@@ -23,21 +23,15 @@ function autoFillEmployee(name) {
     const key = name.trim().toLowerCase();
     const emp = employeeDirectory[key];
     const idEl = document.getElementById('empId');
-    const emailEl = document.getElementById('empEmail');
-    const phoneEl = document.getElementById('empPhone');
     const deptEl = document.getElementById('currentDept');
     const posEl = document.getElementById('currentPos');
 
     if (emp) {
         idEl.value = emp.id;
-        emailEl.value = emp.email;
-        phoneEl.value = emp.phone;
         deptEl.value = emp.dept;
         posEl.value = emp.position;
     } else {
         idEl.value = '';
-        emailEl.value = '';
-        phoneEl.value = '';
         deptEl.value = '';
         posEl.value = '';
     }
@@ -46,8 +40,6 @@ function autoFillEmployee(name) {
 function resetForm() {
     document.getElementById('empName').value = '';
     document.getElementById('empId').value = '';
-    document.getElementById('empEmail').value = '';
-    document.getElementById('empPhone').value = '';
     document.getElementById('currentDept').value = '';
     document.getElementById('currentPos').value = '';
     document.getElementById('requestedPos').value = '';
