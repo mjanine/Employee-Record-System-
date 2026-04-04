@@ -15,24 +15,28 @@ body, html {
     width: 100%;
     margin: 0;
     background: #ffffff;
+    overflow: hidden;
 }
 
 /* ── Page Wrapper ── */
 .page-wrapper {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 50px 80px;
+    padding: 40px 60px;
+    overflow: hidden;
 }
 
 /* ── Top Header with Logo ── */
 .top-header {
-    padding: 0 0 60px 0;
+    padding: 0 0 30px 0;
+    display: flex;
+    align-items: center;
 }
 
 .top-logo {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -46,16 +50,20 @@ body, html {
     max-width: none;
     margin: 0;
     box-shadow: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 /* ── Form Title ── */
 .form-title {
     text-align: center;
-    font-size: 26px;
-    color: #1a1a1a;
+    font-size: 24px;
+    color: #2d2d2d;
     font-weight: 700;
-    letter-spacing: 0.8px;
-    margin-bottom: 70px;
+    letter-spacing: 1.5px;
+    margin-bottom: 50px;
     text-transform: uppercase;
 }
 
@@ -63,23 +71,33 @@ body, html {
 .form-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 120px;
-    margin-bottom: 60px;
+    gap: 100px;
+    margin-bottom: 40px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.form-content::-webkit-scrollbar {
+    display: none;
 }
 
 .form-column {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
 }
 
 .column-title {
-    font-size: 13px;
-    color: #4a1d1d;
+    font-size: 12px;
+    color: #4a2d2d;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 25px;
+    letter-spacing: 0.8px;
+    margin-bottom: 15px;
 }
 
 /* ── Form Group ── */
