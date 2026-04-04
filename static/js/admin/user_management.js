@@ -198,6 +198,11 @@ function openUserModal() {
         return;
     }
 
+    // --- ADD THESE 3 LINES TO FIX THE 0x0 SIZE PROBLEM ---
+    modal.style.setProperty('display', 'flex', 'important');
+    modal.style.setProperty('width', '100vw', 'important');
+    modal.style.setProperty('height', '100vh', 'important');
+
     const form = document.getElementById('userForm');
     if (form) form.reset(); // Clear out any old text
 
@@ -221,7 +226,7 @@ window.openUserModal = openUserModal;
 
 
 function closeUserModal() {
-    document.getElementById('userModal').classList.remove('show');
+    document.getElementById('userModal').style.display = 'none';
 }
 
 async function editUser(userId) {
@@ -235,12 +240,12 @@ async function editUser(userId) {
         }
         const userData = await response.json();
 
-        document.getElementById('firstName').value = userData.first_name;
-        document.getElementById('lastName').value = userData.last_name;
-        document.getElementById('email').value = userData.email;
-        document.getElementById('username').value = userData.username;
-        document.getElementById('role').value = userData.role;
-        document.getElementById('userIdForEdit').value = userId;
+        if (document.getElementById('firstName')) document.getElementById('firstName').value = userData.first_name || '';
+        if (document.getElementById('lastName')) document.getElementById('lastName').value = userData.last_name || '';
+        if (document.getElementById('email')) document.getElementById('email').value = userData.email || '';
+        if (document.getElementById('username')) document.getElementById('username').value = userData.username || '';
+        if (document.getElementById('role')) document.getElementById('role').value = userData.role || '';
+        if (document.getElementById('userIdForEdit')) document.getElementById('userIdForEdit').value = userId;
 
         // Password fields are not required for edit unless explicitly changing
         const pwdField = document.getElementById('password');
@@ -267,7 +272,7 @@ async function editUser(userId) {
         }
 
     document.getElementById('modalTitle').textContent = 'Edit User';
-    document.getElementById('userModal').classList.add('show');
+    document.getElementById('userModal').style.display = 'flex';
 
     } catch (error) {
         console.error('Error fetching user data:', error);
@@ -291,11 +296,11 @@ function openAssignRoleModal(userId, userName, currentRole, currentDepartment) {
         document.getElementById('newDepartment').required = false;
         document.getElementById('newDepartment').value = '';
     }
-    document.getElementById('assignRoleModal').classList.add('show');
+    document.getElementById('assignRoleModal').style.display = 'flex';
 }
 
 function closeAssignRoleModal() {
-    document.getElementById('assignRoleModal').classList.remove('show');
+    document.getElementById('assignRoleModal').style.display = 'none';
 }
 
 function openResetPasswordModal(userId, userName) {
@@ -305,11 +310,11 @@ function openResetPasswordModal(userId, userName) {
     document.getElementById('resetPasswordForm').reset();
     document.getElementById('strengthIndicator').textContent = 'Weak';
     document.getElementById('strengthIndicator').className = 'weak';
-    document.getElementById('resetPasswordModal').classList.add('show');
+    document.getElementById('resetPasswordModal').style.display = 'flex';
 }
 
 function closeResetPasswordModal() {
-    document.getElementById('resetPasswordModal').classList.remove('show');
+    document.getElementById('resetPasswordModal').style.display = 'none';
 }
 
 function closeConfirmModal() {
@@ -555,7 +560,14 @@ function confirmUserStatusChange(userId, action) {
     message.textContent = `Are you sure you want to ${actionText} this user account?`;
     
     confirmedAction = { type: 'single', action: action, userId: userId };
-    modal.classList.add('show');
+    modal.style.display = 'flex'; 
+
+    console.log("2. Modal opened successfully!");
+}
+
+// And for closing:
+function closeUserModal() {
+    document.getElementById('userModal').style.display = 'none';
 }
 
 async function performSingleAction(action, userId) {
@@ -593,7 +605,7 @@ function confirmDeleteUser(userId) {
     message.textContent = 'Are you sure you want to delete this user? This action cannot be undone.';
     
     confirmedAction = { type: 'single', action: 'delete', userId: userId };
-    modal.classList.add('show');
+    modal.style.display = 'flex';
 }
 
 async function performSingleDelete(userId) {
@@ -796,7 +808,7 @@ function showAlert(message, type = 'info') {
     alert.style.margin = '0';
     alert.style.pointerEvents = 'auto';
     
-    document.body.appendChild(alert);
+    alertContainer.appendChild(alert);
     
     setTimeout(() => {
         alert.remove();
@@ -806,3 +818,15 @@ function showAlert(message, type = 'info') {
         }
     }, 3000);
 }
+// This "pairs" your Save Button to your Saving Logic
+document.addEventListener('DOMContentLoaded', function() {
+    const userForm = document.getElementById('userForm');
+    
+    if (userForm) {
+        // This tells the form: "When Save is clicked, run handleUserFormSubmit"
+        userForm.addEventListener('submit', handleUserFormSubmit);
+        console.log("PAIRED: Save button is now connected to the code!");
+    } else {
+        console.error("ERROR: Could not find the form with ID 'userForm'!");
+    }
+});

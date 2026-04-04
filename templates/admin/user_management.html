@@ -12,11 +12,14 @@
     <style>
         html, body {
             height: 100%;
-            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            /* Remove overflow: hidden from here */
         }
 
         body {
             background: transparent;
+            overflow-x: hidden; /* Only hide horizontal scroll */
         }
 
         .sidebar {
@@ -88,116 +91,133 @@
             font-size: 1.5rem;
         }
 
-        /* Styles for the alert/toast messages */
-        #toastContainer {
-            position: fixed;
-            top: 32px;
-            right: 32px;
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-width: 420px;
-            width: min(420px, calc(100vw - 40px));
-            pointer-events: none;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            color: white;
-            pointer-events: auto;
-        }
-
-        .alert.info { background-color: #2196F3; }
-        .alert.success { background-color: #4CAF50; }
-        .alert.danger { background-color: #f44336; }
-        .alert.warning { background-color: #ff9800; }
-        @media (max-width: 1100px) {
-            .main-content.user-management-main {
-                margin-left: 110px;
-            }
-        }
-
-        .action-cell {
-            position: relative;
-            text-align: center;
-        }
-
-        .action-btn {
-            padding: 4px 6px;
-            font-size: 0.75rem;
-            min-width: auto;
-            width: 20px;
-            height: 28px;
-            display: flex;
+        /* --- MODAL CSS FIX --- */
+        #userModal {
+            display: none; /* JS toggles this to flex */
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            z-index: 999999 !important; /* Higher than sidebar (1000) */
             align-items: center;
             justify-content: center;
-            margin-left: 25px;
-            border: none;
-            background: transparent;
-            box-shadow: none;
-            outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            padding: 0;
+            backdrop-filter: blur(4px);
         }
 
-        .action-cell.open .dropdown-menu {
-            display: block;
+        .modal-content {
+            background: white !important;
+            padding: 30px !important;
+            border-radius: 25px !important;
+            width: 450px !important;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important;
         }
 
-        .data-table tbody td:last-child {
-            text-align: center;
-            padding: 0.75rem !important;
-            vertical-align: middle;
+        /* Bulk Actions styling */
+        #bulkActions {
+            display: none;
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
+            align-items: center;
+            gap: 15px;
         }
 
-        @media (max-width: 768px) {
-            .dashboard-viewport {
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .main-content.user-management-main {
-                margin-left: 0;
-            }
-
-            .form-card.user-management-card {
-                padding: 18px;
-                border-radius: 18px;
-            }
+        #selectedCount {
+            font-weight: bold;
+            color: #800000;
         }
-   html, body { height: 100%; overflow: hidden; }
-        body { background: transparent; }
-        .sidebar { z-index: 1000; }
-        .dashboard-viewport { display: flex; height: 100vh; width: 100%; padding: 20px; box-sizing: border-box; gap: 20px; }
-        .main-content.user-management-main { flex: 1; height: 100%; margin-left: 320px; display: flex; min-width: 0; transition: margin-left 0.35s ease; }
-        .sidebar.collapsed ~ .dashboard-viewport .main-content.user-management-main { margin-left: 110px; }
-        .form-card.user-management-card { background: #ffffff; border-radius: 25px; padding: 25px 32px; width: 100%; height: 100%; flex: 1; min-width: 0; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); box-sizing: border-box; }
-        .form-body.user-management-body { display: flex; flex-direction: column; gap: 1.25rem; flex: 1; overflow: auto; padding-right: 0.5rem; scrollbar-width: none; -ms-overflow-style: none; }
-        .form-body.user-management-body::-webkit-scrollbar { display: none; }
-        .user-management-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
-        .user-management-header h1 { margin: 0; color: var(--admin-text); font-size: 1.5rem; }
+
+        /* Existing Alert Styles */
         #toastContainer { position: fixed; top: 32px; right: 32px; z-index: 2000; display: flex; flex-direction: column; gap: 12px; max-width: 420px; width: min(420px, calc(100vw - 40px)); pointer-events: none; }
         .alert { padding: 15px; border-radius: 5px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); color: white; pointer-events: auto; }
         .alert.info { background-color: #2196F3; }
         .alert.success { background-color: #4CAF50; }
         .alert.danger { background-color: #f44336; }
         .alert.warning { background-color: #ff9800; }
-        @media (max-width: 1100px) { .main-content.user-management-main { margin-left: 110px; } }
+        
         .action-cell { position: relative; text-align: center; }
-        .action-btn { padding: 4px 6px; font-size: 0.75rem; min-width: auto; width: 20px; height: 28px; display: flex; align-items: center; justify-content: center; margin-left: 25px; border: none; background: transparent; box-shadow: none; outline: none; appearance: none; -webkit-appearance: none; padding: 0; }
+        .action-btn { border: none; background: transparent; cursor: pointer; }
         .action-cell.open .dropdown-menu { display: block; }
         .data-table tbody td:last-child { text-align: center; padding: 0.75rem !important; vertical-align: middle; }
-        @media (max-width: 768px) { .dashboard-viewport { padding: 12px; gap: 12px; } .main-content.user-management-main { margin-left: 0; } .form-card.user-management-card { padding: 18px; border-radius: 18px; } }
     </style>
 </head>
 <body>
+     <div id="userModal" class="modal-overlay" 
+     style="display: none; 
+            position: fixed !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            width: 100vw !important; 
+            height: 100vh !important; 
+            background: rgba(0,0,0,0.8) !important; 
+            z-index: 9999999 !important; 
+            align-items: center; 
+            justify-content: center; 
+            visibility: visible !important;">
+
+        <div class="modal-content" 
+             style="background: #ffffff !important; width: 480px !important; padding: 40px !important; border-radius: 35px !important; position: relative !important; box-shadow: 0 25px 60px rgba(0,0,0,0.6) !important; display: block !important;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 style="color: #800000; margin: 0; font-family: sans-serif; font-size: 1.5rem;">Create New User</h2>
+                <button type="button" onclick="closeUserModal()" style="background: none; border: none; font-size: 32px; cursor: pointer; color: #666; line-height: 1;">&times;</button>
+            </div>
+
+            <form id="userForm" method="POST" action="{% url 'create_user' %}">
+    {% csrf_token %}
+    <input type="hidden" id="userIdForEdit" name="user_id" value="">
+
+    <div style="margin-bottom: 18px;">
+        <label style="font-weight: 600;">Username</label>
+        <input type="text" id="username" name="username" required style="width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 15px;">
+    </div>
+    
+    <div style="margin-bottom: 18px;">
+        <label style="font-weight: 600;">Email Address</label>
+        <input type="email" id="email" name="email" required style="width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 15px;">
+    </div>
+
+    <div style="margin-bottom: 18px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">System Role</label>
+    <select id="role" name="role" required style="width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 15px; background: white; font-size: 1rem;">
+        <option value="">Select Role</option>
+        <option value="ADMIN">Admin</option>
+        <option value="HR">HR</option>
+        <option value="HEAD">Department Head</option>
+        <option value="EMPLOYEE">Employee</option>
+    </select>
+</div>
+
+<div id="departmentSelectGroupUserModal" style="margin-bottom: 18px; display: none;">
+    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Department</label>
+    <select id="departmentUserModal" name="department" style="width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 15px; background: white; font-size: 1rem;">
+        <option value="">Select Department</option>
+        {% for dept in departments %}
+            <option value="{{ dept.id }}">{{ dept.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div style="margin-bottom: 18px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Password</label>
+    <input type="password" id="password" name="password1" required style="width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 15px; box-sizing: border-box;">
+</div>
+
+<div style="margin-bottom: 25px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Confirm Password</label>
+    <input type="password" id="confirmPassword" name="password2" required style="width: 100%; padding: 12px; border: 1.5px solid #ddd; border-radius: 15px; box-sizing: border-box;">
+</div>
+
+<div style="display: flex; justify-content: flex-end; gap: 12px;">
+    <button type="button" onclick="closeUserModal()" style="padding: 12px 25px; border-radius: 15px; border: 1px solid #ccc; background: #f8f8f8; cursor: pointer; font-weight: 500;">Cancel</button>
+    <button type="submit" style="padding: 12px 25px; border-radius: 15px; border: none; background: #800000; color: white; font-weight: bold; cursor: pointer;">Save User</button>
+</div>
+</form>
+        </div>
+    </div>
 
     <div class="background"></div>
 
@@ -256,6 +276,12 @@
                 <div class="form-body user-management-body">
                     <div class="user-management-header">
                         <h1>User Management</h1>
+                        
+                        <div id="bulkActions" style="display: none; gap: 10px; align-items: center;">
+                            <span id="selectedCount">0 selected</span>
+                            <button class="btn btn-danger" id="bulkDelete">Delete Selected</button>
+                        </div>
+
                         <button class="btn btn-primary" id="createUserBtn" onclick="openUserModal()">
                             <i class="fas fa-user-plus"></i> Create New User
                         </button>
