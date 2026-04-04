@@ -183,11 +183,14 @@ hr {
 
 /* ── MAIN CONTAINER ──────────────────────────────────────── */
 .main-container {
-    margin-left: 340px;
-    height: 100vh;
-    padding: 30px;
-    overflow: hidden; 
-    transition: margin-left 0.35s ease;
+     background: #fdfdfd;
+    width: 100%;
+    max-width: 1400px;
+    height: 100%;
+    border-radius: 25px;
+    padding: 35px 40px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar.collapsed ~ .main-container { margin-left: 130px; }
