@@ -230,10 +230,12 @@ hr { border: 0.5px solid rgba(255, 255, 255, 0.2); margin: 10px 0; }
     font-weight: 600;
     cursor: pointer;
     color: #555;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.2s ease;
     white-space: nowrap;
     text-decoration: none;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .toggle-btn:first-child { border-right: 1.5px solid #d0c8c8; }
