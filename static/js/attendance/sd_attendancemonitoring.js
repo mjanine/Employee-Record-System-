@@ -1,41 +1,17 @@
 /* ============================================================
-   head_attendancemonitoring.js
-   Path: static/js/attendance/head_attendancemonitoring.js
+   hr_attendancemonitoring.js
+   Path: static/js/attendance/hr_attendancemonitoring.js
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    /* ── SIDEBAR ─────────────────────────────────────────── */
     const sidebar    = document.getElementById("sidebar");
     const logoToggle = document.getElementById("logoToggle");
     const closeBtn   = document.getElementById("closeBtn");
     const menuItems  = document.querySelectorAll(".menu-item");
 
-    const searchInput = document.querySelector(".search-pill input");
-
-    const statCards = Array.from(document.querySelectorAll(".stats-container .stat-card"));
-
-    const activeFiltersWrap = document.querySelector(".active-filters");
-    const actionButtons = Array.from(document.querySelectorAll(".action-buttons .btn-action"));
-    const filterBtn = actionButtons[0] || null;
-    const dateBtn   = actionButtons[1] || null;
-
-    const pager      = document.querySelector(".action-buttons .pagination");
-    const pagerPrev  = pager ? pager.querySelector(".fa-chevron-left") : null;
-    const pagerNext  = pager ? pager.querySelector(".fa-chevron-right") : null;
-    const pagerLabel = pager ? pager.querySelector("span") : null;
-
-    const table = document.querySelector(".attendance-table");
-    const tbody = table ? table.querySelector("tbody") : null;
-    const tableRows = tbody ? Array.from(tbody.querySelectorAll("tr")) : [];
-
-    const modal      = document.getElementById("employeeModal");
-    const closeSpan  = document.querySelector(".close-modal");
-    const weeklyBtn  = document.getElementById("weeklyViewBtn");
-    const monthlyBtn = document.getElementById("monthlyViewBtn");
-    const modalPrev  = modal ? modal.querySelector(".date-pager .fa-chevron-left") : null;
-    const modalNext  = modal ? modal.querySelector(".date-pager .fa-chevron-right") : null;
-
-    // ---------- Sidebar ----------
-    if (closeBtn) closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
+    if (closeBtn)   closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
     if (logoToggle) logoToggle.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
 
     menuItems.forEach(item => {
@@ -43,19 +19,33 @@ document.addEventListener("DOMContentLoaded", () => {
         if (span) item.setAttribute("data-text", span.innerText.trim());
     });
 
-    // ---------- State ----------
-    const baseWeekStart = new Date(2026, 1, 2); // Feb 2, 2026 (Sunday) for sample Week 5 row
+    /* ── ELEMENT REFS ────────────────────────────────────── */
+    const searchInput       = document.getElementById("tableSearch");
+    const statCards         = Array.from(document.querySelectorAll(".stats-container .stat-card"));
+    const activeFiltersWrap = document.querySelector(".active-filters");
+    const actionButtons     = Array.from(document.querySelectorAll(".action-buttons .btn-action"));
+    const filterBtn         = actionButtons[0] || null;
+    const dateBtn           = actionButtons[1] || null;
+    const dateInput         = document.getElementById("sampleDateInput");
+
+    const pager      = document.querySelector(".action-buttons .pagination");
+    const pagerPrev  = pager ? pager.querySelector(".fa-chevron-left")  : null;
+    const pagerNext  = pager ? pager.querySelector(".fa-chevron-right") : null;
+    const pagerLabel = pager ? pager.querySelector("span")              : null;
+
+    const table     = document.querySelector(".attendance-table");
+    const tbody     = table ? table.querySelector("tbody") : null;
+    const tableRows = tbody ? Array.from(tbody.querySelectorAll("tr")) : [];
+
+    /* ── STATE ───────────────────────────────────────────── */
+    const baseWeekStart = new Date(2026, 1, 2); // Feb 2 2026 (Sunday) = Week 5
     let weekOffset = 0;
 
-    const filterState = {
-        dept: "All",
-        status: "All",
-        date: null
-    };
+    const filterState = { dept: "All", status: "All", date: null };
 
-    // ---------- Filter popover (created by JS) ----------
+    /* ── FILTER POPOVER ──────────────────────────────────── */
     const filterPopover = document.createElement("div");
-    filterPopover.className = "head-filter-popover";
+    filterPopover.className   = "head-filter-popover";
     filterPopover.style.display = "none";
     filterPopover.innerHTML = `
         <div class="head-filter-title">Filters</div>
@@ -82,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </select>
         </div>
         <div class="head-filter-actions">
-            <button type="button" class="head-filter-btn head-filter-btn-ghost" id="hfClear">Clear</button>
+            <button type="button" class="head-filter-btn head-filter-btn-ghost"   id="hfClear">Clear</button>
             <button type="button" class="head-filter-btn head-filter-btn-primary" id="hfApply">Apply</button>
         </div>
     `;
@@ -94,26 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function toggleFilterPopover(forceOpen) {
-        const open = typeof forceOpen === "boolean" ? forceOpen : filterPopover.style.display !== "block";
+        const open = typeof forceOpen === "boolean"
+            ? forceOpen
+            : filterPopover.style.display !== "block";
         filterPopover.style.display = open ? "block" : "none";
     }
 
-    // ---------- Date picker (Sample Date) ----------
-    // Uses a real hidden input in the Head HTML for better browser support.
-    const dateInput = document.getElementById("sampleDateInput");
-
-    function setDateButtonLabel() {
-        if (!dateBtn) return;
-        if (!filterState.date) {
-            dateBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Sample Date';
-            return;
-        }
-        const d = filterState.date;
-        const label = d.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
-        dateBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> ' + label;
-    }
-
-    // ---------- Helpers ----------
+    /* ── HELPERS ─────────────────────────────────────────── */
     function stripTime(d) {
         const x = new Date(d);
         x.setHours(0, 0, 0, 0);
@@ -126,18 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return d;
     }
 
-    function formatWeekRange(startDate) {
-        const end = new Date(startDate);
-        end.setDate(end.getDate() + 6);
-        const left  = startDate.toLocaleDateString("en-US", { month: "long", day: "numeric" });
-        const right = end.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-        return `${left} - ${right}`;
-    }
-
     function getSelectedColumnIndex(startDate) {
-        const basis = filterState.date || new Date();
-        const diffDays = Math.floor((stripTime(basis) - stripTime(startDate)) / (24 * 3600 * 1000));
-        // Table cols: 0 employee, 1 Sun, 2 Mon ... 7 Sat
+        const basis    = filterState.date || new Date();
+        const diffDays = Math.floor(
+            (stripTime(basis) - stripTime(startDate)) / (24 * 3600 * 1000)
+        );
+        // cols: 0 = Employee, 1 = Sun … 7 = Sat
         if (diffDays < 0 || diffDays > 6) return 2; // default Monday
         return 1 + diffDays;
     }
@@ -146,14 +117,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const pill = cell ? cell.querySelector(".pill") : null;
         if (!pill) return "None";
         const text = (pill.textContent || "").trim().toLowerCase();
-        if (pill.classList.contains("pill-red") || text.includes("absent")) return "Absent";
-        if (pill.classList.contains("pill-purple") || text.includes("leave")) return "Leave";
-        if (pill.classList.contains("pill-tan") || text.includes("late") || /\\d+h/.test(text)) return "Late";
-        if (text.includes("active")) return "Active";
+        if (pill.classList.contains("pill-red")    || text.includes("absent")) return "Absent";
+        if (pill.classList.contains("pill-purple") || text.includes("leave"))  return "Leave";
+        if (pill.classList.contains("pill-tan")    || /\d+h/.test(text))       return "Late";
+        if (text.includes("active"))                                            return "Active";
         return "Present";
     }
 
-    // ---------- Week pagination: update day numbers ----------
+    /* ── DATE BUTTON LABEL ───────────────────────────────── */
+    function setDateButtonLabel() {
+        if (!dateBtn) return;
+        if (!filterState.date) {
+            dateBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Sample Date';
+            return;
+        }
+        const label = filterState.date.toLocaleDateString("en-US", {
+            month: "short", day: "2-digit", year: "numeric"
+        });
+        dateBtn.innerHTML = `<i class="fas fa-calendar-alt"></i> ${label}`;
+    }
+
+    /* ── DAY NUMBERS + WEEK LABEL ────────────────────────── */
     function updateDayNumbers() {
         const start = getWeekStartDate();
         tableRows.forEach(row => {
@@ -171,52 +155,45 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ---------- Stats ----------
+    /* ── STATS ───────────────────────────────────────────── */
     function setStatValue(index, value) {
         const card = statCards[index];
-        const el = card ? card.querySelector(".value") : null;
+        const el   = card ? card.querySelector(".value") : null;
         if (el) el.textContent = String(value);
     }
 
     function updateStats() {
         if (statCards.length < 5) return;
-        const start = getWeekStartDate();
+        const start  = getWeekStartDate();
         const colIdx = getSelectedColumnIndex(start);
+        const visible = tableRows.filter(r => r.style.display !== "none");
 
-        const visibleRows = tableRows.filter(r => r.style.display !== "none");
-
-        let present = 0;
-        let absent = 0;
-        let leave = 0;
-        let late = 0;
-
-        visibleRows.forEach(row => {
-            const cells = Array.from(row.querySelectorAll("td"));
+        let present = 0, absent = 0, leave = 0, late = 0;
+        visible.forEach(row => {
+            const cells  = Array.from(row.querySelectorAll("td"));
             const status = getCellStatus(cells[colIdx]);
-            if (status === "Absent") absent++;
-            else if (status === "Leave") leave++;
-            else if (status === "Late") late++;
+            if      (status === "Absent")                       absent++;
+            else if (status === "Leave")                        leave++;
+            else if (status === "Late")                         late++;
             else if (status === "Present" || status === "Active") present++;
         });
 
-        setStatValue(0, visibleRows.length);
+        setStatValue(0, visible.length);
         setStatValue(1, present);
         setStatValue(2, absent);
         setStatValue(3, leave);
         setStatValue(4, late);
     }
 
-    // ---------- Filter tags ----------
+    /* ── FILTER TAGS ─────────────────────────────────────── */
     function createFilterTag(label, onRemove) {
         if (!activeFiltersWrap) return;
         const btn = document.createElement("button");
-        btn.type = "button";
+        btn.type      = "button";
         btn.className = "filter-tag";
         btn.innerHTML = `${label} <i class="fas fa-times"></i>`;
-        btn.querySelector(".fa-times")?.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onRemove();
+        btn.querySelector(".fa-times")?.addEventListener("click", e => {
+            e.preventDefault(); e.stopPropagation(); onRemove();
         });
         activeFiltersWrap.appendChild(btn);
     }
@@ -227,34 +204,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (filterState.dept !== "All") {
             createFilterTag(`Dept: ${filterState.dept}`, () => {
-                filterState.dept = "All";
-                applyFilters();
+                filterState.dept = "All"; applyFilters();
             });
         }
-
         if (filterState.status !== "All") {
             createFilterTag(`Status: ${filterState.status}`, () => {
-                filterState.status = "All";
-                applyFilters();
+                filterState.status = "All"; applyFilters();
             });
         }
-
         if (filterState.date) {
-            const label = filterState.date.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+            const label = filterState.date.toLocaleDateString("en-US", {
+                month: "short", day: "2-digit", year: "numeric"
+            });
             createFilterTag(`Date: ${label}`, () => {
                 filterState.date = null;
                 if (dateInput) dateInput.value = "";
-                setDateButtonLabel();
-                applyFilters();
+                setDateButtonLabel(); applyFilters();
             });
         }
     }
 
-    // ---------- Apply filters ----------
+    /* ── ROW FILTER LOGIC ────────────────────────────────── */
     function rowMatchesFilters(row) {
-        const dept = (row.querySelector(".dept-badge")?.textContent || "").trim();
-        const name = (row.querySelector(".name")?.textContent || "").trim();
-        const title = (row.querySelector(".title")?.textContent || "").trim();
+        const dept  = (row.querySelector(".dept-badge")?.textContent || "").trim();
+        const name  = (row.querySelector(".name")?.textContent       || "").trim();
+        const title = (row.querySelector(".title")?.textContent      || "").trim();
 
         const q = (searchInput?.value || "").trim().toLowerCase();
         if (q) {
@@ -265,9 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (filterState.dept !== "All" && dept !== filterState.dept) return false;
 
         if (filterState.status !== "All") {
-            const start = getWeekStartDate();
+            const start  = getWeekStartDate();
             const colIdx = getSelectedColumnIndex(start);
-            const cells = Array.from(row.querySelectorAll("td"));
+            const cells  = Array.from(row.querySelectorAll("td"));
             const status = getCellStatus(cells[colIdx]);
             if (status !== filterState.status) return false;
         }
@@ -283,27 +257,22 @@ document.addEventListener("DOMContentLoaded", () => {
         updateStats();
     }
 
-    // ---------- Wire: Search ----------
-    if (searchInput) {
-        searchInput.addEventListener("input", applyFilters);
-    }
+    /* ── WIRE: SEARCH ────────────────────────────────────── */
+    if (searchInput) searchInput.addEventListener("input", applyFilters);
 
-    // ---------- Wire: Filter popover ----------
+    /* ── WIRE: FILTER BUTTON ─────────────────────────────── */
     if (filterBtn) {
-        filterBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const deptSel = filterPopover.querySelector("#hfDept");
+        filterBtn.addEventListener("click", e => {
+            e.preventDefault(); e.stopPropagation();
+            const deptSel   = filterPopover.querySelector("#hfDept");
             const statusSel = filterPopover.querySelector("#hfStatus");
-            if (deptSel) deptSel.value = filterState.dept;
+            if (deptSel)   deptSel.value   = filterState.dept;
             if (statusSel) statusSel.value = filterState.status;
-
             toggleFilterPopover();
         });
     }
 
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", e => {
         if (filterPopover.style.display !== "block") return;
         if (filterPopover.contains(e.target)) return;
         if (filterBtn && filterBtn.contains(e.target)) return;
@@ -311,37 +280,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     filterPopover.querySelector("#hfApply")?.addEventListener("click", () => {
-        const deptSel = filterPopover.querySelector("#hfDept");
+        const deptSel   = filterPopover.querySelector("#hfDept");
         const statusSel = filterPopover.querySelector("#hfStatus");
-        filterState.dept = deptSel ? deptSel.value : "All";
+        filterState.dept   = deptSel   ? deptSel.value   : "All";
         filterState.status = statusSel ? statusSel.value : "All";
         toggleFilterPopover(false);
         applyFilters();
     });
 
     filterPopover.querySelector("#hfClear")?.addEventListener("click", () => {
-        filterState.dept = "All";
+        filterState.dept   = "All";
         filterState.status = "All";
-        filterState.date = null;
+        filterState.date   = null;
 
         if (searchInput) searchInput.value = "";
-        if (dateInput) dateInput.value = "";
+        if (dateInput)   dateInput.value   = "";
         setDateButtonLabel();
 
-        const deptSel = filterPopover.querySelector("#hfDept");
+        const deptSel   = filterPopover.querySelector("#hfDept");
         const statusSel = filterPopover.querySelector("#hfStatus");
-        if (deptSel) deptSel.value = "All";
+        if (deptSel)   deptSel.value   = "All";
         if (statusSel) statusSel.value = "All";
 
         toggleFilterPopover(false);
         applyFilters();
     });
 
-    // ---------- Wire: Date button ----------
+    /* ── WIRE: DATE BUTTON ───────────────────────────────── */
     if (dateBtn && dateInput) {
-        dateBtn.addEventListener("click", (e) => {
+        dateBtn.addEventListener("click", e => {
             e.preventDefault();
-            // keep input value in sync so picker opens at current selection
             if (filterState.date) {
                 const y = filterState.date.getFullYear();
                 const m = String(filterState.date.getMonth() + 1).padStart(2, "0");
@@ -351,7 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 dateInput.value = "";
             }
 
-            // Some browsers block programmatic click on hidden inputs; showPicker is best.
             if (typeof dateInput.showPicker === "function") {
                 dateInput.showPicker();
             } else {
@@ -368,8 +335,10 @@ document.addEventListener("DOMContentLoaded", () => {
             filterState.date = picked;
             setDateButtonLabel();
 
-            // Jump table pager to the week containing the picked date
-            const diffDays = Math.floor((stripTime(picked) - stripTime(baseWeekStart)) / (24 * 3600 * 1000));
+            // Jump the week pager to the week that contains the picked date
+            const diffDays = Math.floor(
+                (stripTime(picked) - stripTime(baseWeekStart)) / (24 * 3600 * 1000)
+            );
             weekOffset = Math.floor(diffDays / 7);
 
             updateDayNumbers();
@@ -377,10 +346,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ---------- Wire: Week pager ----------
+    /* ── WIRE: WEEK PAGER ────────────────────────────────── */
     if (pagerPrev) {
         pagerPrev.addEventListener("click", () => {
-            weekOffset -= 1;
+            weekOffset--;
             updateDayNumbers();
             applyFilters();
         });
@@ -388,15 +357,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (pagerNext) {
         pagerNext.addEventListener("click", () => {
-            weekOffset += 1;
+            weekOffset++;
             updateDayNumbers();
             applyFilters();
         });
     }
 
-    // ---------- Modal ----------
-    let modalMode = "weekly"; // weekly | monthly
+    /* ── MODAL ───────────────────────────────────────────── */
+    const modal      = document.getElementById("employeeModal");
+    const closeSpan  = document.querySelector(".close-modal");
+    const weeklyBtn  = document.getElementById("weeklyViewBtn");
+    const monthlyBtn = document.getElementById("monthlyViewBtn");
+    const modalPrev  = modal ? modal.querySelector(".date-pager .fa-chevron-left")  : null;
+    const modalNext  = modal ? modal.querySelector(".date-pager .fa-chevron-right") : null;
+
+    let modalMode   = "weekly";
     let modalOffset = 0;
+
+    function formatWeekRange(startDate) {
+        const end = new Date(startDate);
+        end.setDate(end.getDate() + 6);
+        const left  = startDate.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+        const right = end.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+        return `${left} - ${right}`;
+    }
 
     function renderModal() {
         const rangeText  = document.getElementById("dateRangeText");
@@ -411,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const start = getWeekStartDate();
             start.setDate(start.getDate() + modalOffset * 7);
 
-            if (rangeText) rangeText.textContent = formatWeekRange(start);
+            if (rangeText)  rangeText.textContent  = formatWeekRange(start);
             if (periodText) periodText.textContent = "Week";
             if (totalValue) totalValue.textContent = "42h 15m";
 
@@ -434,9 +418,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             const monthBase = new Date(2026, 1, 1);
             monthBase.setMonth(monthBase.getMonth() + modalOffset);
-
             const monthLabel = monthBase.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-            if (rangeText) rangeText.textContent = monthLabel;
+
+            if (rangeText)  rangeText.textContent  = monthLabel;
             if (periodText) periodText.textContent = "Month";
             if (totalValue) totalValue.textContent = "160h 00m";
 
@@ -460,7 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setModalView(type) {
-        modalMode = type;
+        modalMode   = type;
         modalOffset = 0;
         weeklyBtn?.classList.toggle("active", type === "weekly");
         monthlyBtn?.classList.toggle("active", type === "monthly");
@@ -469,8 +453,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openModalForRow(row) {
         if (!modal) return;
-        const name     = row.querySelector(".name")?.innerText || "Employee Name";
-        const position = row.querySelector(".title")?.innerText || "—";
+        const name     = row.querySelector(".name")?.innerText      || "Employee Name";
+        const position = row.querySelector(".title")?.innerText     || "—";
         const dept     = row.querySelector(".dept-badge")?.innerText || "—";
 
         document.getElementById("modalEmployeeName").innerText = name;
@@ -487,25 +471,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (closeSpan) closeSpan.addEventListener("click", () => (modal.style.display = "none"));
-    window.addEventListener("click", (event) => {
-        if (event.target === modal) modal.style.display = "none";
-    });
+    window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 
-    weeklyBtn?.addEventListener("click", (e) => { e.stopPropagation(); setModalView("weekly"); });
-    monthlyBtn?.addEventListener("click", (e) => { e.stopPropagation(); setModalView("monthly"); });
+    weeklyBtn?.addEventListener("click",  e => { e.stopPropagation(); setModalView("weekly"); });
+    monthlyBtn?.addEventListener("click", e => { e.stopPropagation(); setModalView("monthly"); });
+    modalPrev?.addEventListener("click",  e => { e.stopPropagation(); modalOffset--; renderModal(); });
+    modalNext?.addEventListener("click",  e => { e.stopPropagation(); modalOffset++; renderModal(); });
 
-    modalPrev?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        modalOffset -= 1;
-        renderModal();
-    });
-    modalNext?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        modalOffset += 1;
-        renderModal();
-    });
-
-    // ---------- Responsive sidebar ----------
+    /* ── RESPONSIVE SIDEBAR ──────────────────────────────── */
     const handleResize = () => {
         if (!sidebar) return;
         if (window.innerWidth <= 1100) sidebar.classList.add("collapsed");
@@ -513,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     window.addEventListener("resize", handleResize);
 
-    // ---------- Init ----------
+    /* ── INIT ────────────────────────────────────────────── */
     setDateButtonLabel();
     updateDayNumbers();
     applyFilters();

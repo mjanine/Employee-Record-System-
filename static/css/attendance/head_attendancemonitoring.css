@@ -4,6 +4,21 @@
    ============================================================ */
 
 /* --- 1. GLOBAL & RESET --- */
+:root {
+    --brand:               #4a1d1d;
+    --brand-deep:          #3a1515;
+    --brand-soft:          #f5eded;
+    --accent-green:        #1e5c3a;
+    --accent-green-bright: #2d8f56;
+    --surface:             #ffffff;
+    --text:                #1a1a1a;
+    --text-muted:          #5c5c5c;
+    --border:              #e8e6e3;
+    --radius-lg:           22px;
+    --radius-md:           14px;
+    --shadow-soft:         0 4px 24px rgba(45, 24, 24, 0.08);
+    --shadow-card:         0 12px 40px rgba(0, 0, 0, 0.12);
+}
 * {
     margin: 0;
     padding: 0;
@@ -216,14 +231,53 @@ hr {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 14px;
 }
 
 .dashboard-header h1 {
     color: #1a1a1a;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 700;
 }
 
+.view-toggle-header {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid #d0c8c8;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(74, 29, 29, 0.08);
+    width: fit-content;
+}
+
+.toggle-btn {
+    padding: 10px 26px;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+
+.toggle-btn:first-child { border-right: 1.5px solid #d0c8c8; }
+.toggle-btn.active      { background: var(--brand); color: #fff; text-decoration: none; }
+.toggle-btn.active:hover { opacity: 0.9; color: #fff; }
+.toggle-btn:not(.active):hover{text-decoration: none; color: var(--brand); background: #f9f9f9;}  
+
+.toggle-btn:hover {
+    text-decoration: none;
+    color: var(--brand);
+}
 .search-pill {
     background: white;
     padding: 10px 20px;
@@ -556,26 +610,40 @@ hr {
 .modal-header-row h2 { font-size: 20px; color: #1a1a1a; }
 
 /* View toggles */
-.view-toggles {
-    background: #eee;
-    padding: 4px;
-    border-radius: 10px;
-    display: inline-flex;
+
+.view-toggle-header {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid #d0c8c8;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(74, 29, 29, 0.08);
 }
 
-.view-btn {
+.toggle-btn {
+    padding: 10px 26px;
     border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: 0.3s;
     background: transparent;
-    color: #333;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.view-btn.active { background: #7f1d1d; color: white; }
+
+.toggle-btn:first-child { border-right: 1.5px solid #d0c8c8; }
+.toggle-btn.active      { background: var(--brand); color: #fff; text-decoration: none; }
+
+.toggle-btn:hover {
+    text-decoration: none;
+    color: var(--brand);
+}
 
 /* Date pager */
 .date-pager {

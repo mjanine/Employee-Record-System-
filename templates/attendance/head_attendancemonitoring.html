@@ -29,7 +29,7 @@
             <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
-         <ul class="menu">
+       <ul class="menu">
             <li>
                 <a href="head_dash.html" class="menu-item active">
                     <i class="fas fa-border-all"></i>
@@ -92,11 +92,16 @@
         <div class="white-container">
 
             <header class="dashboard-header">
-                <h1>Attendance Monitoring</h1>
-                <div class="search-pill">
+                <h1>Attendance </h1>
+                  <div class="search-pill">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search by Name / ID / Department / Position">
+                    <input type="text" id="tableSearch" placeholder="Search by Name / ID / Department / Position">
                 </div>
+
+               <div class="view-toggle-header">
+                <a href="../attendance/head_attendance.html" class="toggle-btn " id="tab-log">Attendance Log</a>
+                <a href="../attendance/head_attendancemonitoring.html" class="toggle-btn active" id="tab-monitoring">Attendance Monitoring</a>
+            </div>
             </header>
 
             <section class="stats-container">
