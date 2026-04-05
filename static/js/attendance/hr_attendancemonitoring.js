@@ -1,143 +1,343 @@
 /**
- * hr_attendance.js
- * Logic for the Attendance Monitoring Portal
+ * emp_attendance.js
+ * Place at: static/js/attendance/emp_attendance.js
+ * ============================================================
  */
 
-document.addEventListener("DOMContentLoaded", () => {
-    /* ── 1. ELEMENT SELECTORS ── */
-    
-    // Sidebar
-    const sidebar = document.getElementById("sidebar");
-    const logoToggle = document.getElementById("logoToggle");
-    const closeBtn = document.getElementById("closeBtn");
-    const menuItems = document.querySelectorAll(".menu-item");
+/* ── 1. ELEMENT SELECTORS ────────────────────────────────── */
 
-    // Search and Filtering
-    const searchInput = document.querySelector(".search-pill input");
-    const tableRows = document.querySelectorAll(".attendance-table tbody tr");
+// Sidebar
+const sidebar    = document.getElementById("sidebar");
+const logoToggle = document.getElementById("logoToggle");
+const closeBtn   = document.getElementById("closeBtn");
+const menuItems  = document.querySelectorAll(".menu-item");
 
-    // Modal Elements
-    const employeeModal = document.getElementById("employeeModal");
-    const closeModal = document.querySelector(".close-modal");
-    const modalTableBody = document.getElementById("modalTableBody");
-    const weeklyViewBtn = document.getElementById("weeklyViewBtn");
-    const monthlyViewBtn = document.getElementById("monthlyViewBtn");
+// Tab Switcher (Attendance Log vs Monitoring)
+const tabLog     = document.getElementById('tab-log');
+const tabMonit   = document.getElementById('tab-monitoring');
+// Content Areas
+const logContent   = document.getElementById('logContent'); 
+const monitContent = document.getElementById('monitoringContent');
 
-    /* ── 2. SIDEBAR LOGIC ── */
-    
-    // Collapse/Expand Sidebar
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => sidebar.classList.add("collapsed"));
-    }
+// Attendance clock
+const clockBtn           = document.getElementById("clockBtn");
+const workingTimeDisplay = document.getElementById("workingTime");
+const timeInDisplay      = document.getElementById("timeInDisplay");
 
-    if (logoToggle) {
-        logoToggle.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
-    }
+// History modal
+const historyModal     = document.getElementById("historyModal");
+const openHistoryBtn   = document.getElementById("openHistory");
+const closeHistoryBtn  = document.getElementById("closeHistory");
+const weeklyViewBtn    = document.getElementById("weeklyViewBtn");
+const monthlyViewBtn   = document.getElementById("monthlyViewBtn");
+const historyDateRange = document.getElementById("historyDateRange");
+const weeklyTable      = document.getElementById("weeklyTable");
+const weeklyTableBody  = document.getElementById("weeklyTableBody");
+const monthlyGrid      = document.getElementById("monthlyGrid");
+const totalHoursCount  = document.getElementById("totalHoursCount");
+const prevPeriodBtn    = document.getElementById("prevPeriod");
+const nextPeriodBtn    = document.getElementById("nextPeriod");
 
-    // Set active state for menu items
-    menuItems.forEach(item => {
-        const span = item.querySelector("span");
-        if (span) item.setAttribute("data-text", span.innerText);
+const clockOutOverlay      = document.getElementById("clockOutOverlay");
+const clockOutConfirmStep  = document.getElementById("clockOutConfirmStep");
+const clockOutSuccessStep  = document.getElementById("clockOutSuccessStep");
+const clockOutCancelBtn    = document.getElementById("clockOutCancel");
+const clockOutConfirmBtn   = document.getElementById("clockOutConfirmBtn");
+const clockOutDismissBtn   = document.getElementById("clockOutDismiss");
+const clockOutDurationText = document.getElementById("clockOutDurationText");
 
-        item.addEventListener("click", function() {
-            menuItems.forEach(i => i.classList.remove("active"));
-            this.classList.add("active");
-        });
+
+/* ── 2. SIDEBAR NAVIGATION ───────────────────────────────── */
+
+if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+        sidebar.classList.add("collapsed");
     });
+}
 
-    /* ── 3. SEARCH / FILTER LOGIC ── */
-
-    if (searchInput) {
-        searchInput.addEventListener("input", (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-
-            tableRows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? "" : "none";
-            });
-        });
-    }
-
-    /* ── 4. MODAL & DATA RENDERING ── */
-
-    // Sample Data for Modal
-    const attendanceData = [
-        { date: "Feb 10, 2026", day: "Monday", in: "08:03 AM", out: "05:02 PM", hours: "8h 59m", status: "present" },
-        { date: "Feb 09, 2026", day: "Sunday", in: "--", out: "--", hours: "--", status: "holiday" },
-        { date: "Feb 08, 2026", day: "Saturday", in: "--", out: "--", hours: "--", status: "leave" },
-        { date: "Feb 07, 2026", day: "Friday", in: "08:45 AM", out: "05:00 PM", hours: "8h 15m", status: "late" },
-        { date: "Feb 06, 2026", day: "Thursday", in: "08:00 AM", out: "05:00 PM", hours: "9h 00m", status: "present" }
-    ];
-
-    function populateModalTable(data) {
-        modalTableBody.innerHTML = "";
-        data.forEach(item => {
-            const row = `
-                <tr>
-                    <td>${item.date}</td>
-                    <td>${item.day}</td>
-                    <td>${item.in}</td>
-                    <td>${item.out}</td>
-                    <td>${item.hours}</td>
-                    <td><span class="status-badge ${item.status}">${item.status.toUpperCase()}</span></td>
-                </tr>
-            `;
-            modalTableBody.insertAdjacentHTML("beforeend", row);
-        });
-    }
-
-    // Open Modal when clicking an employee name or row
-    tableRows.forEach(row => {
-        row.addEventListener("click", () => {
-            const empName = row.querySelector(".name").innerText;
-            document.getElementById("modalEmployeeName").innerText = empName;
-            populateModalTable(attendanceData);
-            employeeModal.style.display = "block";
-        });
+if (logoToggle) {
+    logoToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
     });
+}
 
-    // Close Modal
-    if (closeModal) {
-        closeModal.addEventListener("click", () => {
-            employeeModal.style.display = "none";
-        });
-    }
+menuItems.forEach(item => {
+    const spanEl = item.querySelector("span");
+    if (spanEl) item.setAttribute("data-text", spanEl.innerText);
 
-    // Close Modal on outside click
-    window.addEventListener("click", (e) => {
-        if (e.target === employeeModal) {
-            employeeModal.style.display = "none";
-        }
+    item.addEventListener("click", () => {
+        document.querySelector(".menu-item.active")?.classList.remove("active");
+        item.classList.add("active");
     });
+});
 
-    /* ── 5. MODAL VIEW TOGGLES ── */
 
-    if (weeklyViewBtn && monthlyViewBtn) {
-        weeklyViewBtn.addEventListener("click", () => {
-            weeklyViewBtn.classList.add("active");
-            monthlyViewBtn.classList.remove("active");
-            document.getElementById("periodText").innerText = "Week";
-            // Logic to switch to weekly data goes here
-        });
+/* ── 3. REAL-TIME ATTENDANCE CLOCK ───────────────────────── */
 
-        monthlyViewBtn.addEventListener("click", () => {
-            monthlyViewBtn.classList.add("active");
-            weeklyViewBtn.classList.remove("active");
-            document.getElementById("periodText").innerText = "Month";
-            // Logic to switch to monthly data goes here
-        });
-    }
+let timerInterval = null;
+let totalSeconds  = 0;
+let isClockedIn   = false;
 
-    /* ── 6. HEADER CLOCK (Optional) ── */
-    function updateHeaderClock() {
-        const dateNow = document.getElementById("dateNow");
-        if (dateNow) {
+function formatDuration(seconds) {
+    const hrs  = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    return `${hrs}h ${mins.toString().padStart(2, "0")}m`;
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        totalSeconds++;
+        workingTimeDisplay.innerText = `Working for: ${formatDuration(totalSeconds)}`;
+    }, 1000);
+}
+
+function showClockOutOverlay() {
+    clockOutConfirmStep.classList.remove("clock-out-step--hidden");
+    clockOutSuccessStep.classList.add("clock-out-step--hidden");
+    clockOutSuccessStep.setAttribute("hidden", "");
+    clockOutOverlay.classList.add("clock-out-overlay--visible");
+    clockOutOverlay.setAttribute("aria-hidden", "false");
+    clockOutConfirmBtn.focus();
+}
+
+function hideClockOutOverlay() {
+    clockOutOverlay.classList.remove("clock-out-overlay--visible");
+    clockOutOverlay.setAttribute("aria-hidden", "true");
+    clockOutConfirmStep.classList.remove("clock-out-step--hidden");
+    clockOutSuccessStep.classList.add("clock-out-step--hidden");
+    clockOutSuccessStep.setAttribute("hidden", "");
+}
+
+function showClockOutSuccess(durationLabel) {
+    clockOutDurationText.innerText = `Total time: ${durationLabel}`;
+    clockOutConfirmStep.classList.add("clock-out-step--hidden");
+    clockOutSuccessStep.classList.remove("clock-out-step--hidden");
+    clockOutSuccessStep.removeAttribute("hidden");
+    clockOutDismissBtn.focus();
+}
+
+function completeClockOut() {
+    const durationLabel = formatDuration(totalSeconds);
+    isClockedIn = false;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    totalSeconds = 0;
+    clockBtn.innerText = "Clock in";
+    clockBtn.classList.remove("is-clocked-in");
+    workingTimeDisplay.innerText = "Working for: 0h 00m";
+    timeInDisplay.innerText = "Time In: --";
+    showClockOutSuccess(durationLabel);
+}
+
+if (clockBtn) {
+    clockBtn.addEventListener("click", () => {
+        if (!isClockedIn) {
+            isClockedIn = true;
+            clockBtn.innerText = "Clock out";
+            clockBtn.classList.add("is-clocked-in");
             const now = new Date();
-            const options = { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            dateNow.innerText = now.toLocaleDateString('en-US', options).replace(',', ' |');
+            timeInDisplay.innerText = `Time In: ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+            startTimer();
+        } else {
+            showClockOutOverlay();
         }
+    });
+}
+
+if (clockOutCancelBtn) clockOutCancelBtn.addEventListener("click", hideClockOutOverlay);
+if (clockOutConfirmBtn) clockOutConfirmBtn.addEventListener("click", () => { completeClockOut(); });
+if (clockOutDismissBtn) clockOutDismissBtn.addEventListener("click", hideClockOutOverlay);
+
+if (clockOutOverlay) {
+    clockOutOverlay.addEventListener("click", (e) => {
+        if (e.target === clockOutOverlay) hideClockOutOverlay();
+    });
+}
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && clockOutOverlay?.classList.contains("clock-out-overlay--visible")) {
+        hideClockOutOverlay();
     }
+});
+
+
+/* ── 4. HEADER DATE/TIME UPDATER ─────────────────────────── */
+
+function updateHeader() {
+    const dateElement = document.querySelector(".date-now");
+    if (dateElement) {
+        const now     = new Date();
+        const dateStr = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+        const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        dateElement.innerText = `${dateStr} | ${timeStr}`;
+    }
+}
+setInterval(updateHeader, 60000);
+updateHeader();
+
+
+/* ── 5. HISTORY MODAL – DATA ─────────────────────────────── */
+
+const weeklyData = {
+    0: {
+        label: "February 4 – 10, 2026",
+        rows: [
+            { date: "February 4, 2026",  day: "Tuesday",   timeIn: "8:03 AM", timeOut: "5:02 PM", hours: "8h 59m", status: "present" },
+            { date: "February 5, 2026",  day: "Wednesday", timeIn: "8:15 AM", timeOut: "5:10 PM", hours: "8h 55m", status: "present" },
+            { date: "February 6, 2026",  day: "Thursday",  timeIn: "8:00 AM", timeOut: "5:00 PM", hours: "9h 00m", status: "present" },
+            { date: "February 7, 2026",  day: "Friday",    timeIn: "8:45 AM", timeOut: "5:00 PM", hours: "8h 15m", status: "late"    },
+            { date: "February 8, 2026",  day: "Saturday",  timeIn: "--",      timeOut: "--",       hours: "--",     status: "leave"   },
+            { date: "February 9, 2026",  day: "Sunday",    timeIn: "--",      timeOut: "--",       hours: "--",     status: "holiday" },
+            { date: "February 10, 2026", day: "Monday",    timeIn: "8:03 AM", timeOut: "5:02 PM", hours: "8h 59m", status: "present" },
+        ],
+        total: "42h 15m"
+    }
+};
+
+const monthlyData = {
+    0: {
+        label: "February 2026",
+        firstDayOfWeek: 0,
+        daysInMonth: 28,
+        attendance: {
+            3:  { status: "present", hours: "8h 59m" },
+            4:  { status: "present", hours: "8h 55m" },
+        },
+        total: "152h 30m"
+    }
+};
+
+let currentView = "weekly";
+let weekOffset  = 0;
+let monthOffset = 0;
+
+
+/* ── 6. HISTORY MODAL – RENDER WEEKLY ───────────────────── */
+
+function renderWeekly() {
+    const data = weeklyData[weekOffset] ?? weeklyData[0];
+    if (historyDateRange) historyDateRange.textContent = data.label;
+    if (totalHoursCount) totalHoursCount.textContent  = data.total;
+    const rows = data.rows.map(r => `
+        <tr>
+            <td>${r.date}</td>
+            <td>${r.day}</td>
+            <td>${r.timeIn}</td>
+            <td>${r.timeOut}</td>
+            <td>${r.hours}</td>
+            <td><span class="status-badge ${r.status}">${capitalize(r.status)}</span></td>
+        </tr>
+    `).join("");
+    if (weeklyTableBody) {
+        weeklyTableBody.innerHTML = rows + `<tr class="total-row"><td colspan="4">Total</td><td colspan="2">${data.total}</td></tr>`;
+    }
+}
+
+
+/* ── 7. HISTORY MODAL – RENDER MONTHLY ──────────────────── */
+
+function renderMonthly() {
+    const data = monthlyData[monthOffset] ?? monthlyData[0];
+    if (historyDateRange) historyDateRange.textContent = data.label;
+    if (totalHoursCount) totalHoursCount.textContent  = data.total;
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    let html = dayNames.map(d => `<div class="month-day-header">${d}</div>`).join("");
+    for (let i = 0; i < data.firstDayOfWeek; i++) html += `<div class="month-day-cell empty"></div>`;
+    for (let d = 1; d <= data.daysInMonth; d++) {
+        const att = data.attendance[d];
+        html += `<div class="month-day-cell"><span class="day-num">${d}</span>${att ? `<span class="day-status ${att.status}">${capitalize(att.status)}</span>` : ""}</div>`;
+    }
+    if (monthlyGrid) monthlyGrid.innerHTML = html;
+}
+
+
+/* ── 8. HISTORY MODAL – VIEW SWITCHER ───────────────────── */
+
+function switchView(view) {
+    currentView = view;
+    if (view === "weekly") {
+        weeklyViewBtn?.classList.add("active");
+        monthlyViewBtn?.classList.remove("active");
+        if (weeklyTable) weeklyTable.style.display = "table";
+        monthlyGrid?.classList.remove("active");
+        renderWeekly();
+    } else {
+        monthlyViewBtn?.classList.add("active");
+        weeklyViewBtn?.classList.remove("active");
+        if (weeklyTable) weeklyTable.style.display = "none";
+        monthlyGrid?.classList.add("active");
+        renderMonthly();
+    }
+}
+
+if (weeklyViewBtn) weeklyViewBtn.addEventListener("click",  () => switchView("weekly"));
+if (monthlyViewBtn) monthlyViewBtn.addEventListener("click", () => switchView("monthly"));
+
+
+/* ── 9. HISTORY MODAL – NAVIGATION ──────────────────────── */
+
+if (prevPeriodBtn) {
+    prevPeriodBtn.addEventListener("click", () => {
+        if (currentView === "weekly") { weekOffset++; renderWeekly(); } 
+        else { monthOffset++; renderMonthly(); }
+    });
+}
+
+if (nextPeriodBtn) {
+    nextPeriodBtn.addEventListener("click", () => {
+        if (currentView === "weekly") { weekOffset--; renderWeekly(); } 
+        else { monthOffset--; renderMonthly(); }
+    });
+}
+
+
+/* ── 10. HISTORY MODAL – OPEN / CLOSE ───────────────────── */
+
+if (openHistoryBtn) openHistoryBtn.addEventListener("click", () => historyModal.classList.add("open"));
+if (closeHistoryBtn) closeHistoryBtn.addEventListener("click", () => historyModal.classList.remove("open"));
+if (historyModal) {
+    historyModal.addEventListener("click", (e) => { 
+        if (e.target === historyModal) historyModal.classList.remove("open"); 
+    });
+}
+
+
+/* ── 11. HELPERS & INIT ──────────────────────────────────── */
+
+function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+// Initialize
+switchView("weekly");
+
+
+/* ── 12. TAB SWITCHER IMPLEMENTATION ─────────────────────── */
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Note: tabLog and tabMonit are already declared at the top of the file
     
-    setInterval(updateHeaderClock, 60000);
-    updateHeaderClock();
+    if (tabLog && tabMonit) {
+        // Tab — Attendance Log
+        tabLog.addEventListener('click', function () {
+            tabLog.classList.add('active');
+            tabMonit.classList.remove('active');
+            
+            // Logic to show Log content and hide Monitoring
+            if (logContent) logContent.style.display = 'block';
+            if (monitContent) monitContent.style.display = 'none';
+            
+            console.log("Switching to Attendance Log");
+        });
+
+        // Tab — Attendance Monitoring
+        tabMonit.addEventListener('click', function () {
+            tabMonit.classList.add('active');
+            tabLog.classList.remove('active');
+            
+            // Logic to show Monitoring content and hide Log
+            if (monitContent) monitContent.style.display = 'block';
+            if (logContent) logContent.style.display = 'none';
+            
+            console.log("Switching to Attendance Monitoring");
+        });
+    }
 });

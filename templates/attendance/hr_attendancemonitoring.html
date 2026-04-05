@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Monitoring | HR System</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <title>Attendance Monitoring | Head System</title>
+     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../static/css/attendance/hr_attendance.css">
+    <!--
+        Place hr_attendance.css in:
+        static/css/attendance/hr_attendance.css
+        Then update this path accordingly:
+    -->
+    <link rel="stylesheet" href="../../static/css/attendance/hr_attendancemonitoring.css">
 </head>
 <body>
 
@@ -15,24 +21,64 @@
     <nav class="sidebar" id="sidebar">
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
+                <img src="../../static/img/general/uph.png" class="logo" alt="UPHSD Logo"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-fallback">UPH</div>
                 <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
             </div>
             <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
         </div>
 
-        <ul class="menu">
-            <li><a href="../dashboards/hr_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
-            <li><a href="../accounts/hr_profile_view.html" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
+         <ul class="menu">
+            <li>
+                <a href="head_dash.html" class="menu-item active">
+                    <i class="fas fa-border-all"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="head_profile_view.html" class="menu-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
             <hr>
-            <li><a href="../application_management/hr_appmanagement.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
-            <li><a href="hr_attendance_log.html" class="menu-item active"><i class="fas fa-calendar-alt"></i><span>Attendance</span></a></li>
-            <li><a href="../leave/hr_leaveselect.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-folder-open"></i><span>Document Management</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
+            <li>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-file"></i>
+                    <span>Application Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="head_employeelist.html" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span>Employee Records</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>Attendance Monitoring</span>
+                </a>
+            </li>
+            <li>
+                <a href="head_leaveselect.html" class="menu-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Leave Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-star"></i>
+                    <span>Performance Evaluation</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Trainings</span>
+                </a>
+            </li>
         </ul>
 
         <div class="bottom-section">
@@ -46,50 +92,49 @@
         <div class="white-container">
 
             <header class="dashboard-header">
-                <h1>Attendance</h1>
-                <div class="view-toggle-header">
-                    <a href="hr_attendance_log.html" class="toggle-btn">Attendance Log</a>
-                    <a href="hr_attendance_monitoring.html" class="toggle-btn active">Attendance Monitoring</a>
-                </div>
-            </header>
-
-            <div class="search-row" style="margin-bottom: 25px;">
-                <div class="search-pill">
+                <h1>Attendance </h1>
+                  <div class="search-pill">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search by Name / ID / Department / Position">
                 </div>
+
+               <div class="view-toggle-header">
+                <a href="../attendance/hr_attendance.html" class="toggle-btn " id="tab-log">Attendance Log</a>
+                <a href="../attendance/hr_attendancemonitoring.html" class="toggle-btn active" id="tab-monitoring">Attendance Monitoring</a>
             </div>
+            </header>
 
             <section class="stats-container">
                 <div class="stat-card">
                     <span class="label">Total Employees</span>
-                    <span class="value">124</span>
+                    <span class="value">-</span>
                 </div>
                 <div class="stat-card">
                     <span class="label">Present Today</span>
-                    <span class="value">110</span>
+                    <span class="value">-</span>
                 </div>
                 <div class="stat-card">
                     <span class="label">Absent Today</span>
-                    <span class="value">8</span>
+                    <span class="value">-</span>
                 </div>
                 <div class="stat-card">
                     <span class="label">On Leave</span>
-                    <span class="value">6</span>
+                    <span class="value">-</span>
                 </div>
                 <div class="stat-card">
                     <span class="label">Late Arrivals</span>
-                    <span class="value">12</span>
+                    <span class="value">-</span>
                 </div>
             </section>
 
             <section class="controls-row">
                 <div class="active-filters">
-                    <button class="filter-tag">College of Computer Studies <i class="fas fa-times"></i></button>
+                    <button class="filter-tag">Sample Filter <i class="fas fa-times"></i></button>
                 </div>
                 <div class="action-buttons">
                     <button class="btn-action"><i class="fas fa-filter"></i> Filter</button>
-                    <button class="btn-action"><i class="fas fa-calendar-alt"></i> Feb 4 - 10, 2026</button>
+                    <button class="btn-action"><i class="fas fa-calendar-alt"></i> Sample Date</button>
+                    <input id="sampleDateInput" type="date" class="head-hidden-date" aria-hidden="true" tabindex="-1">
                     <div class="pagination">
                         <i class="fas fa-chevron-left"></i>
                         <span>Week 5</span>
@@ -102,7 +147,7 @@
                 <table class="attendance-table">
                     <thead>
                         <tr>
-                            <th style="width: 250px;">Employee</th>
+                            <th style="width: 200px;">Employee</th>
                             <th>Sunday</th>
                             <th>Monday</th>
                             <th>Tuesday</th>
@@ -151,19 +196,40 @@
                             <td><span class="day-num">7</span><div class="pill pill-green">Active</div></td>
                             <td><span class="day-num">8</span></td>
                         </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="avatar"><i class="fas fa-user-graduate"></i></div>
+                                    <div class="user-info">
+                                        <span class="name">Yang Jungwon</span>
+                                        <span class="title">Assistant Professor</span>
+                                        <span class="dept-badge">CBA</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="day-num">2</span></td>
+                            <td><span class="day-num">3</span><div class="pill pill-tan"><i class="far fa-clock"></i> 6h 15m</div></td>
+                            <td><span class="day-num">4</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">5</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">6</span><div class="pill pill-green"><i class="far fa-check-circle"></i> 8 hours</div></td>
+                            <td><span class="day-num">7</span><div class="pill pill-green">Active</div></td>
+                            <td><span class="day-num">8</span></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+
         </div>
     </main>
 
+    <!-- MODAL -->
     <div id="employeeModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <div class="modal-body">
                 <div class="modal-main">
                     <div class="modal-header-row">
-                        <h2 id="modalEmployeeName">Employee Details</h2>
+                        <h2 id="modalEmployeeName">Employee Name</h2>
                         <div class="view-toggles">
                             <button class="view-btn active" id="weeklyViewBtn">Weekly View</button>
                             <button class="view-btn" id="monthlyViewBtn">Monthly View</button>
@@ -186,16 +252,15 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="modalTableBody">
-                                </tbody>
+                            <tbody id="modalTableBody"></tbody>
                         </table>
                     </div>
                     <div class="total-hours-footer">
-                        Total Hours This <span id="periodText">Week</span>: <span id="totalHoursValue">42h 15m</span>
+                        Total Hours This <span id="periodText">Week</span>: <span id="totalHoursValue">XX</span>
                     </div>
                 </div>
                 <div class="modal-sidebar">
-                    <h3>Profile Summary</h3>
+                    <h3>Employee Details</h3>
                     <div class="detail-avatar"><i class="fas fa-user"></i></div>
                     <div class="info-group">
                         <label>Employee ID</label>
@@ -218,6 +283,6 @@
         </div>
     </div>
 
-    <script src="../../static/js/attendance/hr_attendance.js"></script>
+    <script src="../../static/js/attendance/hr_attendancemonitoring.js"></script>
 </body>
 </html>
