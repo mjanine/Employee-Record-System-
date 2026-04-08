@@ -200,17 +200,21 @@ hr { border: 0.5px solid rgba(255, 255, 255, 0.2); margin: 10px 0; }
 /* ── 5. DASHBOARD HEADER & TOP TOGGLE ────────────────────── */
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* This pushes H1 left, Tabs right */
     align-items: center;
     margin-bottom: 25px;
-    flex-wrap: wrap;
-    gap: 14px;
+    width: 100%;             /* Ensures it spans the full container */
+    flex-wrap: nowrap;       /* Prevents tabs from dropping below H1 on medium screens */
+    gap: 20px;
 }
 
 .dashboard-header h1 {
     color: #1a1a1a;
     font-size: 28px;
     font-weight: 700;
+    margin: 0;               /* Removes default margins */
+    flex-grow: 1;            /* Allows the H1 to take up available space */
+    text-align: left;        /* Forces text alignment to the left */
 }
 
 .view-toggle-header {
@@ -221,6 +225,7 @@ hr { border: 0.5px solid rgba(255, 255, 255, 0.2); margin: 10px 0; }
     background: #fff;
     box-shadow: 0 2px 8px rgba(74, 29, 29, 0.08);
     width: fit-content;
+    flex-shrink: 0;          /* Prevents the tabs from squishing */
 }
 
 .toggle-btn {
@@ -238,7 +243,6 @@ hr { border: 0.5px solid rgba(255, 255, 255, 0.2); margin: 10px 0; }
     align-items: center;
     justify-content: center;
     outline: none;
-    
 }
 
 
