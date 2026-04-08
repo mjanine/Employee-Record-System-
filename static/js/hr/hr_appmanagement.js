@@ -6,78 +6,177 @@
 const hrName = 'HR Manager';
 const HR_STAGE = 'pending-hr';
 let activeAppId = null;
+let activeAppFilter = '';
+let activeAppFilterLabel = '';
+let activeDocPage = 1;
+let activeMainTab = 'new';
 
 // ── Sample Data ───────────────────────────────────────────────────────
 let appData = [
     {
         id: '001',
         name: 'Dela Cruz, Juan',
+        email: 'juan.delacruz@example.com',
+        phoneNumber: '+63 912 345 6780',
         dept: 'CCS',
+        applyingTo: 'CCS',
         position: 'Instructor',
+        applyingFor: 'Instructor',
         submitted: '02/12/2026',
         progress: 'Stage 2 of 4',
         status: 'pending-hr',
         statusLabel: 'Pending - HR Evaluator',
         reviewedBy: '---',
+        headReviewedBy: 'Department Head',
+        headReviewedAt: '03/10/2026',
+        finalReviewedBy: '---',
+        finalReviewedAt: '---',
+        pendingWith: 'HR Evaluator',
         remarks: 'Awaiting HR evaluation.',
+        headRemarks: 'Recommended for HR review.',
         fileName: 'Application_001.pdf'
     },
     {
         id: '002',
         name: 'Santos, Maria',
+        email: 'maria.santos@example.com',
+        phoneNumber: '+63 917 222 1144',
         dept: 'CBA',
+        applyingTo: 'CBA',
         position: 'Professor',
+        applyingFor: 'Professor',
         submitted: '02/15/2026',
         progress: 'Stage 1 of 4',
         status: 'pending-head',
         statusLabel: 'Pending - Dept. Head',
         reviewedBy: '---',
+        headReviewedBy: '---',
+        headReviewedAt: '---',
+        finalReviewedBy: '---',
+        finalReviewedAt: '---',
+        pendingWith: 'Department Head',
         remarks: 'Awaiting department head review.',
+        headRemarks: 'Complete requirements attached.',
         fileName: 'Application_002.pdf'
     },
     {
         id: '003',
         name: 'Reyes, Ricardo',
+        email: 'ricardo.reyes@example.com',
+        phoneNumber: '+63 918 303 9901',
         dept: 'COE',
+        applyingTo: 'COE',
         position: 'Registrar',
+        applyingFor: 'Registrar',
         submitted: '02/10/2026',
         progress: 'Completed',
         status: 'approved',
         statusLabel: 'Approved',
         reviewedBy: 'HR Manager',
+        headReviewedBy: 'Department Head',
+        headReviewedAt: '02/11/2026',
+        finalReviewedBy: 'HR Manager',
+        finalReviewedAt: '02/12/2026',
+        pendingWith: 'Completed',
         remarks: 'Approved on ' + new Date().toLocaleDateString() + '.',
+        headRemarks: 'Endorsed by department head.',
         fileName: 'Application_003.pdf'
     },
     {
         id: '004',
         name: 'Gomez, Patricia',
+        email: 'patricia.gomez@example.com',
+        phoneNumber: '+63 919 445 8802',
         dept: 'CAS',
+        applyingTo: 'CAS',
         position: 'Assistant Professor',
+        applyingFor: 'Assistant Professor',
         submitted: '03/01/2026',
         progress: 'Stage 3 of 4',
         status: 'pending-hr',
         statusLabel: 'Pending - HR Evaluator',
         reviewedBy: '---',
+        headReviewedBy: 'Department Head',
+        headReviewedAt: '03/02/2026',
+        finalReviewedBy: '---',
+        finalReviewedAt: '---',
+        pendingWith: 'HR Evaluator',
         remarks: 'Documents under review by HR.',
+        headRemarks: 'Cleared by department head.',
         fileName: 'Application_004.pdf'
     },
     {
         id: '005',
         name: 'Torres, Miguel',
+        email: 'miguel.torres@example.com',
+        phoneNumber: '+63 920 556 2210',
         dept: 'CON',
+        applyingTo: 'CON',
         position: 'Clinical Instructor',
+        applyingFor: 'Clinical Instructor',
         submitted: '03/05/2026',
         progress: 'Completed',
         status: 'rejected',
         statusLabel: 'Rejected',
         reviewedBy: 'HR Manager',
+        headReviewedBy: 'Department Head',
+        headReviewedAt: '03/06/2026',
+        finalReviewedBy: 'HR Manager',
+        finalReviewedAt: '03/08/2026',
+        pendingWith: 'Completed',
         remarks: 'Incomplete submission requirements.',
+        headRemarks: 'For resubmission after missing documents are completed.',
         fileName: 'Application_005.pdf'
     }
 ];
 
 // ── Position Change Request Data ──────────────────────────────────────
-let positionChangeData = [];
+let positionChangeData = [
+    {
+        id: 'PCR-001',
+        name: 'Dela Cruz, Juan',
+        empId: 'EMP-001',
+        dept: 'CCS',
+        position: 'Instructor',
+        requestedPos: 'Senior Instructor',
+        reason: 'Completed leadership training and recommended for higher teaching load.',
+        submitted: '03/12/2026',
+        progress: 'Stage 1 of 3',
+        status: 'pending-head',
+        statusLabel: 'Pending - Dept. Head',
+        reviewedBy: '---',
+        headReviewedBy: '---',
+        headReviewedAt: '---',
+        finalReviewedBy: '---',
+        finalReviewedAt: '---',
+        pendingWith: 'Department Head',
+        remarks: 'Position change request logged by HR Manager.',
+        headRemarks: '---',
+        fileName: 'PCR_001.pdf'
+    },
+    {
+        id: 'PCR-002',
+        name: 'Santos, Maria',
+        empId: 'EMP-002',
+        dept: 'CBA',
+        position: 'Professor',
+        requestedPos: 'Dean',
+        reason: 'Designated as incoming college administrator for the next academic year.',
+        submitted: '03/15/2026',
+        progress: 'Stage 2 of 3',
+        status: 'pending-hr',
+        statusLabel: 'Pending - HR Evaluator',
+        reviewedBy: '---',
+        headReviewedBy: 'Department Head',
+        headReviewedAt: '03/16/2026',
+        finalReviewedBy: '---',
+        finalReviewedAt: '---',
+        pendingWith: 'HR Evaluator',
+        remarks: 'Awaiting final HR validation.',
+        headRemarks: 'Endorsed for administrative transition.',
+        fileName: 'PCR_002.pdf'
+    }
+];
 
 // Mock employee lookup
 const employeeDirectory = {
@@ -96,6 +195,16 @@ function isFinalStatus(status) {
 
 function canActOnApp(status) {
     return status === HR_STAGE;
+}
+
+function findRecordById(id) {
+    var fromNew = appData.find(function (a) { return a.id === id; });
+    if (fromNew) return fromNew;
+    return positionChangeData.find(function (a) { return a.id === id; }) || null;
+}
+
+function isPositionChangeRecord(app) {
+    return !!(app && (app.empId || app.requestedPos || app.reason || String(app.id).indexOf('PCR-') === 0));
 }
 
 function resetPositionForm() {
@@ -134,6 +243,372 @@ function generatePCRId() {
     return 'PCR-' + String(positionChangeData.length + 1).padStart(3, '0');
 }
 
+function getStatusFilterLabel(status) {
+    var labels = {
+        'pending-hr': 'Status: Pending - HR Evaluator',
+        'pending-head': 'Status: Pending - Dept. Head',
+        approved: 'Status: Approved',
+        rejected: 'Status: Rejected'
+    };
+
+    return labels[status] || '';
+}
+
+function getCurrentTableMode() {
+    return activeMainTab === 'position' ? 'Position' : 'Active';
+}
+
+function matchesSearch(app, query) {
+    if (!query) return true;
+
+    var haystack = [
+        app.id,
+        app.name,
+        app.dept,
+        app.position,
+        app.progress,
+        app.statusLabel,
+        app.reviewedBy,
+        app.remarks
+    ].join(' ').toLowerCase();
+
+    return haystack.indexOf(query) !== -1;
+}
+
+function syncFilterChip() {
+    var row   = document.getElementById('activeFilterRow');
+    var label = document.getElementById('activeFilterLabel');
+
+    if (!row || !label) return;
+
+    if (!activeAppFilter) {
+        row.hidden = true;
+        row.style.display = 'none';
+        label.innerText = '';
+        return;
+    }
+
+    label.innerText = activeAppFilterLabel;
+    row.hidden = false;
+    row.style.display = 'flex';
+}
+
+function closeFilterMenu() {
+    var menu = document.getElementById('filterMenu');
+    var btn  = document.getElementById('filterBtn');
+
+    if (!menu || !btn) return;
+
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+}
+
+function openFilterMenu() {
+    var menu = document.getElementById('filterMenu');
+    var btn  = document.getElementById('filterBtn');
+
+    if (!menu || !btn) return;
+
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+}
+
+function toggleFilterMenu() {
+    var menu = document.getElementById('filterMenu');
+
+    if (!menu) return;
+
+    if (menu.classList.contains('open')) {
+        closeFilterMenu();
+    } else {
+        openFilterMenu();
+    }
+}
+
+function applyAppFilter(filterValue, filterLabel) {
+    activeAppFilter = filterValue;
+    activeAppFilterLabel = filterLabel || '';
+    syncFilterChip();
+    closeFilterMenu();
+    renderCurrentTab();
+}
+
+function clearAppFilter() {
+    activeAppFilter = '';
+    activeAppFilterLabel = '';
+    syncFilterChip();
+    closeFilterMenu();
+    renderCurrentTab();
+}
+
+function setMainTab(tabName) {
+    var tabNew = document.getElementById('tab-new');
+    var tabPosition = document.getElementById('tab-position');
+    var logBtn = document.getElementById('openPositionRequestBtn');
+
+    activeMainTab = tabName === 'position' ? 'position' : 'new';
+
+    if (activeMainTab === 'position') {
+        tabPosition.classList.add('active');
+        tabNew.classList.remove('active');
+        if (logBtn) {
+            logBtn.hidden = false;
+            logBtn.style.display = 'inline-flex';
+        }
+    } else {
+        tabNew.classList.add('active');
+        tabPosition.classList.remove('active');
+        if (logBtn) {
+            logBtn.hidden = true;
+            logBtn.style.display = 'none';
+        }
+    }
+
+    updateTableHeaders();
+}
+
+function updateTableHeaders() {
+    var hId = document.getElementById('hdr-col-id');
+    var hName = document.getElementById('hdr-col-name');
+    var hDept = document.getElementById('hdr-col-dept');
+    var hPosition = document.getElementById('hdr-col-position');
+    var hSubmitted = document.getElementById('hdr-col-submitted');
+    var hProgress = document.getElementById('hdr-col-progress');
+    var hStatus = document.getElementById('hdr-col-status');
+    var hActions = document.getElementById('hdr-col-actions');
+
+    if (!hId || !hName || !hDept || !hPosition || !hSubmitted || !hProgress || !hStatus || !hActions) {
+        return;
+    }
+
+    if (activeMainTab === 'position') {
+        hId.innerText = 'Request ID';
+        hName.innerText = 'Full Name';
+        hDept.innerText = 'Current Position';
+        hPosition.innerText = 'Requested Position';
+        hSubmitted.innerText = 'Department';
+        hProgress.innerText = 'Submitted';
+        hStatus.innerText = 'Status';
+        hActions.innerText = 'Actions';
+        return;
+    }
+
+    hId.innerText = 'Application ID';
+    hName.innerText = 'Full Name';
+    hDept.innerText = 'Department';
+    hPosition.innerText = 'Position';
+    hSubmitted.innerText = 'Submitted';
+    hProgress.innerText = 'Progress';
+    hStatus.innerText = 'Status';
+    hActions.innerText = 'Actions';
+}
+
+function renderRows(rows) {
+    const body     = document.getElementById('applicationTableBody');
+    const template = document.getElementById('appRowTemplate');
+    body.innerHTML = '';
+
+    if (rows.length === 0) {
+        body.innerHTML = '<tr><td colspan="8" class="no-records">No records found.</td></tr>';
+        return;
+    }
+
+    rows.forEach(function (app) {
+        const clone   = template.content.cloneNode(true);
+        const isFinal = isFinalStatus(app.status);
+        const canAct  = canActOnApp(app.status);
+
+        clone.querySelector('.col-id').innerText   = app.id;
+        clone.querySelector('.col-name').innerText = app.name;
+
+        if (activeMainTab === 'position') {
+            clone.querySelector('.col-dept').innerText      = app.position || '---';
+            clone.querySelector('.col-position').innerText  = app.requestedPos || '---';
+            clone.querySelector('.col-submitted').innerText = app.dept || '---';
+            clone.querySelector('.col-progress').innerText  = app.submitted || '---';
+        } else {
+            clone.querySelector('.col-dept').innerText      = app.dept;
+            clone.querySelector('.col-position').innerText  = app.position;
+            clone.querySelector('.col-submitted').innerText = app.submitted;
+            clone.querySelector('.col-progress').innerText  = app.progress;
+        }
+
+        clone.querySelector('.col-status').innerHTML    =
+            '<span class="status-pill ' + app.status + '">' + app.statusLabel + '</span>';
+
+        const actionsCell = clone.querySelector('.col-actions');
+
+        if (isFinal) {
+            actionsCell.innerHTML = '<span class="action-link view-link-btn">View Details</span>';
+            actionsCell.querySelector('.view-link-btn').addEventListener('click', function () {
+                openModal(app.id);
+            });
+        } else if (canAct) {
+            actionsCell.innerHTML =
+                '<div class="actions-cell">' +
+                    '<span class="action-link view-link-btn">View Details</span>' +
+                    '<div class="dropdown">' +
+                        '<button class="update-link">Update <i class="fas fa-caret-down"></i></button>' +
+                        '<div class="dropdown-content">' +
+                            '<a href="#" class="approve-option" data-id="' + app.id + '">Approve</a>' +
+                            '<a href="#" class="reject-option"  data-id="' + app.id + '">Reject</a>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            actionsCell.querySelector('.view-link-btn').addEventListener('click', function () {
+                openModal(app.id);
+            });
+            actionsCell.querySelector('.approve-option').addEventListener('click', function (e) {
+                e.preventDefault();
+                processApp(app.id, 'Approved');
+            });
+            actionsCell.querySelector('.reject-option').addEventListener('click', function (e) {
+                e.preventDefault();
+                processApp(app.id, 'Rejected');
+            });
+        } else {
+            actionsCell.innerHTML = '<div class="actions-cell"><span class="action-link view-link-btn">View Details</span></div>';
+            actionsCell.querySelector('.view-link-btn').addEventListener('click', function () {
+                openModal(app.id);
+            });
+        }
+
+        body.appendChild(clone);
+    });
+}
+
+function renderCurrentTab() {
+    if (activeMainTab === 'position') {
+        renderPositionChangeTable();
+        return;
+    }
+    renderTable('Active');
+}
+
+function updateModalDocPage() {
+    var page1 = document.getElementById('modalDocPage1');
+    var page2 = document.getElementById('modalDocPage2');
+    var pageName = document.getElementById('docPageName');
+    var prevBtn = document.getElementById('docPrevBtn');
+    var nextBtn = document.getElementById('docNextBtn');
+
+    if (!page1 || !page2 || !pageName || !prevBtn || !nextBtn) return;
+
+    page1.hidden = activeDocPage !== 1;
+    page2.hidden = activeDocPage !== 2;
+    pageName.innerText = activeDocPage === 1 ? 'Page 1 - Application Details' : 'Page 2 - PDF View';
+    prevBtn.disabled = activeDocPage === 1;
+    nextBtn.disabled = activeDocPage === 2;
+}
+
+function setModalDocPage(pageNumber) {
+    activeDocPage = pageNumber === 2 ? 2 : 1;
+    updateModalDocPage();
+}
+
+function renderStatusHistory(app) {
+    var container = document.getElementById('modalStatusHistory');
+    if (!container || !app) return;
+
+    var entries = [];
+
+    entries.push({
+        title: 'Submitted',
+        meta: app.name + ' on ' + (app.submitted || '---')
+    });
+
+    if (app.status === 'pending-head') {
+        entries.push({
+            title: 'Pending',
+            meta: 'with ' + (app.pendingWith || 'Department Head')
+        });
+    } else if (app.status === 'pending-hr') {
+        entries.push({
+            title: 'Approved',
+            meta: 'by ' + (app.headReviewedBy || 'Department Head') + ' on ' + (app.headReviewedAt || '---')
+        });
+        entries.push({
+            title: 'Pending',
+            meta: 'with ' + (app.pendingWith || 'HR Evaluator')
+        });
+    } else if (app.status === 'approved') {
+        entries.push({
+            title: 'Approved',
+            meta: 'by ' + (app.headReviewedBy || 'Department Head') + ' on ' + (app.headReviewedAt || '---')
+        });
+        entries.push({
+            title: 'Approved',
+            meta: 'by ' + (app.finalReviewedBy || hrName) + ' on ' + (app.finalReviewedAt || '---')
+        });
+    } else if (app.status === 'rejected') {
+        entries.push({
+            title: 'Approved',
+            meta: 'by ' + (app.headReviewedBy || 'Department Head') + ' on ' + (app.headReviewedAt || '---')
+        });
+        entries.push({
+            title: 'Rejected',
+            meta: 'by ' + (app.finalReviewedBy || hrName) + ' on ' + (app.finalReviewedAt || '---')
+        });
+    }
+
+    container.innerHTML = entries.map(function (entry, index) {
+        var markerClass = index === entries.length - 1 ? ' current' : '';
+        return '<div class="status-history-entry' + markerClass + '">' +
+            '<span class="status-history-dot"></span>' +
+            '<div class="status-history-copy">' +
+                '<div class="status-history-title">' + entry.title + '</div>' +
+                '<div class="status-history-meta">' + entry.meta + '</div>' +
+            '</div>' +
+        '</div>';
+    }).join('');
+}
+
+function populateModalDetailFields(app) {
+    var label1 = document.getElementById('modalDetailLabel1');
+    var label2 = document.getElementById('modalDetailLabel2');
+    var label3 = document.getElementById('modalDetailLabel3');
+    var label4 = document.getElementById('modalDetailLabel4');
+    var label5 = document.getElementById('modalDetailLabel5');
+    var label6 = document.getElementById('modalDetailLabel6');
+    var item6  = document.getElementById('modalDetailItem6');
+
+    if (isPositionChangeRecord(app)) {
+        label1.innerText = 'Request ID';
+        label2.innerText = 'Department';
+        label3.innerText = 'Current Position';
+        label4.innerText = 'Request Position';
+        label5.innerText = 'Reason for Request';
+        if (item6) item6.hidden = true;
+
+        document.getElementById('modalApplicationId').innerText = app.id || '---';
+        document.getElementById('modalApplicantEmail').innerText = app.dept || '---';
+        document.getElementById('modalApplicantPhone').innerText = app.position || '---';
+        document.getElementById('modalApplyingDepartment').innerText = app.requestedPos || '---';
+        document.getElementById('modalApplyingPosition').innerText = app.reason || '---';
+        document.getElementById('modalHeadRemarks').innerText = app.headRemarks || '---';
+        if (label6) label6.innerText = 'Remarks from Head';
+        return;
+    }
+
+    label1.innerText = 'Application ID';
+    label2.innerText = 'Email';
+    label3.innerText = 'Phone Number';
+    label4.innerText = 'Department Applying To';
+    label5.innerText = 'Position Applying For';
+    if (label6) label6.innerText = 'Remarks from Head';
+    if (item6) item6.hidden = false;
+
+    document.getElementById('modalApplicationId').innerText = app.id || '---';
+    document.getElementById('modalApplicantEmail').innerText = app.email || '---';
+    document.getElementById('modalApplicantPhone').innerText = app.phoneNumber || '---';
+    document.getElementById('modalApplyingDepartment').innerText = app.applyingTo || app.dept || '---';
+    document.getElementById('modalApplyingPosition').innerText = app.applyingFor || app.position || '---';
+    document.getElementById('modalHeadRemarks').innerText = app.headRemarks || '---';
+}
+
 // ── Toast System ──────────────────────────────────────────────────────
 function showToast(type, title, message) {
     const container = document.getElementById('toast-container');
@@ -170,99 +645,73 @@ function removeToast(el) {
 
 // ── Render Table ──────────────────────────────────────────────────────
 function renderTable(mode) {
-    const body     = document.getElementById('applicationTableBody');
-    const template = document.getElementById('appRowTemplate');
-    body.innerHTML = '';
+    const query    = document.getElementById('tableSearch').value.trim().toLowerCase();
 
-    const filtered = mode === 'Active'
+    let filtered = mode === 'Active'
         ? appData.filter(function (a) { return !isFinalStatus(a.status); })
         : appData.filter(function (a) { return  isFinalStatus(a.status); });
 
-    if (filtered.length === 0) {
-        body.innerHTML =
-            '<tr><td colspan="8" class="no-records">No records found.</td></tr>';
-        return;
+    if (activeAppFilter) {
+        filtered = filtered.filter(function (app) {
+            return app.status === activeAppFilter;
+        });
     }
 
-    filtered.forEach(function (app) {
-        const clone   = template.content.cloneNode(true);
-        const isFinal = isFinalStatus(app.status);
-        const canAct  = canActOnApp(app.status);
+    if (query) {
+        filtered = filtered.filter(function (app) {
+            return matchesSearch(app, query);
+        });
+    }
 
-        clone.querySelector('.col-id').innerText        = app.id;
-        clone.querySelector('.col-name').innerText      = app.name;
-        clone.querySelector('.col-dept').innerText      = app.dept;
-        clone.querySelector('.col-position').innerText  = app.position;
-        clone.querySelector('.col-submitted').innerText = app.submitted;
-        clone.querySelector('.col-progress').innerText  = app.progress;
-        clone.querySelector('.col-status').innerHTML    =
-            '<span class="status-pill ' + app.status + '">' + app.statusLabel + '</span>';
+    renderRows(filtered);
+}
 
-        const actionsCell = clone.querySelector('.col-actions');
+function renderPositionChangeTable() {
+    const query = document.getElementById('tableSearch').value.trim().toLowerCase();
 
-        if (isFinal) {
-            // Completed — view only
-            actionsCell.innerHTML = '<span class="action-link view-link-btn">View Details</span>';
-            actionsCell.querySelector('.view-link-btn').addEventListener('click', function () {
-                openModal(app.id);
-            });
-        } else if (canAct) {
-            // HR's stage — show View + Update dropdown
-            actionsCell.innerHTML =
-                '<div class="actions-cell">' +
-                    '<span class="action-link view-link-btn">View Details</span>' +
-                    '<div class="dropdown">' +
-                        '<button class="update-link">Update <i class="fas fa-caret-down"></i></button>' +
-                        '<div class="dropdown-content">' +
-                            '<a href="#" class="approve-option" data-id="' + app.id + '">Approve</a>' +
-                            '<a href="#" class="reject-option"  data-id="' + app.id + '">Reject</a>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
+    let filtered = positionChangeData.slice();
 
-            actionsCell.querySelector('.view-link-btn').addEventListener('click', function () {
-                openModal(app.id);
-            });
-            actionsCell.querySelector('.approve-option').addEventListener('click', function (e) {
-                e.preventDefault();
-                processApp(app.id, 'Approved');
-            });
-            actionsCell.querySelector('.reject-option').addEventListener('click', function (e) {
-                e.preventDefault();
-                processApp(app.id, 'Rejected');
-            });
-        } else {
-            // Not HR's stage — view only, no Update dropdown
-            actionsCell.innerHTML =
-                '<div class="actions-cell">' +
-                    '<span class="action-link view-link-btn">View Details</span>' +
-                '</div>';
-            actionsCell.querySelector('.view-link-btn').addEventListener('click', function () {
-                openModal(app.id);
-            });
-        }
+    if (activeAppFilter) {
+        filtered = filtered.filter(function (app) {
+            return app.status === activeAppFilter;
+        });
+    }
 
-        body.appendChild(clone);
-    });
+    if (query) {
+        filtered = filtered.filter(function (app) {
+            return matchesSearch(app, query);
+        });
+    }
+
+    renderRows(filtered);
 }
 
 // ── Open Modal ────────────────────────────────────────────────────────
 function openModal(id) {
     activeAppId = id;
-    const app = appData.find(function (a) { return a.id === id; });
+    activeDocPage = 1;
+    const app = findRecordById(id);
     if (!app) return;
 
+    if (isPositionChangeRecord(app)) {
+        document.getElementById('modalApplicantName').innerText = (app.name || 'Application Detail') + (app.empId ? ' (' + app.empId + ')' : '');
+    } else {
+        document.getElementById('modalApplicantName').innerText = app.name || 'Application Detail';
+    }
+    populateModalDetailFields(app);
+    document.getElementById('modalAddRemarks').value            = app.remarks || '';
     document.getElementById('modalFileName').innerText        = app.fileName;
     document.getElementById('modalSubmitDate').innerText      = app.submitted;
     document.getElementById('modalDepartment').innerText      = app.dept;
     document.getElementById('modalPosition').innerText        = app.position;
     document.getElementById('modalProgress').innerText        = app.progress;
     document.getElementById('modalRemarks').innerText         = app.remarks;
-    document.getElementById('modalReviewerText').innerHTML    = '<small>Reviewed by: ' + app.reviewedBy + '</small>';
     document.getElementById('modalStatusContainer').innerHTML =
         '<span class="status-pill ' + app.status + '">' + app.statusLabel + '</span>';
     document.getElementById('pdfPlaceholder').innerHTML       =
         '<i class="fas fa-file-pdf"></i><p>Preview for ' + app.fileName + '</p>';
+    renderStatusHistory(app);
+    updateModalDocPage();
 
     // Only show Approve/Reject if it's HR's stage
     document.getElementById('modalActions').style.display =
@@ -277,10 +726,9 @@ function closeViewModal() {
 
 // ── Process Application ───────────────────────────────────────────────
 function processApp(id, decision) {
-    const idx = appData.findIndex(function (a) { return a.id === id; });
-    if (idx === -1) return;
+    const app = findRecordById(id);
+    if (!app) return;
 
-    const app     = appData[idx];
     const dateStr = new Date().toLocaleDateString();
 
     // Guard: only allow action if it's HR's stage
@@ -295,6 +743,9 @@ function processApp(id, decision) {
         app.statusLabel = 'Approved';
         app.progress    = 'Completed';
         app.reviewedBy  = hrName;
+        app.finalReviewedBy = hrName;
+        app.finalReviewedAt = dateStr;
+        app.pendingWith  = 'Completed';
         app.remarks     = 'Approved on ' + dateStr + '.';
         showToast('approved', 'Application Approved',
             app.name + "'s application has been successfully approved.");
@@ -303,6 +754,9 @@ function processApp(id, decision) {
         app.statusLabel = 'Rejected';
         app.progress    = 'Completed';
         app.reviewedBy  = hrName;
+        app.finalReviewedBy = hrName;
+        app.finalReviewedAt = dateStr;
+        app.pendingWith  = 'Completed';
         app.remarks     = 'Rejected on ' + dateStr + '.';
         showToast('rejected', 'Application Rejected',
             app.name + "'s application has been rejected.");
@@ -312,12 +766,11 @@ function processApp(id, decision) {
     document.getElementById('modalStatusContainer').innerHTML =
         '<span class="status-pill ' + app.status + '">' + app.statusLabel + '</span>';
     document.getElementById('modalRemarks').innerText      = app.remarks;
-    document.getElementById('modalReviewerText').innerHTML = '<small>Reviewed by: ' + app.reviewedBy + '</small>';
+    document.getElementById('modalAddRemarks').value       = app.remarks;
+    renderStatusHistory(app);
     document.getElementById('modalActions').style.display  = 'none';
 
-    const currentMode = document.getElementById('tab-new').classList.contains('active')
-        ? 'Active' : 'History';
-    renderTable(currentMode);
+    renderCurrentTab();
 }
 
 // ── DOM Ready ─────────────────────────────────────────────────────────
@@ -329,6 +782,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabPosition = document.getElementById('tab-position');
     const posModal    = document.getElementById('positionChangeModal');
     const viewModal   = document.getElementById('viewModal');
+    const filterBtn   = document.getElementById('filterBtn');
+    const filterMenu  = document.getElementById('filterMenu');
+    const clearBtn    = document.getElementById('clearFilterBtn');
+    const prevDocBtn  = document.getElementById('docPrevBtn');
+    const nextDocBtn  = document.getElementById('docNextBtn');
+    const openPositionRequestBtn = document.getElementById('openPositionRequestBtn');
 
     // Sidebar tooltips
     document.querySelectorAll('.menu-item').forEach(function (item) {
@@ -342,17 +801,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Tab — Records
     tabNew.addEventListener('click', function () {
-        tabNew.classList.add('active');
-        tabPosition.classList.remove('active');
-        renderTable('Active');
+        setMainTab('new');
+        renderCurrentTab();
     });
 
     // Tab — Position Change Requests
     tabPosition.addEventListener('click', function () {
-        tabPosition.classList.add('active');
-        tabNew.classList.remove('active');
-        posModal.style.display = 'flex';
+        setMainTab('position');
+        renderCurrentTab();
     });
+
+    if (openPositionRequestBtn) {
+        openPositionRequestBtn.addEventListener('click', function () {
+            setMainTab('position');
+            posModal.style.display = 'flex';
+        });
+    }
+
+    if (filterBtn) {
+        filterBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            toggleFilterMenu();
+        });
+    }
+
+    if (filterMenu) {
+        filterMenu.querySelectorAll('.filter-option').forEach(function (option) {
+            option.addEventListener('click', function () {
+                if (option.dataset.filterClear === 'true') {
+                    clearAppFilter();
+                    return;
+                }
+
+                applyAppFilter(option.dataset.filterValue, getStatusFilterLabel(option.dataset.filterValue));
+            });
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            clearAppFilter();
+        });
+    }
+
+    if (prevDocBtn) {
+        prevDocBtn.addEventListener('click', function () {
+            setModalDocPage(activeDocPage - 1);
+        });
+    }
+
+    if (nextDocBtn) {
+        nextDocBtn.addEventListener('click', function () {
+            setModalDocPage(activeDocPage + 1);
+        });
+    }
 
     // Auto-fill employee details
     document.getElementById('pcEmpName').addEventListener('blur', function () {
@@ -410,13 +912,10 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         positionChangeData.push(newEntry);
-        appData.push(newEntry);
 
         posModal.style.display = 'none';
         resetPositionForm();
-        tabNew.classList.add('active');
-        tabPosition.classList.remove('active');
-        renderTable('Active');
+        renderCurrentTab();
 
         showToast('info', 'Request Saved',
             'Position change request for ' + empName + ' has been logged successfully.');
@@ -437,43 +936,40 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancelRequest').addEventListener('click', function () {
         posModal.style.display = 'none';
         resetPositionForm();
-        tabNew.classList.add('active');
-        tabPosition.classList.remove('active');
-        renderTable('Active');
+        renderCurrentTab();
     });
 
     // Click outside modal to close
     window.addEventListener('click', function (e) {
+        if (!e.target.closest('.filter-dropdown')) {
+            closeFilterMenu();
+        }
         if (e.target === viewModal) closeViewModal();
         if (e.target === posModal) {
             posModal.style.display = 'none';
             resetPositionForm();
-            tabNew.classList.add('active');
-            tabPosition.classList.remove('active');
-            renderTable('Active');
+            renderCurrentTab();
         }
     });
 
     // ESC key
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
+            closeFilterMenu();
             closeViewModal();
             posModal.style.display = 'none';
             resetPositionForm();
-            tabNew.classList.add('active');
-            tabPosition.classList.remove('active');
-            renderTable('Active');
+            renderCurrentTab();
         }
     });
 
     // Live search
-    document.getElementById('tableSearch').addEventListener('keyup', function (e) {
-        const val = e.target.value.toLowerCase();
-        document.querySelectorAll('#applicationTableBody tr').forEach(function (row) {
-            row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none';
-        });
+    document.getElementById('tableSearch').addEventListener('input', function () {
+        renderCurrentTab();
     });
 
     // Initial render
-    renderTable('Active');
+    setMainTab('new');
+    syncFilterChip();
+    renderCurrentTab();
 });
