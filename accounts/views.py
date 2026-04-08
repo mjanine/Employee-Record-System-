@@ -11,6 +11,7 @@ import json
 from django.db import models, transaction # Correctly added here
 from django.db.models import Q, Count
 from django.db import transaction
+from audit.utils import log_activity
 
 from .models import User, Department, EmployeeProfile
 # ADDED AddEmployeeForm TO THIS LIST BELOW:
@@ -177,6 +178,12 @@ def create_user(request):
     form = CustomUserCreationForm(request.POST, request.FILES)
     if form.is_valid():
         user = form.save()
+        log_activity(
+            actor=request.user,
+            action="Create User",
+            target_user=user,
+            details=f"Created new user {user.username}"
+        )
         messages.success(request, f"User {user.username} created successfully. Password change required on first login.")
         return JsonResponse({'status': 'success', 'message': 'User created successfully.'})
     else:
@@ -211,6 +218,12 @@ def edit_user(request, user_id):
     form = CustomUserChangeForm(request.POST, request.FILES, instance=user)
     if form.is_valid():
         form.save()
+        log_activity(
+            actor=request.user,
+            action="Edit User",
+            target_user=user,
+            details=f"Updated details for {user.username}"
+        )
         messages.success(request, f"User {user.username} updated successfully.")
         return JsonResponse({'status': 'success', 'message': 'User updated successfully.'})
     else:
@@ -228,9 +241,16 @@ def assign_role(request):
         department = form.cleaned_data['department']
 
         user = get_object_or_404(User, pk=user_id)
+        old_role = user.role
         user.role = new_role
         user.department = department if new_role == 'HEAD' else None # Only assign department if role is HEAD
         user.save()
+        log_activity(
+            actor=request.user,
+            action="Assign Role",
+            target_user=user,
+            details=f"Changed role from {old_role} to {new_role}"
+        )
         messages.success(request, f"Role for {user.username} updated to {new_role}.")
         return JsonResponse({'status': 'success', 'message': 'Role assigned successfully.'})
     else:
@@ -261,6 +281,12 @@ def update_account_status(request):
                 user.is_locked = False
                 user.failed_login_attempts = 0 # Reset attempts on unlock
             user.save()
+            log_activity(
+                actor=request.user,
+                action="Update Account Status",
+                target_user=user,
+                details=f"Account status changed to {action}"
+            )
         
         messages.success(request, f"Selected accounts {action}d successfully.")
         return JsonResponse({'status': 'success', 'message': f"Accounts {action}d successfully."})
@@ -282,6 +308,12 @@ def reset_password(request):
         user.must_change_password = True # Enforce password change on next login
         user.last_password_change = timezone.now()
         user.save()
+        log_activity(
+            actor=request.user,
+            action="Reset Password",
+            target_user=user,
+            details="Password reset by administrator"
+        )
         messages.success(request, f"Password for {user.username} reset successfully. User must change password on next login.")
         return JsonResponse({'status': 'success', 'message': 'Password reset successfully.'})
     else:
@@ -301,6 +333,13 @@ def delete_user(request):
         return JsonResponse({'status': 'error', 'message': 'Cannot delete your own account.'}, status=400)
 
     users_to_delete = User.objects.filter(pk__in=user_ids)
+    for u in users_to_delete:
+        log_activity(
+            actor=request.user,
+            action="Delete User",
+            target_user=None,
+            details=f"Deleted user {u.username}"
+        )
     deleted_count, _ = users_to_delete.delete()
     messages.success(request, f"{deleted_count} user(s) deleted successfully.")
     return JsonResponse({'status': 'success', 'message': f"{deleted_count} user(s) deleted successfully."})
@@ -355,6 +394,12 @@ def create_department(request):
             dept_obj.head.role = 'HEAD'
             dept_obj.head.department = dept_obj
             dept_obj.head.save()
+            log_activity(
+                actor=request.user,
+                action="Assign Department Head",
+                target_user=dept_obj.head,
+                details=f"Assigned as head of {dept_obj.name}"
+            )
         return JsonResponse({'status': 'success', 'message': 'Department created successfully.'})
     return JsonResponse({'status': 'error', 'message': 'Invalid form data.', 'errors': json.loads(form.errors.as_json())}, status=400)
 
@@ -373,6 +418,12 @@ def edit_department(request, dept_id):
             dept_obj.head.role = 'HEAD'
             dept_obj.head.department = dept_obj
             dept_obj.head.save()
+            log_activity(
+                actor=request.user,
+                action="Assign Department Head",
+                target_user=dept_obj.head,
+                details=f"Assigned as head of {dept_obj.name}"
+            )
         return JsonResponse({'status': 'success', 'message': 'Department updated successfully.'})
     else:
         print("--- FORM ERRORS ---")

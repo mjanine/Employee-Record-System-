@@ -303,37 +303,37 @@
                         <div class="quick-filters">
                         <div class="search-box">
                             <i class="fas fa-search"></i>
-                            <input type="text" id="auditSearch" placeholder="Search by username, email, or IP...">
+                            <input type="text" id="auditSearch" name="search" placeholder="Search by username, email, or IP..." value="{{ current_search|default:'' }}">
                         </div>
                         <div class="date-range">
                             <label>From Date</label>
-                            <input type="date" id="fromDate">
+                            <input type="date" id="fromDate" name="from_date" value="{{ current_from_date|default:'' }}">
                         </div>
 
                         <div class="date-range">
                             <label>To Date</label>
-                            <input type="date" id="toDate">
+                            <input type="date" id="toDate" name="to_date" value="{{ current_to_date|default:'' }}">
                         </div>
 
-                        <select id="activityFilter" class="filter-select">
+                        <select id="activityFilter" class="filter-select" name="action_type">
                             <option value="">All Activities</option>
-                            <option value="login">Login</option>
-                            <option value="logout">Logout</option>
-                            <option value="user_created">User Created</option>
-                            <option value="user_edited">User Edited</option>
-                            <option value="user_deleted">User Deleted</option>
-                            <option value="role_changed">Role Changed</option>
-                            <option value="password_changed">Password Changed</option>
-                            <option value="account_activated">Account Activated</option>
-                            <option value="account_deactivated">Account Deactivated</option>
-                            <option value="failed_login">Failed Login</option>
+                            <option value="login" {% if current_action_type == 'login' %}selected{% endif %}>Login</option>
+                            <option value="logout" {% if current_action_type == 'logout' %}selected{% endif %}>Logout</option>
+                            <option value="user_created" {% if current_action_type == 'user_created' %}selected{% endif %}>User Created</option>
+                            <option value="user_edited" {% if current_action_type == 'user_edited' %}selected{% endif %}>User Edited</option>
+                            <option value="user_deleted" {% if current_action_type == 'user_deleted' %}selected{% endif %}>User Deleted</option>
+                            <option value="role_changed" {% if current_action_type == 'role_changed' %}selected{% endif %}>Role Changed</option>
+                            <option value="password_changed" {% if current_action_type == 'password_changed' %}selected{% endif %}>Password Changed</option>
+                            <option value="account_activated" {% if current_action_type == 'account_activated' %}selected{% endif %}>Account Activated</option>
+                            <option value="account_deactivated" {% if current_action_type == 'account_deactivated' %}selected{% endif %}>Account Deactivated</option>
+                            <option value="failed_login" {% if current_action_type == 'failed_login' %}selected{% endif %}>Failed Login</option>
                         </select>
 
-                        <select id="statusFilter" class="filter-select">
+                        <select id="statusFilter" class="filter-select" name="status">
                             <option value="">All Status</option>
-                            <option value="success">Success</option>
-                            <option value="failed">Failed</option>
-                            <option value="warning">Warning</option>
+                            <option value="success" {% if current_status == 'success' %}selected{% endif %}>Success</option>
+                            <option value="failed" {% if current_status == 'failed' %}selected{% endif %}>Failed</option>
+                            <option value="warning" {% if current_status == 'warning' %}selected{% endif %}>Warning</option>
                         </select>
 
                         <button class="btn btn-secondary" id="filterBtn">
@@ -362,48 +362,26 @@
                                     </tr>
                                 </thead>
                                 <tbody id="loginLogsBody">
-                                    <tr class="log-row" data-log-id="1">
-                                        <td><strong>john.doe</strong></td>
-                                        <td>john.doe@company.com</td>
-                                        <td><span class="timestamp">Mar 16, 2024 09:30</span></td>
-                                        <td><span class="timestamp">Mar 16, 2024 17:45</span></td>
-                                        <td><code class="ip-address">192.168.1.102</code></td>
-                                        <td><span class="device-info">Chrome on Windows</span></td>
-                                        <td><span class="status-badge success">Success</span></td>
+                                    {% for log in login_logs %}
+                                    <tr class="log-row" data-log-id="{{ log.id }}">
+                                        <td><strong>{{ log.username }}</strong></td>
+                                        <td>{{ log.user.email|default:"N/A" }}</td>
+                                        <td><span class="timestamp">{{ log.datetime|date:"M d, Y H:i" }}</span></td>
+                                        <td><span class="timestamp">-</span></td>
+                                        <td><code class="ip-address">{{ log.ip_address }}</code></td>
+                                        <td><span class="device-info">{{ log.user_agent|default:"Unknown" }}</span></td>
+                                        <td><span class="status-badge {% if log.is_success %}success{% elif log.status == 'Warning' %}warning{% else %}failed{% endif %}">{{ log.status }}</span></td>
                                         <td>
-                                            <button class="btn-icon view-details" data-log-id="1" title="View Details">
+                                            <button class="btn-icon view-details" data-log-id="{{ log.id }}" title="View Details">
                                                 <i class="fas fa-circle-info"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr class="log-row" data-log-id="2">
-                                        <td><strong>sarah.smith</strong></td>
-                                        <td>sarah.smith@company.com</td>
-                                        <td><span class="timestamp">Mar 16, 2024 08:15</span></td>
-                                        <td><span class="timestamp">Mar 16, 2024 16:30</span></td>
-                                        <td><code class="ip-address">192.168.1.105</code></td>
-                                        <td><span class="device-info">Firefox on macOS</span></td>
-                                        <td><span class="status-badge success">Success</span></td>
-                                        <td>
-                                            <button class="btn-icon view-details" data-log-id="2" title="View Details">
-                                                <i class="fas fa-circle-info"></i>
-                                            </button>
-                                        </td>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" style="text-align: center; padding: 20px;">No login logs found yet.</td>
                                     </tr>
-                                    <tr class="log-row" data-log-id="3">
-                                        <td><strong>mike.johnson</strong></td>
-                                        <td>mike.johnson@company.com</td>
-                                        <td><span class="timestamp">Mar 15, 2024 10:20</span></td>
-                                        <td><span class="timestamp">Mar 15, 2024 18:05</span></td>
-                                        <td><code class="ip-address">192.168.1.127</code></td>
-                                        <td><span class="device-info">Edge on Windows</span></td>
-                                        <td><span class="status-badge warning">Warning</span></td>
-                                        <td>
-                                            <button class="btn-icon view-details" data-log-id="3" title="View Details">
-                                                <i class="fas fa-circle-info"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -412,69 +390,27 @@
                     <div class="logs-section">
                         <h2 class="section-title">Activity Logs</h2>
                         <div class="activity-logs-list">
+                            {% for log in activity_logs %}
                             <div class="activity-log-item">
-                                <div class="log-icon"><i class="fas fa-sign-in-alt"></i></div>
+                                <div class="log-icon"><i class="fas fa-history"></i></div>
                                 <div class="log-content">
                                     <div class="log-header">
-                                        <p class="log-activity">User Login: John Doe</p>
-                                        <span class="log-time">Mar 16, 2024 09:30:15</span>
+                                        <p class="log-activity">{{ log.action }}{% if log.target_user %}: {{ log.target_user.get_full_name }}{% endif %}</p>
+                                        <span class="log-time">{{ log.timestamp|date:"M d, Y H:i:s" }}</span>
                                     </div>
                                     <div class="log-details">
-                                        <p class="log-user"><strong>User:</strong> John Doe (john.doe@company.com)</p>
-                                        <p class="log-ip"><strong>IP Address:</strong> <code>192.168.1.102</code></p>
-                                        <p class="log-description"><strong>Details:</strong> Successful login from Chrome on Windows</p>
+                                        <p class="log-user"><strong>Actor:</strong> {% if log.actor %}{{ log.actor.get_full_name }} ({{ log.actor.email }}){% else %}System{% endif %}</p>
+                                        <p class="log-ip"><strong>IP Address:</strong> <code>{{ log.ip_address|default:"N/A" }}</code></p>
+                                        <p class="log-description"><strong>Details:</strong> {{ log.details }}</p>
                                     </div>
                                 </div>
-                                <div class="log-status"><span class="status-badge success">Success</span></div>
+                                <div class="log-status"><span class="status-badge success">Recorded</span></div>
                             </div>
-
-                            <div class="activity-log-item">
-                                <div class="log-icon"><i class="fas fa-user-plus"></i></div>
-                                <div class="log-content">
-                                    <div class="log-header">
-                                        <p class="log-activity">New User Created: Sarah Johnson</p>
-                                        <span class="log-time">Mar 15, 2024 14:22:45</span>
-                                    </div>
-                                    <div class="log-details">
-                                        <p class="log-user"><strong>User:</strong> Admin User (admin@company.com)</p>
-                                        <p class="log-ip"><strong>IP Address:</strong> <code>192.168.1.50</code></p>
-                                        <p class="log-description"><strong>Details:</strong> New employee account created with HR role</p>
-                                    </div>
-                                </div>
-                                <div class="log-status"><span class="status-badge success">Success</span></div>
+                            {% empty %}
+                            <div style="padding: 2rem; text-align: center; color: #666;">
+                                <p>No real activity logs found yet. Try performing an action!</p>
                             </div>
-
-                            <div class="activity-log-item">
-                                <div class="log-icon"><i class="fas fa-user-tie"></i></div>
-                                <div class="log-content">
-                                    <div class="log-header">
-                                        <p class="log-activity">Role Changed: Mike Johnson</p>
-                                        <span class="log-time">Mar 15, 2024 11:10:20</span>
-                                    </div>
-                                    <div class="log-details">
-                                        <p class="log-user"><strong>User:</strong> Admin User (admin@company.com)</p>
-                                        <p class="log-ip"><strong>IP Address:</strong> <code>192.168.1.50</code></p>
-                                        <p class="log-description"><strong>Details:</strong> Role changed from Employee to Department Head (Finance)</p>
-                                    </div>
-                                </div>
-                                <div class="log-status"><span class="status-badge success">Success</span></div>
-                            </div>
-
-                            <div class="activity-log-item">
-                                <div class="log-icon"><i class="fas fa-user-slash"></i></div>
-                                <div class="log-content">
-                                    <div class="log-header">
-                                        <p class="log-activity">User Deactivated: Robert Smith</p>
-                                        <span class="log-time">Mar 14, 2024 16:45:30</span>
-                                    </div>
-                                    <div class="log-details">
-                                        <p class="log-user"><strong>User:</strong> Admin User (admin@company.com)</p>
-                                        <p class="log-ip"><strong>IP Address:</strong> <code>192.168.1.50</code></p>
-                                        <p class="log-description"><strong>Details:</strong> User account deactivated - Employee separation</p>
-                                    </div>
-                                </div>
-                                <div class="log-status"><span class="status-badge warning">Warning</span></div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 

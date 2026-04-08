@@ -1,5 +1,5 @@
 import json
-from .models import ActivityLog
+from .models import ActivityLog, LoginLog
 
 class AuditMiddleware:
     def __init__(self, get_response):
@@ -23,7 +23,7 @@ class AuditMiddleware:
             ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
             ActivityLog.objects.create(
-                user=request.user,
+                actor=request.user,
                 action=action,
                 module=request.path.split('/')[1] if len(request.path.split('/')) > 1 else "Root",
                 details=f"User accessed {request.path}",
