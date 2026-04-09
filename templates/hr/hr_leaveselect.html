@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Leave Management | HR System</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/hr/hr_leaveselect.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/general/uph.png' %}">
+    <link rel="stylesheet" href="{% static 'css/hr/hr_leaveselect.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -15,7 +16,7 @@
         <div class="sidebar" id="sidebar">
             <div class="top-section">
                 <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo">
+                    <img src="{% static 'img/general/uph.png' %}" class="logo">
                     <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
                 </div>
                 <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
@@ -27,13 +28,13 @@
         <li><a href="hr_appmanagement.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
         <li><a href="hr_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
         <li><a href="hr_attendancemonitoring.html" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
-        <li><a href="hr_leaveselect.html" class="menu-item active"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
+        <li><a href="{% url 'leaves:hr_leave_select' %}" class="menu-item active"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
         <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
         <li><a href="hr_training.html" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
         <li><a href="hr_reports.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
     </ul>
                 <div class="bottom-section">
-        <a href="../login/login.html" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
+        <a href="{% url 'logout' %}" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
     </div>
         </div>
 
@@ -43,12 +44,12 @@
                 <p>Please select an option to proceed</p>
                 
                 <div class="modal-options">
-                    <a href="hr_applicationleave.html" class="opt-card">
+                    <a href="{% url 'leaves:hr_apply_leave' %}" class="opt-card">
                         <i class="fas fa-file-signature"></i>
                         <span>Apply for Leave</span>
                     </a>
                     
-                    <a href="hr_leaverequest.html" class="opt-card">
+                    <a href="{% url 'leaves:hr_leave_history' %}" class="opt-card">
                         <i class="fas fa-history"></i>
                         <span>Leave Requests / History</span>
                     </a>
@@ -57,6 +58,6 @@
         </main>
     </div>
 
-    <script src="../../static/js/hr/hr_applicationleave.js"></script>
+    <script src="{% static 'js/hr/hr_leaveselect.js' %}"></script>
 </body>
 </html>

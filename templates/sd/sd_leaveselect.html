@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Leave Management | School Director System</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/sd/sd_leaveselect.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/general/uph.png' %}">
+    <link rel="stylesheet" href="{% static 'css/sd/sd_leaveselect.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -15,7 +16,7 @@
         <div class="sidebar" id="sidebar">
             <div class="top-section">
                 <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo">
+                    <img src="{% static 'img/general/uph.png' %}" class="logo">
                     <div class="open-icon">
                         <i class="fas fa-chevron-right"></i>
                     </div>
@@ -32,13 +33,13 @@
                 <li><a href="sd_appmanagement.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
                 <li><a href="sd_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
                 <li><a href="sd_attendancemonitoring.html" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
-                <li><a href="sd_leaveselect.html" class="menu-item active"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
+                <li><a href="{% url 'leaves:sd_leave_select' %}" class="menu-item active"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
                 <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
                 <li><a href="sd_reports.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
             </ul>
 
             <div class="bottom-section">
-                <a href="../login/login.html" class="menu-item logout">
+                <a href="{% url 'logout' %}" class="menu-item logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Log Out</span>
                 </a>
@@ -51,12 +52,12 @@
                 <p>Please select an option to proceed</p>
                 
                 <div class="modal-options">
-                    <a href="sd_applicationleave.html" class="opt-card">
+                    <a href="{% url 'leaves:sd_apply_leave' %}" class="opt-card">
                         <i class="fas fa-file-signature"></i>
                         <span>Apply for Leave</span>
                     </a>
                     
-                    <a href="sd_leaverequest.html" class="opt-card">
+                    <a href="{% url 'leaves:sd_leave_history' %}" class="opt-card">
                         <i class="fas fa-history"></i>
                         <span>Leave Requests / History</span>
                     </a>
@@ -65,6 +66,6 @@
         </main>
     </div>
 
-    <script src="../../static/js/sd/sd_leaveselect.js"></script>
+    <script src="{% static 'js/sd/sd_leaveselect.js' %}"></script>
 </body>
 </html>
