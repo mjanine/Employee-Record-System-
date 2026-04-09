@@ -255,8 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const logoToggle = document.getElementById('logoToggle');
     const closeBtn = document.getElementById('closeBtn');
-    const tabList = document.getElementById('tab-list');
-    const tabAdd = document.getElementById('tab-add');
+    const openAddTrainingModal = document.getElementById('openAddTrainingModal');
     const addModal = document.getElementById('addTrainingModal');
     const viewModal = document.getElementById('viewModal');
 
@@ -268,17 +267,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (closeBtn) closeBtn.onclick = function () { sidebar.classList.add('collapsed'); };
     if (logoToggle) logoToggle.onclick = function () { sidebar.classList.toggle('collapsed'); };
 
-    tabList.addEventListener('click', function () {
-        tabList.classList.add('active');
-        tabAdd.classList.remove('active');
-        renderTable();
-    });
-
-    tabAdd.addEventListener('click', function () {
-        tabAdd.classList.add('active');
-        tabList.classList.remove('active');
+    if (openAddTrainingModal) {
+        openAddTrainingModal.addEventListener('click', function () {
         addModal.style.display = 'flex';
-    });
+        });
+    }
 
     document.getElementById('modalCompleteBtn').addEventListener('click', function () {
         processTraining(activeTrainingId, 'Completed');
@@ -291,8 +284,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancelAddTraining').addEventListener('click', function () {
         addModal.style.display = 'none';
         resetAddTrainingForm();
-        tabList.classList.add('active');
-        tabAdd.classList.remove('active');
         renderTable();
     });
 
@@ -356,8 +347,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         addModal.style.display = 'none';
         resetAddTrainingForm();
-        tabList.classList.add('active');
-        tabAdd.classList.remove('active');
         renderTable();
         showToast('info', 'Training Added', '"' + name + '" has been scheduled.');
     });
@@ -367,8 +356,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target === addModal) {
             addModal.style.display = 'none';
             resetAddTrainingForm();
-            tabList.classList.add('active');
-            tabAdd.classList.remove('active');
             renderTable();
         }
     });
@@ -378,8 +365,6 @@ document.addEventListener('DOMContentLoaded', function () {
             closeViewModal();
             addModal.style.display = 'none';
             resetAddTrainingForm();
-            tabList.classList.add('active');
-            tabAdd.classList.remove('active');
             renderTable();
         }
     });
