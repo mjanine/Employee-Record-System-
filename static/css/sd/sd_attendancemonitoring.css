@@ -241,6 +241,15 @@ hr {
     font-weight: 700;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
 .view-toggle-header {
     display: flex;
     border-radius: 12px;
@@ -297,6 +306,22 @@ hr {
     width: 100%;
     font-size: 14px;
     color: #333;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .search-pill {
+        width: min(100%, 400px);
+    }
 }
 
 
@@ -467,7 +492,7 @@ hr {
 /* --- 7. ATTENDANCE TABLE --- */
 .table-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 25px;
     overflow-x: auto;           /* horizontal scrollbar */
     border: 1px solid #dcdcdc;
 }
@@ -574,42 +599,93 @@ hr {
     max-width: 1100px;
     border-radius: 20px;
     position: relative;
-    padding: 30px;
+    padding: 42px 30px 30px;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
 }
 
 .close-modal {
     position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 28px;
+    right: 16px;
+    top: 10px;
+    font-size: 24px;
     cursor: pointer;
     color: #888;
     line-height: 1;
+    z-index: 2;
 }
 
-.modal-body  { display: flex; gap: 30px; }
-.modal-main  { flex: 3; }
+.close-modal:hover {
+    color: #333;
+}
+
+.modal-body  {
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+}
+.modal-main  {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-side-column {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
 
 .modal-sidebar {
-    flex: 1;
     background: #f8f9fa;
     padding: 20px;
     border-radius: 15px;
     border: 1px solid #ddd;
-}
-
-.modal-header-row {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 5px;
+    flex-direction: column;
 }
-
-.modal-header-row h2 { font-size: 20px; color: #1a1a1a; }
 
 /* View toggles */
+
+.modal-controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.modal-controls-row .date-pager {
+    margin-left: auto;
+}
+
+.view-toggles {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid #d0c8c8;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(74, 29, 29, 0.08);
+}
+
+.view-btn {
+    padding: 7px 18px;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.view-btn:first-child { border-right: 1.5px solid #d0c8c8; }
+.view-btn.active { background: var(--brand); color: #fff; }
+.view-btn:not(.active):hover { color: var(--brand); background: #f9f9f9; }
 
 .view-toggle-header {
     display: flex;
@@ -672,6 +748,19 @@ hr {
 
 .modal-sidebar h3 { margin-bottom: 15px; font-size: 16px; color: #333; }
 
+.name-group {
+    margin-bottom: 18px;
+}
+
+.name-group label {
+    color: #666;
+}
+
+.name-group span {
+    font-size: 16px;
+    font-weight: 700;
+}
+
 .info-group { margin-bottom: 15px; }
 .info-group label {
     display: block;
@@ -685,10 +774,12 @@ hr {
 
 /* Modal table wrapper — scrollable */
 .modal-table-wrapper {
-    max-height: 320px;
+    height: 420px;
     overflow-y: auto;
-    border-radius: 0 0 10px 10px;
+    border-radius: 25px;
     margin-top: 20px;
+    border: 1px solid #ececec;
+    width: 100%;
 }
 
 .modal-table-wrapper::-webkit-scrollbar          { width: 6px; }
@@ -698,6 +789,11 @@ hr {
 
 /* Modal table */
 .modal-table { width: 100%; border-collapse: collapse; }
+
+.modal-table thead th,
+.modal-table td {
+    white-space: nowrap;
+}
 
 .modal-table thead th {
     background: #333;
@@ -710,14 +806,16 @@ hr {
     z-index: 1;
 }
 
+.modal-table thead th:first-child { border-top-left-radius: 25px; }
+.modal-table thead th:last-child { border-top-right-radius: 25px; }
+
 .modal-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
 
 .total-hours-footer {
-    margin-top: 20px;
     background: #e5e5e5;
     padding: 15px;
     border-radius: 10px;
     text-align: center;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 600;
+    font-size: 13px;
 }
