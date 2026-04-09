@@ -6,7 +6,7 @@
     <title>Attendance Log | School Director System</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../static/css/attendance/emp_attendance.css">
+    <link rel="stylesheet" href="../../static/css/sd/sd_attendance.css">
 </head>
 <body>
 
@@ -28,55 +28,15 @@
             </div>
 
             <ul class="menu">
-                <li>
-                    <a href="head_dash.html" class="menu-item active">
-                        <i class="fas fa-border-all"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="head_profile_view.html" class="menu-item">
-                        <i class="fas fa-user"></i>
-                        <span>Profile</span>
-                    </a>
-                </li>
+                <li><a href="sd_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+                <li><a href="sd_profile_view.html" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
                 <hr>
-                <li>
-                    <a href="#" class="menu-item">
-                        <i class="fas fa-file"></i>
-                        <span>Application Management</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="head_employeelist.html" class="menu-item">
-                        <i class="fas fa-database"></i>
-                        <span>Employee Records</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="menu-item">
-                        <i class="fas fa-calendar"></i>
-                        <span>Attendance Monitoring</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="head_leaveselect.html" class="menu-item">
-                        <i class="fas fa-briefcase"></i>
-                        <span>Leave Management</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="menu-item">
-                        <i class="fas fa-star"></i>
-                        <span>Performance Evaluation</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="menu-item">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <span>Trainings</span>
-                    </a>
-                </li>
+                <li><a href="sd_appmanagement.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+                <li><a href="sd_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
+                <li><a href="sd_attendancemonitoring.html" class="menu-item active"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
+                <li><a href="sd_leaveselect.html" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
+                <li><a href="sd_reports.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
             </ul>
 
             <div class="bottom-section">
@@ -94,8 +54,8 @@
             <div class="dashboard-header dashboard-header--compact-right dashboard-header--title-tabs">
                 <h1 style="color: #000000;">Attendance Log</h1>
                 <div class="view-toggle-header">
-                    <a href="../attendance/sd_attendance.html" class="toggle-btn active" id="tab-log">Attendance Log</a>
-                    <a href="../attendance/sd_attendancemonitoring.html" class="toggle-btn" id="tab-monitoring">Attendance Monitoring</a>
+                    <a href="../sd/sd_attendance.html" class="toggle-btn active" id="tab-log">Attendance Log</a>
+                    <a href="../sd/sd_attendancemonitoring.html" class="toggle-btn" id="tab-monitoring">Attendance Monitoring</a>
                 </div>
             </div>
 
@@ -250,6 +210,6 @@
         </div>
 
     </div> 
-    <script src="../../static/js/attendance/sd_attendance.js"></script>
+    <script src="../../static/js/sd/sd_attendance.js"></script>
 </body>
 </html>
