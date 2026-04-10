@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="menu-item">
+                    <a href="{% url 'history:head_profile' %}" class="menu-item">
                         <i class="fas fa-user"></i>
                         <span>Profile</span>
                     </a>
@@ -96,7 +96,7 @@
                 <h1 style="color: #000000;">Attendance Log</h1>
                 <div class="view-toggle-header">
                     <a href="{% url 'attendance:head_department_attendance' %}" class="toggle-btn active" id="tab-log">Attendance Log</a>
-                    <a href="#" class="toggle-btn" id="tab-monitoring">Attendance Monitoring</a>
+                    <a href="{% url 'attendance:head_attendance_monitoring' %}" class="toggle-btn" id="tab-monitoring">Attendance Monitoring</a>
                 </div>
             </div>
 

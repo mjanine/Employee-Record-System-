@@ -12,6 +12,8 @@ from django.db import models, transaction # Correctly added here
 from django.db.models import Q, Count
 from django.db import transaction
 from audit.utils import log_activity
+from history.services import log_history
+from history.models import EmploymentHistory
 
 from .models import User, Department, EmployeeProfile
 # ADDED AddEmployeeForm TO THIS LIST BELOW:
@@ -158,8 +160,14 @@ def employee_dashboard(request):
 
 @login_required
 def employee_profile(request):
-    # This view will render the employee's profile page
-    return render(request, 'dashboards/employee_profile.html')
+    # This view will render the employee's personal profile page
+    history_entries = EmploymentHistory.objects.filter(employee=request.user).order_by('-date')
+    context = {
+        'employee': request.user,
+        'target_employee': request.user,
+        'history_entries': history_entries
+    }
+    return render(request, 'employee/emp_profile_view.html', context)
 
 @login_required
 def employee_attendance(request):
@@ -245,6 +253,17 @@ def assign_role(request):
         user.role = new_role
         user.department = department if new_role == 'HEAD' else None # Only assign department if role is HEAD
         user.save()
+        
+        # Automatically add to the timeline audit trail
+        if old_role != new_role:
+            log_history(
+                employee=user,
+                change_type="Role Changed",
+                from_value=old_role,
+                to_value=new_role,
+                recorded_by=request.user
+            )
+
         log_activity(
             actor=request.user,
             action="Assign Role",
@@ -532,7 +551,13 @@ def add_employee(request):
 def employee_profile_view(request, user_id):
     # Fetch the employee or show 404 if not found
     employee = get_object_or_404(User, id=user_id)
-    return render(request, 'hr/hr_profile_view.html', {'employee': employee})
+    history_entries = EmploymentHistory.objects.filter(employee=employee).order_by('-date')
+    context = {
+        'employee': employee,
+        'target_employee': employee,
+        'history_entries': history_entries
+    }
+    return render(request, 'hr/hr_profile_view.html', context)
 
 @login_required
 @user_passes_test(is_admin)
@@ -552,6 +577,8 @@ def edit_employee(request, user_id):
         emp_type = request.POST.get('employment_type')
         address = request.POST.get('address')
         contact = request.POST.get('contact_number')
+        
+        old_emp_type = profile.employment_type if profile else "None"
 
         try:
             with transaction.atomic():
@@ -571,6 +598,16 @@ def edit_employee(request, user_id):
                 profile.address = address
                 profile.contact_number = contact
                 profile.save()
+
+                # Log employment history change if type changed
+                if str(old_emp_type) != str(emp_type):
+                    log_history(
+                        employee=employee,
+                        change_type="Employment Type Changed",
+                        from_value=old_emp_type,
+                        to_value=emp_type,
+                        recorded_by=request.user
+                    )
 
             messages.success(request, f"Successfully updated {employee.get_full_name()}!")
             return redirect('employee_profile', user_id=employee.id)

@@ -57,6 +57,15 @@ def hr_attendance(request):
     return render(request, 'hr/hr_attendance.html', context)
 
 @login_required
+@user_passes_test(is_hr)
+def hr_attendance_monitoring(request):
+    """
+    Displays the attendance monitoring grid view for HR.
+    """
+    context = {'page_title': 'Attendance Monitoring'}
+    return render(request, 'hr/hr_attendancemonitoring.html', context)
+
+@login_required
 def emp_attendance(request):
     """
     Displays attendance logs for the currently logged-in employee.
@@ -102,6 +111,15 @@ def head_attendance(request):
     return render(request, 'head/head_attendance.html', context)
 
 @login_required
+@user_passes_test(is_head)
+def head_attendance_monitoring(request):
+    """
+    Displays the attendance monitoring grid view for Department Heads.
+    """
+    context = {'page_title': 'Attendance Monitoring'}
+    return render(request, 'head/head_attendancemonitoring.html', context)
+
+@login_required
 @user_passes_test(is_sd)
 def sd_attendance(request):
     """
@@ -131,6 +149,15 @@ def sd_attendance(request):
         'page_title': 'Monthly Attendance Summary'
     }
     return render(request, 'sd/sd_attendance.html', context)
+
+@login_required
+@user_passes_test(is_sd)
+def sd_attendance_monitoring(request):
+    """
+    Displays the attendance monitoring grid view for the School Director.
+    """
+    context = {'page_title': 'Attendance Monitoring'}
+    return render(request, 'sd/sd_attendancemonitoring.html', context)
 
 @login_required
 @user_passes_test(is_hr)
