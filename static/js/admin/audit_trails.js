@@ -33,8 +33,18 @@ function setupEventListeners() {
 
     // Modal Close Buttons
     document.querySelectorAll('.modal .close').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
             this.closest('.modal').classList.remove('show');
+        });
+    });
+
+    // Close modal when clicking outside of it to prevent overlay blocking
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+            }
         });
     });
 
@@ -60,15 +70,12 @@ function setupDatePickers() {
     const today = new Date();
     const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-    if (fromDateInput) {
+    if (fromDateInput && !fromDateInput.value) {
         fromDateInput.value = thirtyDaysAgo.toISOString().split('T')[0];
     }
-    if (toDateInput) {
+    if (toDateInput && !toDateInput.value) {
         toDateInput.value = today.toISOString().split('T')[0];
     }
-
-    fromDateInput?.addEventListener('change', applyFilters);
-    toDateInput?.addEventListener('change', applyFilters);
 }
 
 function filterLogs(searchTerm) {
@@ -86,53 +93,34 @@ function filterLogs(searchTerm) {
 }
 
 function applyFilters() {
-    const searchTerm = document.getElementById('auditSearch').value.toLowerCase();
+    const searchTerm = document.getElementById('auditSearch').value;
     const fromDate = document.getElementById('fromDate').value;
     const toDate = document.getElementById('toDate').value;
     const activity = document.getElementById('activityFilter').value;
     const status = document.getElementById('statusFilter').value;
 
-    filterLogs(searchTerm);
+    const url = new URL(window.location.href);
+    
+    if (searchTerm) url.searchParams.set('search', searchTerm);
+    else url.searchParams.delete('search');
 
-    // Additional filter logic for dates, activity type, and status
-    document.querySelectorAll('#loginLogsBody tr, .activity-log-item').forEach(row => {
-        let show = true;
+    if (fromDate) url.searchParams.set('from_date', fromDate);
+    else url.searchParams.delete('from_date');
 
-        if (searchTerm && !row.textContent.toLowerCase().includes(searchTerm)) {
-            show = false;
-        }
+    if (toDate) url.searchParams.set('to_date', toDate);
+    else url.searchParams.delete('to_date');
 
-        // Additional filters can be applied here
-        if (activity || status || fromDate || toDate) {
-            // Filter logic for these criteria
-            // This would require data attributes on the rows/items
-        }
+    if (activity) url.searchParams.set('action_type', activity);
+    else url.searchParams.delete('action_type');
 
-        row.style.display = show ? '' : 'none';
-    });
+    if (status) url.searchParams.set('status', status);
+    else url.searchParams.delete('status');
 
-    showAlert('Filters applied!', 'success');
+    window.location.href = url.toString();
 }
 
 function clearFilters() {
-    // Reset all filters
-    document.getElementById('auditSearch').value = '';
-    document.getElementById('activityFilter').value = '';
-    document.getElementById('statusFilter').value = '';
-    
-    // Reset dates to default (last 30 days)
-    const today = new Date();
-    const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-    
-    document.getElementById('fromDate').value = thirtyDaysAgo.toISOString().split('T')[0];
-    document.getElementById('toDate').value = today.toISOString().split('T')[0];
-
-    // Show all logs
-    document.querySelectorAll('#loginLogsBody tr, .activity-log-item').forEach(row => {
-        row.style.display = '';
-    });
-
-    showAlert('Filters cleared!', 'success');
+    window.location.href = window.location.pathname;
 }
 
 function viewLogDetails(logId) {

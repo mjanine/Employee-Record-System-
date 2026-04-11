@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile | Employee System</title>
-    <link rel="shortcut icon" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/employee/emp_profile_view.css">
+    <link rel="shortcut icon" href="{% static 'img/general/uph.png' %}">
+    <link rel="stylesheet" href="{% static 'css/employee/emp_profile_view.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -15,11 +16,10 @@
 
 <div class="dashboard-viewport">
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="top-section">
             <div class="logo-wrapper" id="logoToggle">
-                <img src="../../static/img/general/uph.png" class="logo">
+                <img src="{% static 'img/general/uph.png' %}" class="logo">
                 <div class="open-icon">
                     <i class="fas fa-chevron-right"></i>
                 </div>
@@ -30,85 +30,81 @@
         </div>
 
         <ul class="menu">
-            <li><a href="#" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
-            <li><a href="#" class="menu-item active"><i class="fas fa-user"></i><span>Profile</span></a></li>
+            <li><a href="{% url 'employee_dashboard' %}" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+            <li><a href="{% url 'employee_profile' %}" class="menu-item active"><i class="fas fa-user"></i><span>Profile</span></a></li>
             <hr>
             <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
+            <li><a href="{% url 'attendance:employee_attendance_records' %}" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
+            <li><a href="{% url 'leaves:leave_select' %}" class="menu-item"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
         </ul>
 
         <div class="bottom-section">
-            <a href="#" class="menu-item logout">
+            <a href="{% url 'logout' %}" class="menu-item logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Log Out</span>
             </a>
         </div>
     </div>
 
-    <!-- MAIN -->
     <main class="main-content">
         <div class="profile-page-container">
 
-            <!-- PROFILE -->
             <div class="profile-card">
                 <div class="profile-left">
-                    <img src="../../static/img/sample-profile-pic.jfif" class="profile-img">
+                    {% if employee.profile_pic %}
+                        <img src="{{ employee.profile_pic.url }}" class="profile-img">
+                    {% else %}
+                        <img src="{% static 'img/sample-profile-pic.jfif' %}" class="profile-img">
+                    {% endif %}
 
                     <div class="profile-info">
-                        <h2>John Doe</h2>
-                        <p class="role">Software Engineer</p>
-                        <p class="employee-id">Employee ID: EMP001</p>
+                        <h2>{{ employee.get_full_name }}</h2>
+                        <p class="role">{{ employee.profile.employment_type|default:"Employee" }}</p>
+                        <p class="employee-id">Employee ID: {{ employee.profile.employee_id|default:"N/A" }}</p>
 
                         <div class="employment-details">
-                            <p><strong>Status</strong> <span class="status-dot" style="background:#8ddf9b"></span> Active</p>
-                            <p><strong>Position</strong> Software Engineer</p>
-                            <p><strong>Department</strong> Computer Department</p>
-                            <p><strong>Employment Type</strong> Full-time</p>
-                            <p><strong>Date Hired</strong> 2022-01-15</p>
+                            <p><strong>Status</strong> <span class="status-dot" style="background:{% if employee.is_active %}#8ddf9b{% else %}#ff6b6b{% endif %}"></span> {% if employee.is_active %}Active{% else %}Inactive{% endif %}</p>
+                            <p><strong>Position</strong> {{ employee.get_role_display }}</p>
+                            <p><strong>Department</strong> {{ employee.department.name|default:"N/A" }}</p>
+                            <p><strong>Employment Type</strong> {{ employee.profile.employment_type|default:"N/A" }}</p>
+                            <p><strong>Date Hired</strong> {{ employee.date_joined|date:"M d, Y" }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="profile-right">
-                    <a href="emp_profile_edit.html">
+                    <a href="#">
                         <button class="edit-btn">Edit Profile</button>
                     </a>
 
                     <div class="contact-info">
                         <h4>Contact Information</h4>
-                        <p><i class="fas fa-envelope"></i> john.doe@email.com</p>
-                        <p><i class="fas fa-phone"></i> +63 912 345 6789</p>
-                        <p><i class="fas fa-location-dot"></i> Manila, Philippines</p>
+                        <p><i class="fas fa-envelope"></i> {{ employee.email|default:"N/A" }}</p>
+                        <p><i class="fas fa-phone"></i> {{ employee.profile.contact_number|default:"N/A" }}</p>
+                        <p><i class="fas fa-location-dot"></i> {{ employee.profile.address|default:"N/A" }}</p>
                     </div>
                 </div>
             </div>
 
-            <!-- TABS -->
             <div class="tabs">
                 <button class="tab active" data-tab="dept">My Department</button>
                 <button class="tab" data-tab="docs">My Documents</button>
                 <button class="tab" data-tab="history">My History</button>
             </div>
 
-            <!-- TAB CONTENT -->
             <div class="tab-content">
 
-                <!-- DEPARTMENT -->
                 <div class="tab-content-item active" id="dept">
                     <div class="info-card">
                         <h4>Department Information</h4>
-                        <div class="info-row"><span>Department</span><span>Computer Department</span></div>
-                        <div class="info-row"><span>Code</span><span>CCS-201</span></div>
-                        <div class="info-row"><span>Location</span><span>Main Building 2nd Floor</span></div>
-                        <div class="info-row"><span>Email</span><span>computer.admin@school.com</span></div>
-                        <div class="info-row"><span>Contact</span><span>+63 912 111 2222</span></div>
+                        <div class="info-row"><span>Department</span><span>{{ employee.department.name|default:"N/A" }}</span></div>
+                        <div class="info-row"><span>Head</span><span>{{ employee.department.head.get_full_name|default:"N/A" }}</span></div>
+                        <div class="info-row"><span>Location</span><span>Main Building</span></div>
                     </div>
                 </div>
 
-                <!-- DOCUMENTS -->
                 <div class="tab-content-item" id="docs">
 
                     <div class="doc-header">
@@ -163,28 +159,9 @@
 
                 </div>
 
-                <!-- HISTORY -->
                 <div class="tab-content-item" id="history">
 
-                    <div class="timeline">
-
-                        <div class="timeline-item">
-                            <div class="timeline-date">2025</div>
-                            <div class="timeline-content">
-                                <h4>Promotion</h4>
-                                <p>Junior Developer → Software Engineer</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item">
-                            <div class="timeline-date">2022</div>
-                            <div class="timeline-content">
-                                <h4>Hired</h4>
-                                <p>Joined Computer Department</p>
-                            </div>
-                        </div>
-
-                    </div>
+                    {% include 'history/timeline.html' %}
 
                 </div>
 
@@ -194,7 +171,6 @@
     </main>
 </div>
 
-<!-- UPLOAD MODAL -->
 <div id="uploadModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
     <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%; border-radius: 8px;">
         <span class="close-modal" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
@@ -207,7 +183,7 @@
     </div>
 </div>
 
-<script src="../../static/js/employee/emp_profile_view.js"></script>
+<script src="{% static 'js/employee/emp_profile_view.js' %}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var modal = document.getElementById("uploadModal");

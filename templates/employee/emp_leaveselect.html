@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Leave Management | Employee System</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/employee/emp_leaveselect.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/general/uph.png' %}">
+    <link rel="stylesheet" href="{% static 'css/employee/emp_leaveselect.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -15,7 +16,7 @@
         <div class="sidebar" id="sidebar">
             <div class="top-section">
                 <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo">
+                    <img src="{% static 'img/general/uph.png' %}" class="logo">
                     <div class="open-icon">
                         <i class="fas fa-chevron-right"></i>
                     </div>
@@ -26,18 +27,19 @@
             </div>
 
             <ul class="menu">
-                <li><a href="../dashboards/emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
-            <li><a href="../accounts/emp_profile_view.html" class="menu-item"><i class="fas fa-user"></i> <span>Profile</span></a></li>
-            <hr>
-            <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
-            <li><a href="#" class="menu-item active"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+                <li><a href="{% url 'employee_dashboard' %}" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+                {# The profile URL requires a user ID and is best handled in a base template or context processor #}
+                <li><a href="#" class="menu-item"><i class="fas fa-user"></i> <span>Profile</span></a></li>
+                <hr>
+                <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
+                <li><a href="{% url 'attendance:employee_attendance_records' %}" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
+                <li><a href="{% url 'leaves:leave_select' %}" class="menu-item active"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
+                <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
             </ul>
 
             <div class="bottom-section">
-                <a href="../login/login.html" class="menu-item logout">
+                <a href="{% url 'logout' %}" class="menu-item logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Log Out</span>
                 </a>
@@ -50,12 +52,12 @@
                 <p>Please select an option to proceed</p>
                 
                 <div class="modal-options">
-                    <a href="emp_applicationleave.html" class="opt-card">
+                    <a href="{% url 'leaves:apply_leave' %}" class="opt-card">
                         <i class="fas fa-file-signature"></i>
                         <span>Apply for Leave</span>
                     </a>
                     
-                    <a href="emp_leaverequest.html" class="opt-card">
+                    <a href="{% url 'leaves:leave_history' %}" class="opt-card">
                         <i class="fas fa-history"></i>
                         <span>Leave Requests / History</span>
                     </a>
@@ -64,6 +66,6 @@
         </main>
     </div>
 
-    <script src="../../static/js/employee/emp_leaveselect.js"></script>
+    <script src="{% static 'js/employee/emp_leaveselect.js' %}"></script>
 </body>
 </html>

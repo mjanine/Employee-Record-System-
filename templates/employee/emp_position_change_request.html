@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Position Change Request | Employee System</title>
     <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/application_management/position_change_request.css">
+    <link rel="stylesheet" href="../../static/css/employee/position_change_request.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 </head>
@@ -21,14 +21,14 @@
         </div>
 
         <ul class="menu">
-            <li><a href="../dashboards/emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
-            <li><a href="../accounts/emp_profile_view.html" class="menu-item"><i class="fas fa-user"></i> <span>Profile</span></a></li>
+            <li><a href="emp_dash.html" class="menu-item"><i class="fas fa-border-all"></i> <span>Dashboard</span></a></li>
+            <li><a href="emp_profile_view.html" class="menu-item"><i class="fas fa-user"></i> <span>Profile</span></a></li>
             <hr>
-            <li><a href="#" class="menu-item"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
-            <li><a href="#" class="menu-item active"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
+            <li><a href="emp_position_change_request.html" class="menu-item active"><i class="fas fa-user-edit"></i><span>Position Change Request</span></a></li>
+            <li><a href="emp_attendance.html" class="menu-item"><i class="fas fa-calendar-check"></i><span>Attendance</span></a></li>
+            <li><a href="emp_leaveselect.html" class="menu-item"><i class="fas fa-plane-departure"></i><span>Leave Request</span></a></li>
             <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-            <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+            <li><a href="emp_training.html" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
         </ul>
 
         <div class="bottom-section">
@@ -39,7 +39,16 @@
     <div class="dashboard-viewport">
         <main class="main-content">
             <div class="form-card">
-                <h2>Position Change Request</h2>
+                <div class="form-card-header">
+                    <div>
+                        <h2>Position Change Request</h2>
+                        <p>Submit a position change request and track it in your records.</p>
+                    </div>
+                    <div class="view-toggle-header">
+                        <button type="button" class="toggle-btn active" id="tabNewRequest">New Request</button>
+                        <button type="button" class="toggle-btn" id="recordsBtn">Records</button>
+                    </div>
+                </div>
                 
                 <form class="position-form" id="positionForm">
                     <div class="form-row">
@@ -97,7 +106,7 @@
 
                     <div class="form-actions">
                         <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
-                        <button type="button" class="btn-save" id="submitBtn">Save</button>
+                        <button type="submit" class="btn-save" id="submitBtn">Submit</button>
                     </div>
                 </form>
             </div>
@@ -119,6 +128,6 @@
         </div>
     </div>
 
-    <script src="../../static/js/application_management/position_change_request.js"></script>
+    <script src="../../static/js/employee/position_change_request.js"></script>
 </body>
 </html>

@@ -72,4 +72,30 @@ class EmployeeProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.employee_id if self.employee_id else 'No ID'})"
+
+class SystemConfig(models.Model):
+    # Security Policies
+    min_password_length = models.IntegerField(default=8)
+    require_complexity = models.BooleanField(default=True)
+    session_timeout = models.IntegerField(default=30) # in minutes
+    force_password_change = models.BooleanField(default=False)
+    
+    # Backup Info
+    last_backup_date = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "System Configuration"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1  # Ensures only one instance exists
+        super().save(*args, **kwargs)
+
+class BackupSnapshot(models.Model):
+    file_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    size_in_bytes = models.BigIntegerField(default=0)
+    status = models.CharField(max_length=50, default='Success')
+
+    def __str__(self):
+        return f"Backup: {self.file_name} on {self.created_at.strftime('%Y-%m-%d %H:%M')}"
     

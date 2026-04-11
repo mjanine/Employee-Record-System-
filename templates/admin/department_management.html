@@ -171,25 +171,7 @@
 
     <div class="background"></div>
 
-    <div class="sidebar" id="sidebar">
-        <div class="top-section">
-            <div class="logo-wrapper" id="logoToggle">
-                <img src="{% static 'img/general/uph.png' %}" class="logo" alt="Logo">
-                <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
-            </div>
-            <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
-        </div>
-
-        <ul class="menu">
-            <li><a href="{% url 'admin_dashboard' %}" class="menu-item"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-            <li><a href="{% url 'admin_dashboard' %}" class="menu-item"><i class="fas fa-users"></i> <span>User Management</span></a></li>
-<li><a href="{% url 'department_management' %}" class="menu-item active"><i class="fas fa-sitemap"></i> <span>Department Management</span></a></li>
-        </ul>
-
-        <div class="bottom-section">
-            <a href="{% url 'logout' %}" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> <span>Log Out</span></a>
-        </div>
-    </div>
+    {% include 'components/sidebar.html' %}
 
     <div class="dashboard-viewport">
     <main class="main-content department-main">
@@ -377,7 +359,12 @@
                 <div class="form-group">
                     <label>Select Department Head *</label>
                     <div class="head-selection">
-                        <input type="text" id="headSearch" placeholder="Search by name or email...">
+                        <input type="text" id="headSearch" list="userList" placeholder="Search by name or email...">
+                        <datalist id="userList">
+                            {% for user in users %}
+                            <option value="{{ user.email }}">{{ user.get_full_name }}</option>
+                            {% endfor %}
+                        </datalist>
                         <div id="headList" class="head-list">
                             {% for user in users %}
                             <div class="head-option" data-user-id="{{ user.id }}">

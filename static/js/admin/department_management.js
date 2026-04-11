@@ -56,8 +56,29 @@ function setupEventListeners() {
     document.getElementById('departmentForm')?.addEventListener('submit', handleDepartmentFormSubmit);
     document.getElementById('assignHeadForm')?.addEventListener('submit', handleAssignHeadSubmit);
 
-    // Head search
-    document.getElementById('headSearch')?.addEventListener('keyup', searchHeads);
+    // Head search floating menu behavior
+    const headSearch = document.getElementById('headSearch');
+    const headList = document.getElementById('headList');
+    
+    if (headSearch) {
+        headSearch.addEventListener('keyup', searchHeads);
+        headSearch.addEventListener('focus', function() {
+            if (headList) headList.style.display = 'block';
+        });
+    }
+
+    // Update search input when an option is selected
+    document.querySelectorAll('.head-option input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked && headSearch) {
+                const nameSpan = this.nextElementSibling.querySelector('.head-name');
+                if (nameSpan) {
+                    headSearch.value = nameSpan.textContent;
+                }
+                if (headList) headList.style.display = 'none';
+            }
+        });
+    });
 
     // Confirm Modal Button
     document.getElementById('confirmBtn')?.addEventListener('click', executeConfirmedAction);
@@ -125,6 +146,9 @@ async function editDepartment(deptId) {
         document.getElementById('deptId').value = deptId;
         document.getElementById('deptName').value = data.name;
         document.getElementById('deptCollege').value = data.college || '';
+        if (document.getElementById('deptHead')) {
+            document.getElementById('deptHead').value = data.head_id || '';
+        }
 
         document.getElementById('departmentModal').classList.add('show');
     } catch (error) {
@@ -154,6 +178,9 @@ function closeConfirmModal() {
 
 function searchHeads(e) {
     const searchTerm = e.target.value.toLowerCase();
+    const headList = document.getElementById('headList');
+    
+    if (headList) headList.style.display = 'block';
     
     document.querySelectorAll('.head-option').forEach(option => {
         const text = option.textContent.toLowerCase();
@@ -346,6 +373,12 @@ document.addEventListener('click', function(e) {
         document.querySelectorAll('.department-card .dropdown-menu').forEach(d => {
             d.style.display = 'none';
         });
+    }
+
+    // Also close the custom head search dropdown when clicking outside
+    const headList = document.getElementById('headList');
+    if (headList && !e.target.closest('.head-selection')) {
+        headList.style.display = 'none';
     }
 });
 

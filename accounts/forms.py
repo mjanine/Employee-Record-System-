@@ -65,7 +65,7 @@ class DepartmentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['head'].queryset = User.objects.filter(role='HEAD', is_active=True)
+        self.fields['head'].queryset = User.objects.all()
         self.fields['head'].empty_label = "Select Department Head"
 
 

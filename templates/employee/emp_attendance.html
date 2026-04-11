@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Log | Employee System</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
-    <link rel="stylesheet" href="../../static/css/attendance/emp_attendance.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/general/uph.png' %}">
+    <link rel="stylesheet" href="{% static 'css/employee/emp_attendance.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +18,7 @@
         <div class="sidebar" id="sidebar">
             <div class="top-section">
                 <div class="logo-wrapper" id="logoToggle">
-                    <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
+                    <img src="{% static 'img/general/uph.png' %}" class="logo" alt="Logo">
                     <div class="open-icon">
                         <i class="fas fa-chevron-right"></i>
                     </div>
@@ -29,13 +30,13 @@
 
             <ul class="menu">
                 <li>
-                    <a href="emp_dash.html" class="menu-item">
+                    <a href="{% url 'employee_dashboard' %}" class="menu-item">
                         <i class="fas fa-border-all"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../employee/emp_profile_view.html" class="menu-item">
+                    <a href="#" class="menu-item">
                         <i class="fas fa-user"></i>
                         <span>Profile</span>
                     </a>
@@ -48,13 +49,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="../attendance/emp_attendance.html" class="menu-item active">
+                    <a href="{% url 'attendance:employee_attendance_records' %}" class="menu-item active">
                         <i class="fas fa-calendar-check"></i>
                         <span>Attendance</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../leave/hr_leaveselect.html" class="menu-item">
+                    <a href="{% url 'leaves:leave_select' %}" class="menu-item">
                         <i class="fas fa-plane-departure"></i>
                         <span>Leave Request</span>
                     </a>
@@ -67,12 +68,6 @@
                 </li>
                 <li>
                     <a href="#" class="menu-item">
-                        <i class="fas fa-folder-open"></i>
-                        <span>Documents</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../training_management/emp_training.html" class="menu-item">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <span>Trainings</span>
                     </a>
@@ -80,7 +75,7 @@
             </ul>
 
             <div class="bottom-section">
-                <a href="../login/login.html" class="menu-item logout">
+                <a href="{% url 'logout' %}" class="menu-item logout">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Log Out</span>
                 </a>
@@ -91,15 +86,8 @@
 
             <div class="master-content-wrapper">
 
-                <div class="content-card header-banner">
-                    <div class="header-banner-inner">
-                        <div class="header-greeting">
-                            <p class="header-kicker">Employee portal</p>
-                            <h1>Good morning, Juan!</h1>
-                            <p class="header-sub">Track your time and weekly attendance at a glance.</p>
-                        </div>
-                        <div class="header-weather" aria-hidden="true"><i class="fas fa-sun"></i></div>
-                    </div>
+                <div class="dashboard-header dashboard-header--compact-right">
+                    <h1 style="color: #000000;">Attendance Log</h1>
                 </div>
 
                 <div class="dashboard-grid">
@@ -124,20 +112,6 @@
                             </div>
                         </div>
                         <button type="button" class="btn-clock-in" id="clockBtn">Clock in</button>
-                    </div>
-
-                    <div class="content-card profile-preview">
-                        <div class="profile-flex">
-                            <div class="avatar-box">
-                                <img src="../../static/img/man.jpeg" alt="Juan Dela Cruz">
-                            </div>
-                            <div class="profile-details">
-                                <h3>Juan Dela Cruz</h3>
-                                <p class="profile-role">Department Head</p>
-                                <p class="emp-id">Employee ID: 001</p>
-                                <a href="../employee/emp_profile_view.html" class="btn-secondary">View Profile</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -223,7 +197,19 @@
                                     </tr>
                                 </thead>
                                 <tbody id="weeklyTableBody">
-                                    </tbody>
+                                    {% for log in attendance_logs %}
+                                    <tr>
+                                        <td>{{ log.date|date:"F d, Y" }}</td>
+                                        <td>{{ log.date|date:"l" }}</td>
+                                        <td>{{ log.time_in|time:"h:i A"|default:"--" }}</td>
+                                        <td>{{ log.time_out|time:"h:i A"|default:"--" }}</td>
+                                        <td>--</td>
+                                        <td><span class="status-badge {{ log.status|lower }}">{{ log.get_status_display }}</span></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="6" style="text-align: center; padding: 2rem;">No attendance records found.</td></tr>
+                                    {% endfor %}
+                                </tbody>
                             </table>
                             <div class="monthly-grid" id="monthlyGrid">
                                 </div>
@@ -278,6 +264,6 @@
         </div>
 
     </div> 
-    <script src="../../static/js/attendance/emp_attendance.js"></script>
+    <script src="{% static 'js/employee/emp_attendance.js' %}"></script>
 </body>
 </html>

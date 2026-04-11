@@ -12,13 +12,16 @@ const employeeDirectory = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    const recordsPageUrl = '../history/timeline.html';
     const sidebar        = document.getElementById('sidebar');
     const logoToggle     = document.getElementById('logoToggle');
     const closeBtn       = document.getElementById('closeBtn');
     const menuItems      = document.querySelectorAll('.menu-item');
+    const positionForm   = document.getElementById('positionForm');
     const empNameInput   = document.getElementById('empName');
     const cancelBtn      = document.getElementById('cancelBtn');
     const submitBtn      = document.getElementById('submitBtn');
+    const recordsBtn     = document.getElementById('recordsBtn');
 
     // ── Static modal elements (defined in HTML) ──
     const cancelModal      = document.getElementById('cancelModal');
@@ -67,6 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (recordsBtn) {
+        recordsBtn.addEventListener('click', () => {
+            const employeeName = empNameInput.value.trim();
+            const recordsUrl = employeeName
+                ? `${recordsPageUrl}?employee=${encodeURIComponent(employeeName)}`
+                : recordsPageUrl;
+
+            window.location.href = recordsUrl;
+        });
+    }
+
     // Close modal on backdrop click
     cancelModal.addEventListener('click', (e) => {
         if (e.target === cancelModal) {
@@ -74,22 +88,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ── Submit button ──
-    if (submitBtn) {
-        submitBtn.addEventListener('click', () => {
-            const empName      = document.getElementById('empName').value.trim();
+    // ── Submit form ──
+    if (positionForm) {
+        positionForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const empName = document.getElementById('empName').value.trim();
+            const empId = document.getElementById('empId').value.trim();
+            const currentPos = document.getElementById('currentPos').value.trim();
+            const currentDept = document.getElementById('currentDept').value.trim();
             const requestedPos = document.getElementById('requestedPos').value;
             const effectiveDate = document.getElementById('effectiveDate').value;
-            const reason       = document.getElementById('reason').value.trim();
+            const reason = document.getElementById('reason').value.trim();
 
             if (!empName || !requestedPos || !effectiveDate || !reason) {
                 showToast('Please fill in all required fields.');
                 return;
             }
 
+            const requestRecord = {
+                employeeName: empName,
+                employeeId: empId,
+                currentPosition: currentPos,
+                currentDepartment: currentDept,
+                requestedPosition: requestedPos,
+                effectiveDate,
+                reason,
+                submittedAt: new Date().toISOString(),
+                status: 'Pending'
+            };
+
+            try {
+                const existingRecords = JSON.parse(localStorage.getItem('positionChangeRequests') || '[]');
+                existingRecords.unshift(requestRecord);
+                localStorage.setItem('positionChangeRequests', JSON.stringify(existingRecords));
+            } catch (error) {
+                console.warn('Unable to persist position change request locally.', error);
+            }
+
             showSuccessNotification(`${empName}'s position change request has been successfully submitted.`);
 
-            setTimeout(() => resetForm(), 1500);
+            setTimeout(() => {
+                window.location.href = `${recordsPageUrl}?employee=${encodeURIComponent(empName)}`;
+            }, 1200);
         });
     }
 

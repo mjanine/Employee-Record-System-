@@ -11,9 +11,11 @@ import json
 from django.db import models, transaction # Correctly added here
 from django.db.models import Q, Count
 
-from .models import User, Department, EmployeeProfile
+from audit.utils import log_activity
+from .models import User, Department, EmployeeProfile, SystemConfig
 from documents.models import Document
 from documents.forms import DocumentUploadForm
+
 # ADDED AddEmployeeForm TO THIS LIST BELOW:
 from .forms import (
     CustomUserCreationForm, CustomUserChangeForm, AssignRoleForm, 
@@ -100,6 +102,7 @@ def logout_view(request):
 def admin_dashboard(request):
     # This view will now serve as the user management list
     users = User.objects.all().order_by('last_name', 'first_name')
+    all_users = User.objects.all().order_by('last_name', 'first_name')
     departments = Department.objects.all()
     
     # Apply filters if present in GET request
@@ -140,6 +143,7 @@ def admin_dashboard(request):
 
     context = {
         'users': users,
+        'all_users': all_users,
         'roles': User.ROLE_CHOICES,
         'departments': departments,
         'current_search': search_term,
@@ -203,6 +207,12 @@ def create_user(request):
     form = CustomUserCreationForm(request.POST, request.FILES)
     if form.is_valid():
         user = form.save()
+        log_activity(
+            actor=request.user,
+            action="Create User",
+            target_user=user,
+            details=f"Created new user {user.username}"
+        )
         messages.success(request, f"User {user.username} created successfully. Password change required on first login.")
         return JsonResponse({'status': 'success', 'message': 'User created successfully.'})
     else:
@@ -237,6 +247,12 @@ def edit_user(request, user_id):
     form = CustomUserChangeForm(request.POST, request.FILES, instance=user)
     if form.is_valid():
         form.save()
+        log_activity(
+            actor=request.user,
+            action="Edit User",
+            target_user=user,
+            details=f"Updated details for {user.username}"
+        )
         messages.success(request, f"User {user.username} updated successfully.")
         return JsonResponse({'status': 'success', 'message': 'User updated successfully.'})
     else:
@@ -254,9 +270,16 @@ def assign_role(request):
         department = form.cleaned_data['department']
 
         user = get_object_or_404(User, pk=user_id)
+        old_role = user.role
         user.role = new_role
         user.department = department if new_role == 'HEAD' else None # Only assign department if role is HEAD
         user.save()
+        log_activity(
+            actor=request.user,
+            action="Assign Role",
+            target_user=user,
+            details=f"Changed role from {old_role} to {new_role}"
+        )
         messages.success(request, f"Role for {user.username} updated to {new_role}.")
         return JsonResponse({'status': 'success', 'message': 'Role assigned successfully.'})
     else:
@@ -287,6 +310,12 @@ def update_account_status(request):
                 user.is_locked = False
                 user.failed_login_attempts = 0 # Reset attempts on unlock
             user.save()
+            log_activity(
+                actor=request.user,
+                action="Update Account Status",
+                target_user=user,
+                details=f"Account status changed to {action}"
+            )
         
         messages.success(request, f"Selected accounts {action}d successfully.")
         return JsonResponse({'status': 'success', 'message': f"Accounts {action}d successfully."})
@@ -308,6 +337,12 @@ def reset_password(request):
         user.must_change_password = True # Enforce password change on next login
         user.last_password_change = timezone.now()
         user.save()
+        log_activity(
+            actor=request.user,
+            action="Reset Password",
+            target_user=user,
+            details="Password reset by administrator"
+        )
         messages.success(request, f"Password for {user.username} reset successfully. User must change password on next login.")
         return JsonResponse({'status': 'success', 'message': 'Password reset successfully.'})
     else:
@@ -327,6 +362,13 @@ def delete_user(request):
         return JsonResponse({'status': 'error', 'message': 'Cannot delete your own account.'}, status=400)
 
     users_to_delete = User.objects.filter(pk__in=user_ids)
+    for u in users_to_delete:
+        log_activity(
+            actor=request.user,
+            action="Delete User",
+            target_user=None,
+            details=f"Deleted user {u.username}"
+        )
     deleted_count, _ = users_to_delete.delete()
     messages.success(request, f"{deleted_count} user(s) deleted successfully.")
     return JsonResponse({'status': 'success', 'message': f"{deleted_count} user(s) deleted successfully."})
@@ -361,8 +403,8 @@ def password_change(request):
 def department_management(request):
     # Using annotate is perfect for keeping the database query efficient
     departments = Department.objects.all().annotate(employee_count=Count('user')).order_by('-is_active', 'name')
-    # Filter users to only show potential Heads (Role: HEAD) in the assignment modal
-    users = User.objects.filter(role='HEAD', is_active=True).order_by('last_name')
+    # Pass a list of users to populate the searchable dropdown
+    users = User.objects.all().order_by('last_name')
     
     context = {
         'departments': departments,
@@ -376,7 +418,17 @@ def department_management(request):
 def create_department(request):
     form = DepartmentForm(request.POST)
     if form.is_valid():
-        form.save()
+        dept_obj = form.save()
+        if dept_obj.head:
+            dept_obj.head.role = 'HEAD'
+            dept_obj.head.department = dept_obj
+            dept_obj.head.save()
+            log_activity(
+                actor=request.user,
+                action="Assign Department Head",
+                target_user=dept_obj.head,
+                details=f"Assigned as head of {dept_obj.name}"
+            )
         return JsonResponse({'status': 'success', 'message': 'Department created successfully.'})
     return JsonResponse({'status': 'error', 'message': 'Invalid form data.', 'errors': json.loads(form.errors.as_json())}, status=400)
 
@@ -384,13 +436,29 @@ def create_department(request):
 @user_passes_test(is_admin)
 @require_POST
 def edit_department(request, dept_id):
+    print("--- DEBUG DATA ---")
+    print(request.POST)
     dept = get_object_or_404(Department, pk=dept_id)
     # This handles both general edits and the 'Assign Head' modal
     form = DepartmentForm(request.POST, instance=dept)
     if form.is_valid():
-        form.save()
+        dept_obj = form.save()
+        if dept_obj.head:
+            dept_obj.head.role = 'HEAD'
+            dept_obj.head.department = dept_obj
+            dept_obj.head.save()
+            log_activity(
+                actor=request.user,
+                action="Assign Department Head",
+                target_user=dept_obj.head,
+                details=f"Assigned as head of {dept_obj.name}"
+            )
         return JsonResponse({'status': 'success', 'message': 'Department updated successfully.'})
-    return JsonResponse({'status': 'error', 'message': 'Update failed.', 'errors': json.loads(form.errors.as_json())}, status=400)
+    else:
+        print("--- FORM ERRORS ---")
+        print(form.errors.as_data()) # THIS WILL TELL YOU THE REAL REASON
+        from django.http import HttpResponseBadRequest
+        return HttpResponseBadRequest("Validation Failed")
 
 @login_required
 @user_passes_test(is_admin)
@@ -565,3 +633,19 @@ def delete_employee(request, user_id):
         messages.success(request, "Employee record deleted successfully.")
         return redirect('employee_list')
     return redirect('employee_profile', user_id=user_id)
+
+@login_required
+@user_passes_test(is_admin)
+def security_settings_view(request):
+    config, created = SystemConfig.objects.get_or_create(pk=1)
+
+    if request.method == 'POST':
+        new_timeout = request.POST.get('timeout')
+        
+        if new_timeout:
+            config.session_timeout = int(new_timeout)
+            config.save()
+            messages.success(request, "Security policies updated successfully!")
+            return redirect('security_settings')
+
+    return render(request, 'admin/security_settings.html', {'config': config})

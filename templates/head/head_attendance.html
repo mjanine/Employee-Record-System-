@@ -1,111 +1,108 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Log | Head System</title>
-    <link rel="shortcut icon" type="image/png" href="../../static/img/general/uph.png">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/general/uph.png' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../static/css/attendance/head_attendance.css">
+    <link rel="stylesheet" href="{% static 'css/head/head_attendance.css' %}">
 </head>
 <body>
 
-<div class="background"></div>
+    <div class="background"></div>
 
-<nav class="sidebar" id="sidebar">
-    <div class="top-section">
-        <div class="logo-wrapper" id="logoToggle">
-            <img src="../../static/img/general/uph.png" class="logo" alt="Logo">
-            <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
-        </div>
-        <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
-    </div>
+    <div class="master-app-container">
 
-    <ul class="menu">
-            <li>
-                <a href="head_dash.html" class="menu-item active">
-                    <i class="fas fa-border-all"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="head_profile_view.html" class="menu-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-            <hr>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-file"></i>
-                    <span>Application Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="head_employeelist.html" class="menu-item">
-                    <i class="fas fa-database"></i>
-                    <span>Employee Records</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>Attendance Monitoring</span>
-                </a>
-            </li>
-            <li>
-                <a href="head_leaveselect.html" class="menu-item">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Leave Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-star"></i>
-                    <span>Performance Evaluation</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Trainings</span>
-                </a>
-            </li>
-        </ul>
+        <div class="sidebar" id="sidebar">
+            <div class="top-section">
+                <div class="logo-wrapper" id="logoToggle">
+                    <img src="{% static 'img/general/uph.png' %}" class="logo" alt="Logo">
+                    <div class="open-icon">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <button class="close-btn" id="closeBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
 
-    <div class="bottom-section">
-        <a href="../login/login.html" class="menu-item logout">
-            <i class="fas fa-sign-out-alt"></i><span>Log Out</span>
-        </a>
-    </div>
-</nav>
+            <ul class="menu">
+                <li>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-border-all"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'history:head_profile' %}" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-file"></i>
+                        <span>Application Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-database"></i>
+                        <span>Employee Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'attendance:head_department_attendance' %}" class="menu-item active">
+                        <i class="fas fa-calendar"></i>
+                        <span>Attendance Monitoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'leaves:head_leave_select' %}" class="menu-item">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Leave Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-star"></i>
+                        <span>Performance Evaluation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="menu-item">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Trainings</span>
+                    </a>
+                </li>
+            </ul>
 
-<main class="main-content">
-    <div class="white-container">
-
-        <div class="dashboard-header">
-            <h1>Attendance</h1>
-            <div class="view-toggle-header">
-                <a href="../attendance/head_attendance.html" class="toggle-btn active" id="tab-log">Attendance Log</a>
-                <a href="../attendance/head_attendancemonitoring.html" class="toggle-btn" id="tab-monitoring">Attendance Monitoring</a>
+            <div class="bottom-section">
+                <a href="{% url 'logout' %}" class="menu-item logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
+                </a>
             </div>
         </div>
 
-        <div class="section-panel active">
-            <div class="al-header-banner">
-                <div class="al-header-inner">
-                    <div>
-                        <p class="kicker">HR Portal</p>
-                        <h2>Good morning, Juan!</h2>
-                        <p class="sub">Track your time and weekly attendance at a glance.</p>
-                    </div>
-                    <div class="al-header-weather" aria-hidden="true"><i class="fas fa-sun"></i></div>
+        <main class="main-container" id="mainContent">
+
+            <div class="master-content-wrapper">
+
+            <div class="dashboard-header dashboard-header--compact-right dashboard-header--title-tabs">
+                <h1 style="color: #000000;">Attendance Log</h1>
+                <div class="view-toggle-header">
+                    <a href="{% url 'attendance:head_department_attendance' %}" class="toggle-btn active" id="tab-log">Attendance Log</a>
+                    <a href="{% url 'attendance:head_attendance_monitoring' %}" class="toggle-btn" id="tab-monitoring">Attendance Monitoring</a>
                 </div>
             </div>
 
-            <div class="al-grid">
+            <div class="dashboard-grid">
                 <div class="content-card attendance-section">
-                    <div class="att-accent"></div>
+                    <div class="attendance-card-accent"></div>
                     <div class="card-header">
                         <div class="card-title-group">
                             <span class="card-icon-wrap"><i class="fas fa-fingerprint"></i></span>
@@ -125,20 +122,6 @@
                         </div>
                     </div>
                     <button type="button" class="btn-clock-in" id="clockBtn">Clock in</button>
-                </div>
-
-                <div class="content-card profile-preview">
-                    <div class="profile-flex">
-                        <div class="avatar-box">
-                            <img src="../../static/img/man.jpeg" alt="Juan Dela Cruz">
-                        </div>
-                        <div class="profile-details">
-                            <h3>Juan Dela Cruz</h3>
-                            <p class="profile-role">Department Head</p>
-                            <p class="emp-id">Employee ID: 001</p>
-                            <a href="../employee/emp_profile_view.html" class="btn-secondary">View Profile</a>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -186,12 +169,12 @@
                     <button class="btn-history" id="openHistory">View Full History</button>
                 </div>
             </div>
-        </div>
-    </div>
-</main>
 
-<div class="history-modal" id="historyModal">
-    <div class="history-modal-content">
+            </div> 
+            </main>
+
+        <div class="history-modal" id="historyModal">
+            <div class="history-modal-content">
         <div class="history-modal-header">
             <div class="employee-tab">Dela Cruz, Juan</div>
             <div class="header-controls">
@@ -263,10 +246,11 @@
             <p class="clock-out-duration" id="clockOutDurationText">Total time: 0h 00m</p>
             <p class="clock-out-sub">Shift saved. See you next time.</p>
             <button type="button" class="clock-out-btn clock-out-btn--primary" id="clockOutDismiss">Done</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<script src="../../static/js/attendance/head_attendance.js"></script>
+    </div> 
+    <script src="{% static 'js/head/head_attendance.js' %}"></script>
 </body>
 </html>

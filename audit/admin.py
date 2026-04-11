@@ -8,5 +8,5 @@ class LoginLogAdmin(admin.ModelAdmin):
 
 @admin.register(ActivityLog)
 class ActivityLogAdmin(admin.ModelAdmin):
-    list_display = ('user', 'action', 'module', 'timestamp', 'ip_address')
+    list_display = ('actor', 'action', 'module', 'timestamp', 'ip_address')
     list_filter = ('module', 'timestamp')
