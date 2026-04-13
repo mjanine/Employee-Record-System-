@@ -962,6 +962,11 @@ def delete_employee(request, user_id):
     return redirect('employee_profile_view', user_id=user_id)
 
 @login_required
+@user_passes_test(is_hr_or_admin)
+def hr_training(request):
+    return render(request, 'hr/hr_training.html')
+
+@login_required
 @user_passes_test(is_admin)
 def security_settings_view(request):
     config, created = SystemConfig.objects.get_or_create(pk=1)

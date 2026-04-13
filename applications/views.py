@@ -13,8 +13,11 @@ def sd_application_overview(request):
 @login_required
 def application_list(request):
     """View to list applications."""
-    # Placeholder context
-    return render(request, 'application_management/application_list.html', {})
+    # Route to the HR App Management template if user is HR/Admin
+    if request.user.role in ['HR', 'ADMIN']:
+        return render(request, 'hr/hr_appmanagement.html', {'applications': []})
+        
+    return render(request, 'application_management/application_list.html', {'applications': []})
 
 @login_required
 def application_detail(request, pk):

@@ -47,6 +47,7 @@ path('hr/employees/profile/<int:user_id>/', views.employee_profile_view, name='e
 # Make sure the name matches 'edit_employee'
 path('hr/employees/edit/<int:user_id>/', views.edit_employee, name='edit_employee'),
 path('hr/employees/delete/<int:user_id>/', views.delete_employee, name='delete_employee'),
+path('hr/training/', views.hr_training, name='hr_training'),
 
     # Admin Security & Data Management
     path('security-settings/', views.security_settings_view, name='security_settings'),
