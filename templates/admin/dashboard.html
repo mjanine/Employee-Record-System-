@@ -125,8 +125,6 @@
                         <div>
                             <h1>Admin Dashboard</h1>
                             <p class="subtitle">System Overview &amp; Management</p>
-                            <p class="subtitle">Welcome, {{ welcome_name }}</p>
-                            <p class="subtitle" style="font-style: italic;">{{ global_quote|default:"Success is the sum of small efforts repeated day in and day out." }}</p>
                         </div>
                     </div>
 
@@ -137,8 +135,8 @@
                             </div>
                             <div class="stat-content">
                                 <p class="stat-label">Total Users</p>
-                                <h2 class="stat-number">{{ system_overview.total_users }}</h2>
-                                <span class="stat-change positive">↑ {{ user_account_summary.active_users }} Active</span>
+                                <h2 class="stat-number">{{ stats.total_users }}</h2>
+                                <span class="stat-change positive">↑ {{ stats.active_users }} Active</span>
                             </div>
                         </div>
 
@@ -148,8 +146,8 @@
                             </div>
                             <div class="stat-content">
                                 <p class="stat-label">Total Departments</p>
-                                <h2 class="stat-number">{{ system_overview.total_departments }}</h2>
-                                <span class="stat-change">{{ system_overview.total_departments }} Active Units</span>
+                                <h2 class="stat-number">{{ stats.total_departments }}</h2>
+                                <span class="stat-change">{{ stats.total_departments }} Heads Assigned</span>
                             </div>
                         </div>
 
@@ -158,9 +156,9 @@
                                 <i class="fas fa-chart-line"></i>
                             </div>
                             <div class="stat-content">
-                                <p class="stat-label">Active Sessions</p>
-                                <h2 class="stat-number">{{ system_overview.active_sessions }}</h2>
-                                <span class="stat-change">Authenticated sessions</span>
+                                <p class="stat-label">System Activity</p>
+                                <h2 class="stat-number">47</h2>
+                                <span class="stat-change">Logins Today</span>
                             </div>
                         </div>
 
@@ -169,9 +167,9 @@
                                 <i class="fas fa-hourglass-end"></i>
                             </div>
                             <div class="stat-content">
-                                <p class="stat-label">Failed Logins</p>
-                                <h2 class="stat-number">{{ failed_login_count }}</h2>
-                                <span class="stat-change warning">{{ failed_login_today }} Today</span>
+                                <p class="stat-label">Pending Actions</p>
+                                <h2 class="stat-number">3</h2>
+                                <span class="stat-change warning">Require Attention</span>
                             </div>
                         </div>
                     </div>
@@ -194,43 +192,57 @@
                         <div class="section">
                             <h2 class="section-title">Recent System Activity</h2>
                             <div class="activity-feed">
-                                {% for log in recent_login_activity %}
                                 <div class="activity-item">
                                     <div class="activity-icon">
-                                        <i class="fas {% if log.status == 'Failed' %}fa-user-shield{% else %}fa-sign-in-alt{% endif %}"></i>
+                                        <i class="fas fa-sign-in-alt"></i>
                                     </div>
                                     <div class="activity-details">
-                                        <p class="activity-action">{{ log.username }} login {{ log.status|lower }}</p>
-                                        <p class="activity-user">IP: {{ log.ip_address }}</p>
+                                        <p class="activity-action">John Doe logged in</p>
+                                        <p class="activity-user">by Admin</p>
                                     </div>
-                                    <p class="activity-time">{{ log.datetime|timesince }} ago</p>
+                                    <p class="activity-time">10 mins ago</p>
                                 </div>
-                                {% empty %}
+
                                 <div class="activity-item">
-                                    <div class="activity-details">
-                                        <p class="activity-action">No recent login activity</p>
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-plus"></i>
                                     </div>
+                                    <div class="activity-details">
+                                        <p class="activity-action">New user Sarah Smith created</p>
+                                        <p class="activity-user">by Admin User</p>
+                                    </div>
+                                    <p class="activity-time">25 mins ago</p>
                                 </div>
-                                {% endfor %}
+
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p class="activity-action">Role changed for Mike Johnson to HR</p>
+                                        <p class="activity-user">by Admin</p>
+                                    </div>
+                                    <p class="activity-time">1 hour ago</p>
+                                </div>
                             </div>
                         </div>
 
                         <div class="section">
                             <h2 class="section-title">Quick Actions</h2>
                             <div class="quick-actions">
-                                <a href="{{ quick_action_urls.manage_users }}" class="action-btn primary">
+                                <a href="user_management.html" class="action-btn primary">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Manage Users</span>
                                 </a>
-                                <a href="{{ quick_action_urls.manage_departments }}" class="action-btn secondary">
+                                <a href="department_management.html" class="action-btn secondary">
                                     <i class="fas fa-sitemap"></i>
                                     <span>Manage Departments</span>
                                 </a>
-                                <a href="{{ quick_action_urls.audit_trails }}" class="action-btn secondary">
+                                <a href="audit_trails.html" class="action-btn secondary">
                                     <i class="fas fa-history"></i>
                                     <span>View Audit Trails</span>
                                 </a>
-                                <a href="{{ quick_action_urls.export_report }}" class="action-btn secondary">
+                                <a href="#" class="action-btn secondary">
                                     <i class="fas fa-file-export"></i>
                                     <span>Export Report</span>
                                 </a>
@@ -238,66 +250,24 @@
                         </div>
 
                         <div class="section">
-                            <h2 class="section-title">User Account Summary</h2>
+                            <h2 class="section-title">System Status</h2>
                             <div class="status-list">
                                 <div class="status-item">
-                                    <span class="status-label">Active Users</span>
-                                    <span class="status-badge success">{{ user_account_summary.active_users }}</span>
+                                    <span class="status-label">Database</span>
+                                    <span class="status-badge success">Connected</span>
                                 </div>
                                 <div class="status-item">
-                                    <span class="status-label">Inactive Users</span>
-                                    <span class="status-badge warning">{{ user_account_summary.inactive_users }}</span>
+                                    <span class="status-label">Email Service</span>
+                                    <span class="status-badge success">Active</span>
                                 </div>
                                 <div class="status-item">
-                                    <span class="status-label">Locked Users</span>
-                                    <span class="status-badge warning">{{ user_account_summary.locked_users }}</span>
+                                    <span class="status-label">File Storage</span>
+                                    <span class="status-badge success">Available</span>
                                 </div>
                                 <div class="status-item">
-                                    <span class="status-label">Total Accounts</span>
-                                    <span class="status-badge success">{{ user_account_summary.total_users }}</span>
+                                    <span class="status-label">Backup</span>
+                                    <span class="status-badge warning">Scheduled</span>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="section">
-                            <h2 class="section-title">System Notifications</h2>
-                            <div class="activity-feed">
-                                {% for notification in system_notifications %}
-                                <div class="activity-item">
-                                    <div class="activity-icon">
-                                        <i class="fas fa-bell"></i>
-                                    </div>
-                                    <div class="activity-details">
-                                        <p class="activity-action">{{ notification.message }}</p>
-                                        <p class="activity-user">{{ notification.notification_type }}</p>
-                                    </div>
-                                    <p class="activity-time">{{ notification.created_at|timesince }} ago</p>
-                                </div>
-                                {% empty %}
-                                <div class="activity-item">
-                                    <div class="activity-details">
-                                        <p class="activity-action">No system notifications</p>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <div class="section">
-                            <h2 class="section-title">Help &amp; Support</h2>
-                            <div class="quick-actions">
-                                <a href="{% url 'audit_trails' %}" class="action-btn secondary">
-                                    <i class="fas fa-circle-question"></i>
-                                    <span>FAQ / Help Center</span>
-                                </a>
-                                <a href="mailto:hr@uph.edu" class="action-btn secondary">
-                                    <i class="fas fa-user-tie"></i>
-                                    <span>HR: hr@uph.edu</span>
-                                </a>
-                                <a href="mailto:its@uph.edu" class="action-btn secondary">
-                                    <i class="fas fa-laptop-code"></i>
-                                    <span>ITS: its@uph.edu</span>
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -307,7 +277,6 @@
     </main>
     </div>
 
-    {{ dashboard_payload|json_script:"adminDashboardData" }}
     <script src="{% static 'js/admin/sidebar.js' %}"></script>
     <script src="{% static 'js/admin/dashboard.js' %}"></script>
 </body>
