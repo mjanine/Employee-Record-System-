@@ -244,34 +244,62 @@
     </div>
 
     <div id="departmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeDepartmentModal()">&times;</span>
-            <h2 id="deptModalTitle">Add Department</h2>
-            <form id="departmentForm" method="POST">
-                {% csrf_token %}
-                <input type="hidden" id="deptId" name="dept_id">
-                <div class="form-group">
-                    <label>Department Name *</label>
-                    <input type="text" id="deptName" name="name" required class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>College (If applicable)</label>
-                    <input type="text" id="deptCollege" name="college" class="form-control" placeholder="e.g. College of Computing">
-                </div>
-                <div class="form-group" id="statusGroup" style="display:none;">
-                    <label>
-                        <input type="checkbox" name="is_active" id="deptStatus" checked>
-                        Department is Active
-                    </label>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Department</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeDepartmentModal()">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div class="modal-content">
+        <span class="close" onclick="closeDepartmentModal()">&times;</span>
+        <h2 id="deptModalTitle">Add Department</h2>
+        <form id="departmentForm" method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="deptId" name="dept_id">
+            
+            <div class="form-group">
+                <label>Select Department *</label>
+                <select id="deptName" name="name" required class="form-control glass-input">
+                    <option value="" disabled selected>-- Choose Department --</option>
+                    
+                    <optgroup label="College of Computer Studies">
+                        <option value="IT">Information Technology</option>
+                        <option value="CS">Computer Science</option>
+                        <option value="EMC">Entertainment & Multimedia Computing</option>
+                    </optgroup>
 
+                    <optgroup label="College of Engineering">
+                        <option value="CIVIL">Civil Engineering</option>
+                        <option value="COMP_ENG">Computer Engineering</option>
+                        <option value="ELEC">Electrical Engineering</option>
+                        <option value="IND_ENG">Industrial Engineering</option>
+                        <option value="MECH">Mechanical Engineering</option>
+                    </optgroup>
+
+                    <optgroup label="Health & Sciences">
+                        <option value="NURSING">Nursing</option>
+                        <option value="MED_TECH">Medical Technology</option>
+                        <option value="PHARMA">Pharmacy</option>
+                    </optgroup>
+
+                    <optgroup label="Business & Arts">
+                        <option value="CBA">Business Administration</option>
+                        <option value="CRIM">Criminology</option>
+                        <option value="EDUC">Education</option>
+                        <option value="IHM">International Hospitality Management</option>
+                    </optgroup>
+                </select>
+                <small style="color: rgba(255,255,255,0.6);">College will be assigned automatically.</small>
+            </div>
+
+            <div class="form-group" id="statusGroup" style="display:none;">
+                <label>
+                    <input type="checkbox" name="is_active" id="deptStatus" checked>
+                    Department is Active
+                </label>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Department</button>
+                <button type="button" class="btn btn-secondary" onclick="closeDepartmentModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
     <div id="assignHeadModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>

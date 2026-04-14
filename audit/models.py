@@ -22,3 +22,5 @@ class ActivityLog(models.Model):
     details = models.TextField(blank=True, null=True)
     ip_address = models.GenericIPAddressField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    

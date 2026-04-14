@@ -683,6 +683,52 @@ body:has(.sidebar.collapsed) {
     }
 }
 
+/* Glass Style for Select Dropdown */
+.glass-input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #333; /* Use white if background is dark */
+    backdrop-filter: blur(10px);
+    appearance: none; /* Removes default browser arrow */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='maroon' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+.glass-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #4a4a4a;
+}
+
+/* Save Button - Maroon Theme */
+.btn-save {
+    background: #800000 !important;
+    color: white !important;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: bold;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    background: #4a1d1d !important;
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.3);
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    border-radius: 12px;
+    border: none;
+}
+
 .modal-content {
     background-color: white;
     padding: 2rem;
