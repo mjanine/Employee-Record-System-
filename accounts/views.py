@@ -1119,19 +1119,25 @@ def employee_list(request):
 @user_passes_test(is_hr_or_admin)
 def add_employee(request):
     """ View to create both a User and their EmployeeProfile safely """
+    # 1. FETCH DEPARTMENTS for the dropdown
+    departments = Department.objects.filter(is_active=True)
+
     if request.method == 'POST':
         form = AddEmployeeForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    # 1. Create User Account
+                    # 2. CAPTURE THE SELECTED DEPARTMENT
+                    dept_id = request.POST.get('department')
+                    
+                    # 3. CREATE USER (Assign department_id here!)
                     user = User.objects.create(
                         username=form.cleaned_data['username'],
                         email=form.cleaned_data['email'],
                         first_name=form.cleaned_data['first_name'],
                         last_name=form.cleaned_data['last_name'],
                         role='EMP', 
-                        department=form.cleaned_data.get('department'),
+                        department_id=dept_id,  # <-- Link to Department
                         must_change_password=True
                     )
                     user.set_password('UPH_Employee2026!') 
@@ -1140,11 +1146,9 @@ def add_employee(request):
                         user.profile_pic = request.FILES['profile_pic']
                     user.save()
 
-                    # 2. Manually Create/Update the Profile
-                    # We use get_or_create to ensure no duplicate profiles are made
+                    # 4. CREATE PROFILE
                     profile, created = EmployeeProfile.objects.get_or_create(user=user)
                     
-                    # 3. Populate Profile Details from the Form safely
                     profile.employee_id = form.cleaned_data.get('employee_id')
                     profile.employment_type = form.cleaned_data.get('employment_type')
                     profile.middle_name = form.cleaned_data.get('middle_name')
@@ -1166,10 +1170,11 @@ def add_employee(request):
     else:
         form = AddEmployeeForm()
 
-    return render(request, 'hr/hr_addemployee.html', {'form': form})
-
-from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib import messages
+    # 5. PASS DEPARTMENTS TO THE HTML CONTEXT
+    return render(request, 'hr/hr_addemployee.html', {
+        'form': form, 
+        'departments': departments 
+    })
 
 @login_required
 def employee_profile_view(request, user_id):
