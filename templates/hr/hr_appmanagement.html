@@ -32,8 +32,8 @@
         <li><a href="{% url 'attendance:hr_attendance_monitoring' %}" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
         <li><a href="{% url 'leaves:hr_leave_select' %}" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
         <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-        <li><a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
-        <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
+        <li><a href="{% url 'trainings:hr_training_list' %}" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+        <li><a href="{% url 'hr_reports' %}" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
     </ul>
         <div class="bottom-section">
         <a href="{% url 'logout' %}" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>

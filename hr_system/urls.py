@@ -21,6 +21,7 @@ urlpatterns = [
     path('documents/', include('documents.urls')),
     path('history/', include('history.urls')),
     path('notifications/', include('notifications.urls')),
+    path('trainings/', include('trainings.urls')),
 ]
 
 # Serving Media Files during development

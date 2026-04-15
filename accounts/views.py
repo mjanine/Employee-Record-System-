@@ -1272,7 +1272,7 @@ def delete_employee(request, user_id):
 @login_required
 @user_passes_test(is_hr_or_admin)
 def hr_training(request):
-    return render(request, 'hr/hr_training.html')
+    return redirect('trainings:hr_training_list')
 
 @login_required
 @user_passes_test(is_admin)

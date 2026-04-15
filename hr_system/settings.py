@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'history',
     'leaves',
     'notifications',
+    'trainings',
 ]
 
 # CRITICAL: Tell Django to use your custom User model

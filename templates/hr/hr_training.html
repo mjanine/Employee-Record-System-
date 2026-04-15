@@ -33,8 +33,8 @@
         <li><a href="{% url 'attendance:hr_attendance_monitoring' %}" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
         <li><a href="{% url 'leaves:hr_leave_select' %}" class="menu-item"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
         <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-        <li><a href="{% url 'hr_training' %}" class="menu-item active"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
-        <li><a href="#" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
+        <li><a href="{% url 'trainings:hr_training_list' %}" class="menu-item active"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+        <li><a href="{% url 'hr_reports' %}" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
     </ul>
         <div class="bottom-section">
         <a href="{% url 'logout' %}" class="menu-item logout"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a>
@@ -93,7 +93,7 @@
             <div class="doc-preview">
                 <div class="doc-tab-label">Training overview</div>
                 <div class="doc-box">
-                    <div class="doc-header" id="modalTrainingTitle">â€”</div>
+                    <div class="doc-header" id="modalTrainingTitle">&mdash;</div>
                     <div class="pdf-placeholder" id="trainingPlaceholder">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <p>Training session overview</p>
@@ -108,27 +108,27 @@
                 </div>
                 <div class="info-item">
                     <label>Date</label>
-                    <p id="modalDate">â€”</p>
+                    <p id="modalDate">&mdash;</p>
                 </div>
                 <div class="info-item">
                     <label>Category</label>
-                    <p id="modalCategory">â€”</p>
+                    <p id="modalCategory">&mdash;</p>
                 </div>
                 <div class="info-item">
                     <label>Mode</label>
-                    <p id="modalMode">â€”</p>
+                    <p id="modalMode">&mdash;</p>
                 </div>
                 <div class="info-item">
                     <label>Slots</label>
-                    <p id="modalSlots">â€”</p>
+                    <p id="modalSlots">&mdash;</p>
                 </div>
                 <div class="info-item">
                     <label>Progress</label>
-                    <p id="modalProgress">â€”</p>
+                    <p id="modalProgress">&mdash;</p>
                 </div>
                 <div class="info-item">
                     <label>Notes</label>
-                    <p id="modalRemarks" class="modal-text-unified">â€”</p>
+                    <p id="modalRemarks" class="modal-text-unified">&mdash;</p>
                 </div>
                 <div class="modal-footer" id="modalActions">
                     <button class="btn-approve" id="modalCompleteBtn">Mark Completed</button>
@@ -168,7 +168,6 @@
                         <option disabled selected value="">Select mode...</option>
                         <option>Onsite</option>
                         <option>Online</option>
-                        <option>Hybrid</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -213,6 +212,29 @@
         <td class="col-actions"></td>
     </tr>
 </template>
+
+<form id="createTrainingForm" method="post" action="{% url 'trainings:hr_training_create' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="name" id="formName">
+    <input type="hidden" name="description" id="formDescription">
+    <input type="hidden" name="category" id="formCategory">
+    <input type="hidden" name="date" id="formDate">
+    <input type="hidden" name="mode" id="formMode">
+    <input type="hidden" name="max_participants" id="formMaxParticipants">
+    <input type="hidden" name="status" value="ACTIVE">
+</form>
+
+<form id="statusTrainingForm" method="post" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="status" id="statusValue">
+</form>
+
+{{ training_rows|json_script:"hr-training-data" }}
+<script>
+window.hrTrainingData = JSON.parse(document.getElementById('hr-training-data').textContent || '[]');
+window.hrTrainingStatusUrlTemplate = "{% url 'trainings:hr_training_update_status' 0 %}";
+window.hrTrainingParticipantsUrlTemplate = "{% url 'trainings:hr_training_participants' 0 %}";
+</script>
 
 <script src="{% static 'js/training_management/hr_training.js' %}"></script>
 

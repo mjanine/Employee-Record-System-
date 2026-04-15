@@ -4,72 +4,11 @@ const coordinatorName = 'HR Training';
 
 let activeTrainingId = null;
 
-let trainingData = [
-    {
-        id: '001',
-        name: 'Outcomes-Based Education Workshop',
-        category: 'Teaching',
-        date: '03/12/2026',
-        mode: 'Onsite',
-        slotsText: '25 / 30',
-        filled: 25,
-        total: 30,
-        progress: 'Enrollment open',
-        status: 'open',
-        statusLabel: 'Open',
-        remarks: 'Workshop on OBE implementation for faculty.',
-        venue: 'Main building, 2nd floor',
-        trainer: 'CCS Training Team'
-    },
-    {
-        id: '002',
-        name: 'Research Writing Seminar',
-        category: 'Research',
-        date: '03/20/2026',
-        mode: 'Online',
-        slotsText: '30 / 30',
-        filled: 30,
-        total: 30,
-        progress: 'At capacity',
-        status: 'full',
-        statusLabel: 'Full',
-        remarks: 'Publication skills and grant writing basics.',
-        venue: 'Zoom',
-        trainer: 'Dr. Santos'
-    },
-    {
-        id: '003',
-        name: 'Faculty Development Program',
-        category: 'Development',
-        date: '02/28/2026',
-        mode: 'Onsite',
-        slotsText: '20 / 20',
-        filled: 20,
-        total: 20,
-        progress: 'Completed',
-        status: 'completed',
-        statusLabel: 'Completed',
-        remarks: 'Annual faculty development seminar concluded.',
-        venue: 'Auditorium',
-        trainer: 'External Agency'
-    },
-    {
-        id: '004',
-        name: 'Safety & Emergency Response Training',
-        category: 'Safety',
-        date: '03/05/2026',
-        mode: 'Onsite',
-        slotsText: '15 / 25',
-        filled: 15,
-        total: 25,
-        progress: 'Session cancelled',
-        status: 'cancelled',
-        statusLabel: 'Cancelled',
-        remarks: 'Cancelled due to venue unavailability.',
-        venue: 'Gymnasium',
-        trainer: 'Safety Officer'
-    }
-];
+let trainingData = Array.isArray(window.hrTrainingData) ? window.hrTrainingData : [];
+
+function buildTrainingUrl(template, trainingId) {
+    return String(template || '').replace('/0/', '/' + trainingId + '/');
+}
 
 function isFinalTrainingStatus(status) {
     return status === 'completed' || status === 'cancelled';
@@ -125,7 +64,7 @@ function renderTable() {
         const clone = template.content.cloneNode(true);
         const isFinal = isFinalTrainingStatus(t.status);
 
-        clone.querySelector('.col-id').innerText = t.id;
+        clone.querySelector('.col-id').innerText = t.display_id || t.id;
         clone.querySelector('.col-tname').innerText = t.name;
         clone.querySelector('.col-category').innerText = t.category;
         clone.querySelector('.col-date').innerText = t.date;
@@ -194,6 +133,22 @@ function openModal(id) {
     document.getElementById('modalActions').style.display =
         isFinalTrainingStatus(t.status) ? 'none' : 'flex';
 
+    if (window.hrTrainingParticipantsUrlTemplate) {
+        const participantsUrl = buildTrainingUrl(window.hrTrainingParticipantsUrlTemplate, id);
+        fetch(participantsUrl)
+            .then(function (response) { return response.ok ? response.json() : null; })
+            .then(function (payload) {
+                if (!payload || !payload.training) return;
+                const count = Array.isArray(payload.participants) ? payload.participants.length : t.filled;
+                const total = payload.training.max_participants || t.total;
+                document.getElementById('modalSlots').innerText = count + ' / ' + total;
+                document.getElementById('modalProgress').innerText = count >= total ? 'At capacity' : t.progress;
+            })
+            .catch(function () {
+                // Keep existing modal values when participants fetch fails.
+            });
+    }
+
     document.getElementById('viewModal').style.display = 'flex';
 }
 
@@ -202,33 +157,13 @@ function closeViewModal() {
 }
 
 function processTraining(id, decision) {
-    const idx = trainingData.findIndex(function (x) { return x.id === id; });
-    if (idx === -1) return;
+    const statusForm = document.getElementById('statusTrainingForm');
+    const statusValue = document.getElementById('statusValue');
+    if (!statusForm || !statusValue || !window.hrTrainingStatusUrlTemplate) return;
 
-    const t = trainingData[idx];
-    const dateStr = new Date().toLocaleDateString();
-
-    if (decision === 'Completed') {
-        t.status = 'completed';
-        t.statusLabel = 'Completed';
-        t.progress = 'Completed';
-        t.remarks = 'Marked completed on ' + dateStr + '.';
-        showToast('approved', 'Training Completed', '"' + t.name + '" has been marked completed.');
-    } else {
-        t.status = 'cancelled';
-        t.statusLabel = 'Cancelled';
-        t.progress = 'Session cancelled';
-        t.remarks = 'Cancelled on ' + dateStr + '.';
-        showToast('rejected', 'Training Cancelled', '"' + t.name + '" has been cancelled.');
-    }
-
-    document.getElementById('modalStatusContainer').innerHTML =
-        '<span class="status-pill ' + t.status + '">' + t.statusLabel + '</span>';
-    document.getElementById('modalProgress').innerText = t.progress;
-    document.getElementById('modalRemarks').innerText = t.remarks;
-    document.getElementById('modalActions').style.display = 'none';
-
-    renderTable();
+    statusForm.action = buildTrainingUrl(window.hrTrainingStatusUrlTemplate, id);
+    statusValue.value = decision === 'Completed' ? 'CLOSED' : 'CANCELLED';
+    statusForm.submit();
 }
 
 function resetAddTrainingForm() {
@@ -245,10 +180,6 @@ function resetAddTrainingForm() {
         var el = document.getElementById(id);
         if (el) el.style.borderColor = '';
     });
-}
-
-function padId(num) {
-    return String(num).padStart(3, '0');
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -288,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('saveTraining').addEventListener('click', function () {
+        var createForm = document.getElementById('createTrainingForm');
         var name = document.getElementById('tName').value.trim();
         var category = document.getElementById('tCategory').value;
         var mode = document.getElementById('tMode').value;
@@ -319,36 +251,24 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        var d = new Date(dateVal + 'T12:00:00');
-        var dateDisplay = (d.getMonth() + 1).toString().padStart(2, '0') + '/' +
-            d.getDate().toString().padStart(2, '0') + '/' + d.getFullYear();
+        if (!createForm) {
+            showToast('rejected', 'Save Failed', 'Training form endpoint is not available.');
+            return;
+        }
 
-        var nextNum = trainingData.reduce(function (max, x) {
-            var n = parseInt(x.id, 10);
-            return n > max ? n : max;
-        }, 0) + 1;
+        var descriptionParts = [];
+        if (remarks) descriptionParts.push(remarks);
+        if (trainer) descriptionParts.push('Trainer: ' + trainer);
+        if (venue) descriptionParts.push('Venue/Platform: ' + venue);
 
-        trainingData.push({
-            id: padId(nextNum),
-            name: name,
-            category: category,
-            date: dateDisplay,
-            mode: mode,
-            slotsText: '0 / ' + totalSlots,
-            filled: 0,
-            total: totalSlots,
-            progress: 'Enrollment open',
-            status: 'open',
-            statusLabel: 'Open',
-            remarks: remarks || 'New training session created.',
-            venue: venue || '—',
-            trainer: trainer || '—'
-        });
+        document.getElementById('formName').value = name;
+        document.getElementById('formCategory').value = category;
+        document.getElementById('formDate').value = dateVal;
+        document.getElementById('formMode').value = mode.toUpperCase();
+        document.getElementById('formMaxParticipants').value = String(totalSlots);
+        document.getElementById('formDescription').value = descriptionParts.join('\n');
 
-        addModal.style.display = 'none';
-        resetAddTrainingForm();
-        renderTable();
-        showToast('info', 'Training Added', '"' + name + '" has been scheduled.');
+        createForm.submit();
     });
 
     window.addEventListener('click', function (e) {

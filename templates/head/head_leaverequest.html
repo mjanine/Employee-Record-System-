@@ -29,7 +29,7 @@
             <li><a href="{% url 'attendance:head_attendance_monitoring' %}" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
             <li><a href="{% url 'leaves:head_leave_select' %}" class="menu-item active"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
             <li><a href="javascript:void(0);" class="menu-item" onclick="alert('This module is currently under development.'); return false;" aria-disabled="true"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-            <li><a href="javascript:void(0);" class="menu-item" onclick="alert('This module is currently under development.'); return false;" aria-disabled="true"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
+            <li><a href="{% url 'trainings:head_training_overview' %}" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>Trainings</span></a></li>
         </ul>
 
         <div class="bottom-section">

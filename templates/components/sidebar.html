@@ -9,6 +9,146 @@
     </div>
 
     <ul class="menu">
+        {% if request.user.role == 'HR' %}
+        <li>
+            <a href="{% url 'hr_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'hr_dashboard' %}active{% endif %}">
+                <i class="fas fa-border-all"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'history:hr_profile' %}" class="menu-item {% if request.resolver_match.url_name == 'hr_profile' %}active{% endif %}">
+                <i class="fas fa-user"></i> <span>Profile</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'application_list' %}" class="menu-item {% if request.resolver_match.url_name == 'application_list' %}active{% endif %}">
+                <i class="fas fa-file"></i> <span>Application Management</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'employee_list' %}" class="menu-item {% if request.resolver_match.url_name == 'employee_list' %}active{% endif %}">
+                <i class="fas fa-database"></i> <span>Employee Records</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'attendance:hr_attendance_monitoring' %}" class="menu-item {% if request.resolver_match.url_name == 'hr_attendance_monitoring' %}active{% endif %}">
+                <i class="fas fa-calendar"></i> <span>Attendance Monitoring</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'leaves:hr_leave_select' %}" class="menu-item {% if request.resolver_match.url_name == 'hr_leave_select' %}active{% endif %}">
+                <i class="fas fa-briefcase"></i> <span>Leave Management</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'trainings:hr_training_list' %}" class="menu-item {% if request.resolver_match.url_name == 'hr_training_list' %}active{% endif %}">
+                <i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'documents:view_documents' %}" class="menu-item {% if request.resolver_match.url_name == 'view_documents' %}active{% endif %}">
+                <i class="fas fa-folder-open"></i> <span>Documents</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'hr_reports' %}" class="menu-item {% if request.resolver_match.url_name == 'hr_reports' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i> <span>Reports / Analytics</span>
+            </a>
+        </li>
+        {% elif request.user.role == 'EMP' %}
+        <li>
+            <a href="{% url 'employee_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'employee_dashboard' %}active{% endif %}">
+                <i class="fas fa-border-all"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'history:employee_profile' %}" class="menu-item {% if request.resolver_match.url_name == 'employee_profile' %}active{% endif %}">
+                <i class="fas fa-user"></i> <span>Profile</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'create_position_change' %}" class="menu-item {% if request.resolver_match.url_name == 'create_position_change' %}active{% endif %}">
+                <i class="fas fa-user-edit"></i> <span>Position Change Request</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'attendance:employee_attendance_records' %}" class="menu-item {% if request.resolver_match.url_name == 'employee_attendance_records' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i> <span>Attendance</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'leaves:leave_select' %}" class="menu-item {% if request.resolver_match.url_name == 'leave_select' %}active{% endif %}">
+                <i class="fas fa-plane-departure"></i> <span>Leave Request</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'trainings:employee_trainings' %}" class="menu-item {% if request.resolver_match.url_name == 'employee_trainings' %}active{% endif %}">
+                <i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span>
+            </a>
+        </li>
+        {% elif request.user.role == 'HEAD' %}
+        <li>
+            <a href="{% url 'head_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'head_dashboard' %}active{% endif %}">
+                <i class="fas fa-border-all"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'history:head_profile' %}" class="menu-item {% if request.resolver_match.url_name == 'head_profile' %}active{% endif %}">
+                <i class="fas fa-user"></i> <span>Profile</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'create_position_change' %}" class="menu-item {% if request.resolver_match.url_name == 'create_position_change' %}active{% endif %}">
+                <i class="fas fa-user-edit"></i> <span>Position Change Request</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'attendance:head_attendance_monitoring' %}" class="menu-item {% if request.resolver_match.url_name == 'head_attendance_monitoring' %}active{% endif %}">
+                <i class="fas fa-calendar"></i> <span>Attendance Monitoring</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'leaves:head_leave_select' %}" class="menu-item {% if request.resolver_match.url_name == 'head_leave_select' %}active{% endif %}">
+                <i class="fas fa-briefcase"></i> <span>Leave Management</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'trainings:head_training_overview' %}" class="menu-item {% if request.resolver_match.url_name == 'head_training_overview' %}active{% endif %}">
+                <i class="fas fa-chalkboard-teacher"></i> <span>Trainings</span>
+            </a>
+        </li>
+        {% elif request.user.role == 'SD' %}
+        <li>
+            <a href="{% url 'sd_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'sd_dashboard' %}active{% endif %}">
+                <i class="fas fa-border-all"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'history:sd_profile' %}" class="menu-item {% if request.resolver_match.url_name == 'sd_profile' %}active{% endif %}">
+                <i class="fas fa-user"></i> <span>Profile</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'application_list' %}" class="menu-item {% if request.resolver_match.url_name == 'application_list' %}active{% endif %}">
+                <i class="fas fa-file"></i> <span>Applications</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'leaves:sd_leave_select' %}" class="menu-item {% if request.resolver_match.url_name == 'sd_leave_select' %}active{% endif %}">
+                <i class="fas fa-briefcase"></i> <span>Leaves</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'attendance:sd_attendance_summary' %}" class="menu-item {% if request.resolver_match.url_name == 'sd_attendance_summary' %}active{% endif %}">
+                <i class="fas fa-calendar"></i> <span>Attendance</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'sd_reports' %}" class="menu-item {% if request.resolver_match.url_name == 'sd_reports' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i> <span>Reports</span>
+            </a>
+        </li>
+        {% else %}
         <li>
             <a href="{% url 'admin_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
                 <i class="fas fa-users-cog"></i> <span>User Management</span>
@@ -38,6 +178,7 @@
                 <i class="fas fa-shield-alt"></i> <span>Security Settings</span>
             </a>
         </li>
+        {% endif %}
     </ul>
 
     <div class="bottom-section">
