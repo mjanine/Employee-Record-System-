@@ -3,17 +3,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body, html {
     height: 100%;
     margin: 0;
     overflow: hidden; 
-}
-
-body {
-    height: 100vh;
 }
 
 /* 2. Blurred Fixed Background */
@@ -38,7 +34,7 @@ body {
 
 /* 4. Glassmorphism Sidebar */
 .sidebar {
-    position: fixed; /* Keep it fixed to the side */
+    position: fixed; 
     top: 20px;
     left: 20px;
     height: calc(100% - 40px);
@@ -53,12 +49,10 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.15);
     transition: width 0.35s ease-in-out;
     z-index: 1000;
-    overflow: visible; /* Required for tooltips to show */
+    overflow: visible; 
 }
 
-.sidebar.collapsed {
-    width: 90px;
-}
+.sidebar.collapsed { width: 90px; }
 
 .top-section { display: flex; align-items: center; justify-content: space-between; }
 .logo-wrapper { width: 45px; height: 45px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -77,20 +71,19 @@ body {
     align-items: center;
     height: 48px;
     color: white;
+    text-decoration: none;
     cursor: pointer;
     border-radius: 12px;
     transition: background 0.3s;
+    margin-bottom: 4px;
 }
 
-.menu-item i {
-    width: 50px;
-    text-align: center;
-}
-.menu-item span { position: absolute; left: 60px; white-space: nowrap; transition: opacity 0.2s ease; }
+.menu-item i { width: 50px; text-align: center; font-size: 18px; }
+.menu-item span { position: absolute; left: 60px; white-space: nowrap; font-weight: 500; transition: opacity 0.2s ease; }
 
 .sidebar.collapsed .menu-item span { opacity: 0; pointer-events: none; }
 .menu-item:hover { background: rgba(255,255,255,0.15); }
-.menu-item.active { background: rgba(255,255,255,0.25); }
+.menu-item.active { background: rgba(255,255,255,0.25); font-weight: 600; }
 
 .sidebar.collapsed .menu-item:hover::after {
     content: attr(data-text);
@@ -104,85 +97,228 @@ body {
     z-index: 2000;
 }
 
-hr { border: 0.5px solid rgba(255,255,255,0.2); margin: 10px 0; }
+hr { border: 0.5px solid rgba(255,255,255,0.2); margin: 15px 0; }
 .bottom-section { margin-top: auto; }
 
-/* 5. Main Content: AUTO-WIDTH GLIDE */
+/* 5. Main Content Area */
 .main-content {
     flex: 1;
     display: flex;
     height: 100%;
-    /* Default margin: 300px sidebar + 20px gap */
     margin-left: 320px; 
     transition: margin-left 0.35s ease-in-out;
 }
-.sidebar.collapsed + .main-content {
-    /* New margin: 90px sidebar + 20px gap */
-    margin-left: 110px;
-}
+.sidebar.collapsed + .main-content { margin-left: 110px; }
 
+/* The White Dashboard Card */
 .leave-card {
     background: #ffffff;
-    border-radius: 25px;
-    padding: 30px 45px;
+    border-radius: 20px;
+    padding: 40px;
     width: 100%;
     display: flex;
     flex-direction: column;
     height: 100%; 
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     box-sizing: border-box;
 }
 
-/* Card expands fully when sidebar state changes (Handled by Flexbox) */
-.sidebar.collapsed ~ .dashboard-viewport .main-content .leave-card {
-    max-width: 100%;
+.sidebar.collapsed ~ .dashboard-viewport .main-content .leave-card { max-width: 100%; }
+
+/* 6. Header & Controls */
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 25px; 
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.header h1 { font-size: 28px; margin: 0; color: #1e293b; font-weight: 700; letter-spacing: -0.5px; }
+
+/* Modern Search Bar */
+.search-bar-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.search-icon {
+    position: absolute;
+    left: 15px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+.search-add input { 
+    padding: 12px 20px 12px 40px; 
+    width: 320px; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 10px; 
+    font-size: 14px; 
+    outline: none; 
+    background-color: #f8fafc;
+    color: #334155;
+    transition: 0.3s;
+}
+.search-add input:focus {
+    border-color: #800000;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
 }
 
-/* 6. Header & Table Design */
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.header h1 { font-size: 32px; margin: 0; color: #1a1a1a; }
+/* Add Button */
+.add-btn { 
+    padding: 12px 20px; 
+    background: #800000; 
+    color: white; 
+    border: none; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.add-btn:hover { background: #5c0000; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(128, 0, 0, 0.2); }
 
-.search-add { display: flex; gap: 10px; }
-.search-add input { padding: 10px 15px; width: 280px; border: 1px solid #ccc; border-radius: 10px; font-size: 13px; outline: none; }
-
-.add-btn { padding: 10px 20px; background: #4a1d1d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-
+/* 7. Table Container & Scrollbar */
 .form-body { 
     flex: 1; 
     overflow-y: auto; 
-    padding-right: 5px; 
-    
-    /* Hide for Firefox and IE/Edge */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    padding-right: 10px; 
 }
-.form-body::-webkit-scrollbar { 
-    display: none; 
+.form-body::-webkit-scrollbar { width: 6px; }
+.form-body::-webkit-scrollbar-track { background: transparent; }
+.form-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.form-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* 8. Modern Table Design */
+table { 
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0; 
 }
-.form-body::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
+thead { 
+    position: sticky; 
+    top: 0; 
+    background: #f8fafc;
+    z-index: 10; 
+}
+thead th { 
+    text-align: left; 
+    padding: 16px 20px; 
+    border-bottom: 2px solid #e2e8f0; 
+    color: #64748b; 
+    font-size: 12px; 
+    font-weight: 700;
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+}
 
-table { width: 100%; border-collapse: collapse; }
-thead { position: sticky; top: 0; background: white; z-index: 10; }
-thead th { text-align: left; padding: 15px 10px; border-bottom: 2px solid #eee; color: #555; font-size: 12px; text-transform: uppercase; }
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+tbody tr:hover {
+    background-color: #f1f5f9; 
+}
+tbody td { 
+    padding: 16px 20px; 
+    border-bottom: 1px solid #f1f5f9; 
+    font-size: 14px; 
+    color: #475569; 
+    font-weight: 500;
+    vertical-align: middle;
+}
+.emp-name { color: #0f172a; font-weight: 600; }
+.emp-id { color: #64748b; font-family: monospace; font-size: 13px; }
 
-tbody td { padding: 15px 10px; border-bottom: 1px solid #f5f5f5; font-size: 13px; color: #333; }
+/* 9. Status Badges */
+.status-badge { 
+    padding: 6px 12px; 
+    border-radius: 20px; 
+    font-weight: 600; 
+    font-size: 12px; 
+    display: inline-block; 
+    text-align: center; 
+    letter-spacing: 0.3px;
+}
+.status-active { background-color: #dcfce7; color: #166534; }
+.status-inactive { background-color: #fee2e2; color: #991b1b; }
 
-/* Status Badges */
-.status { padding: 5px 12px; border-radius: 12px; font-weight: 600; font-size: 11px; display: inline-block; min-width: 85px; text-align: center; }
-.status.active { background-color: #d4edda; color: #155724; }
-.status.inactive { background-color: #f8d7da; color: #721c24; }
-.status.on_leave { background-color: #fff3cd; color: #856404; }
+/* 10. Three-Dot Action Menu */
+.action-cell { 
+    text-align: center; 
+    position: relative; 
+}
+.action-menu-container { 
+    position: relative; 
+    display: inline-block; 
+}
+.three-dots-btn { 
+    background: none; 
+    border: none; 
+    font-size: 18px; 
+    color: #94a3b8; 
+    cursor: pointer; 
+    padding: 8px 12px; 
+    border-radius: 8px; 
+    transition: 0.2s; 
+}
+.three-dots-btn:hover { 
+    background: #e2e8f0; 
+    color: #1e293b; 
+}
 
-/* Maroon Actions */
-.action-cell i, .action-link, .add-file-label {
-    color: #800000;
+/* The Dropdown Card */
+.action-dropdown {
+    position: absolute;
+    right: 80%; /* Opens to the left to avoid getting cut off by the edge of the card */
+    top: 5px;
+    background: #ffffff;
+    min-width: 140px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+}
+
+/* Show menu on CLICK (triggered by JavaScript adding the 'show' class) */
+.action-dropdown.show {
+    display: flex;
+}
+
+/* Dropdown Items */
+.dropdown-item {
+    padding: 12px 16px;
     text-decoration: none;
-    font-weight: 600;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.2s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
 }
-
-.action-link:hover, .action-cell i:hover { color: #4a1d1d; text-decoration: underline; transform: scale(1.1); }
- .action-cell {
-            text-align: center;
-        }
+.dropdown-item i { 
+    width: 14px; 
+    text-align: center; 
+    font-size: 14px;
+}
+.dropdown-item:hover { 
+    background: #f8fafc; 
+    color: #800000; 
+}
+.dropdown-item.delete:hover { 
+    background: #fef2f2; 
+    color: #b91c1c; 
+}

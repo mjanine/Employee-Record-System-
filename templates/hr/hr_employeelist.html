@@ -44,11 +44,16 @@
             <div class="header">
                 <h1>Employee Records</h1>
                 <div class="search-add">
-                    <form method="GET" action="{% url 'employee_list' %}" style="display: flex; gap: 10px; width: 100%;">
-                        <input type="text" name="search" id="searchInput" placeholder="Search by Name or ID..." value="{{ request.GET.search }}">
+                    <form method="GET" action="{% url 'employee_list' %}" style="display: flex; gap: 15px; width: 100%; align-items: center;">
+                        <div class="search-bar-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" name="search" id="searchInput" placeholder="Search by Name or ID..." value="{{ request.GET.search }}">
+                        </div>
                         
                         {% if request.user.role == 'ADMIN' or request.user.role == 'HR' %}
-                        <a href="{% url 'add_employee' %}"><button type="button" class="add-btn"><i class="fas fa-plus"></i> Add Employee</button></a>
+                        <a href="{% url 'add_employee' %}" style="text-decoration: none;">
+                            <button type="button" class="add-btn"><i class="fas fa-plus"></i> Add Employee</button>
+                        </a>
                         {% endif %}
                     </form>
                 </div>
@@ -63,51 +68,56 @@
                             <th>Department</th>
                             <th>Role</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th style="text-align: center;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="employeeTableBody">
                         {% for emp in employees %}
                         <tr>
-                            <td>{{ emp.profile.employee_id|default:"---" }}</td>
-                            <td>{{ emp.get_full_name }}</td>
+                            <td class="emp-id">{{ emp.profile.employee_id|default:"---" }}</td>
+                            <td class="emp-name">{{ emp.get_full_name }}</td>
                             <td>{{ emp.department.name|default:"Unassigned" }}</td>
                             <td>{{ emp.get_role_display }}</td>
                             <td>
                                 {% if emp.is_active %}
-                                    <span class="status-active">Active</span>
+                                    <span class="status-badge status-active">Active</span>
                                 {% else %}
-                                    <span class="status-inactive">Inactive</span>
+                                    <span class="status-badge status-inactive">Inactive</span>
                                 {% endif %}
                             </td>
-                            <td>
-                                <a href="{% url 'employee_profile_view' emp.id %}" class="action-link" title="View">
-                                    <i class="fas fa-eye"></i>
-                                </a>
+                            <td class="action-cell">
+                                <div class="action-menu-container">
+                                    <button class="three-dots-btn" onclick="toggleDropdown(event, '{{ emp.id }}')">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    
+                                    <div class="action-dropdown" id="dropdown-{{ emp.id }}">
+                                        <a href="{% url 'employee_profile_view' emp.id %}" class="dropdown-item">
+                                            <i class="fas fa-eye"></i> View Profile
+                                        </a>
 
-                                {% if request.user.role == 'ADMIN' or request.user.role == 'HR' %}
-                                    <span class="separator">|</span>
+                                        {% if request.user.role == 'ADMIN' or request.user.role == 'HR' %}
+                                            <a href="{% url 'edit_employee' emp.id %}" class="dropdown-item">
+                                                <i class="fas fa-pen"></i> Edit Record
+                                            </a>
 
-                                    <a href="{% url 'edit_employee' emp.id %}" class="action-link" title="Edit">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-
-                                    <span class="separator">|</span>
-
-                                    <form action="{% url 'delete_employee' emp.id %}" method="POST" style="display:inline;" 
-                                          onsubmit="return confirm('Are you sure you want to delete {{ emp.get_full_name }}? This action cannot be undone.');">
-                                        {% csrf_token %}
-                                        <button type="submit" class="action-link" title="Delete" 
-                                                style="background: none; border: none; color: #a02d2d; cursor: pointer; padding: 0; font-size: inherit;">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                {% endif %}
+                                            <form action="{% url 'delete_employee' emp.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ emp.get_full_name }}? This action cannot be undone.');">
+                                                {% csrf_token %}
+                                                <button type="submit" class="dropdown-item delete">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="6" style="text-align: center;">No employees found.</td>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #64748b;">
+                                <i class="fas fa-folder-open" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                                No employees found in this department.
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -116,6 +126,36 @@
         </div>
     </main>
 </div>
+
+<script>
+    // Function to toggle the specific dropdown
+    function toggleDropdown(event, empId) {
+        // Prevent the click from immediately bubbling up and closing it
+        event.stopPropagation();
+        
+        // Close all other dropdowns first
+        document.querySelectorAll('.action-dropdown').forEach(menu => {
+            if (menu.id !== 'dropdown-' + empId) {
+                menu.classList.remove('show');
+            }
+        });
+        
+        // Toggle the one we clicked
+        const dropdown = document.getElementById('dropdown-' + empId);
+        dropdown.classList.toggle('show');
+    }
+
+    // Close dropdowns if the user clicks anywhere else on the screen
+    window.onclick = function(event) {
+        if (!event.target.matches('.three-dots-btn') && !event.target.closest('.three-dots-btn')) {
+            document.querySelectorAll('.action-dropdown').forEach(menu => {
+                if (menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                }
+            });
+        }
+    }
+</script>
 
 <script src="{% static 'js/hr/hr_employeelist.js' %}"></script>
 </body>
