@@ -2,72 +2,7 @@
 const loggedHeadName = "Jose Brian Dela Peña"; 
 let activeRowId = null; 
 
-let headSampleData = [
-    {
-        id: 201,
-        name: "Jose Brian Dela Peña",
-        role: "Department Head",
-        dateFiled: "March 25, 2026",
-        submitTime: "08:30 AM",
-        leaveType: "Sick Leave",
-        startDate: "2026-03-26",
-        endDate: "2026-03-27",
-        numDays: 2,
-        status: "Approved",
-        reviewedBy: "Ricardo G. Dela Cruz (SD)",
-        reason: "Severe Migraine",
-        fileName: "Medical_Cert.pdf",
-        reviewRemarks: "Approved by School Director. Get well soon."
-    },
-    {
-        id: 204,
-        name: "Jose Brian Dela Peña",
-        role: "Department Head",
-        dateFiled: "March 30, 2026",
-        submitTime: "09:00 AM",
-        leaveType: "Vacation Leave",
-        startDate: "2026-04-05",
-        endDate: "2026-04-05",
-        numDays: 1,
-        status: "Pending",
-        reviewedBy: "---",
-        reason: "Personal errands and rest.",
-        fileName: "No Document Attached",
-        reviewRemarks: "Awaiting review from School Director."
-    },
-    {
-        id: 202,
-        name: "Alice Johnson",
-        role: "Senior Instructor",
-        dateFiled: "March 29, 2026",
-        submitTime: "10:15 AM",
-        leaveType: "Vacation Leave",
-        startDate: "2026-04-10",
-        endDate: "2026-04-15",
-        numDays: 6,
-        status: "Pending",
-        reviewedBy: "---",
-        reason: "Personal family event out of town.",
-        fileName: "Travel_Itinerary.pdf",
-        reviewRemarks: "Awaiting review from Department Head."
-    },
-    {
-        id: 203,
-        name: "Bob Williams",
-        role: "Junior Instructor",
-        dateFiled: "March 20, 2026",
-        submitTime: "01:45 PM",
-        leaveType: "Emergency Leave",
-        startDate: "2026-03-21",
-        endDate: "2026-03-21",
-        numDays: 1,
-        status: "Rejected",
-        reviewedBy: "Jose Brian Dela Peña",
-        reason: "Sudden home repairs.",
-        fileName: "No Document Attached",
-        reviewRemarks: "Rejected: Excessive leaves taken this month without prior notice."
-    }
-];
+let headSampleData = []; // Will be populated dynamically from the database
 
 document.addEventListener('DOMContentLoaded', () => {
     const tabRequests = document.getElementById('tab-requests');
@@ -95,7 +30,37 @@ document.addEventListener('DOMContentLoaded', () => {
         renderHeadTable("History");
     };
 
-    renderHeadTable("Active");
+    // Fetch real data from Django Backend
+    const table = document.getElementById('employeeTable');
+    const dataSourceUrl = table && table.dataset.sourceUrl ? table.dataset.sourceUrl : '/leaves/head/history/?format=json';
+
+    fetch(dataSourceUrl, { headers: { 'Accept': 'application/json' } })
+        .then(response => response.json())
+        .then(data => {
+            // Map Django's JSON format to match our table logic
+            headSampleData = (data.history || []).map(item => ({
+                id: item.id,
+                name: loggedHeadName, 
+                role: "Department Head",
+                dateFiled: item.dateFiled || "---",
+                submitTime: item.submitTime || "---",
+                leaveType: item.leave_type__name || "General Leave",
+                startDate: item.start_date,
+                endDate: item.end_date,
+                numDays: item.days_requested,
+                // Convert backend 'PENDING_HR_APPROVAL' etc. to just 'Pending'
+                status: item.status.includes('PENDING') ? 'Pending' : item.status.charAt(0).toUpperCase() + item.status.slice(1).toLowerCase(),
+                reviewedBy: "---", // Update this later if you want real reviewer tracking
+                reason: item.reason,
+                fileName: "Document Attached",
+                reviewRemarks: "Awaiting response"
+            }));
+            renderHeadTable("Active");
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+            renderHeadTable("Active");
+        });
 });
 
 function renderHeadTable(mode) {

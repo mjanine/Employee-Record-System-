@@ -107,6 +107,18 @@ def head_apply_leave(request):
 def head_leave_history(request):
     """View for a Department Head to see their personal leave history."""
     leave_requests = LeaveRequest.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Return JSON if requested by the JavaScript fetch call
+    if request.headers.get('Accept') == 'application/json' or request.GET.get('format') == 'json':
+        history_data = list(leave_requests.values(
+            'id', 'leave_type__name', 'start_date', 'end_date', 'days_requested', 'status', 'reason', 'created_at'
+        ))
+        for item in history_data:
+            if item.get('created_at'):
+                item['dateFiled'] = item['created_at'].strftime('%B %d, %Y')
+                item['submitTime'] = item['created_at'].strftime('%I:%M %p')
+        return JsonResponse({'history': history_data})
+
     return render(request, 'head/head_leaverequest.html', {'leave_requests': leave_requests})
 
 

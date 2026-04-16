@@ -24,15 +24,15 @@
             </div>
 
             <ul class="menu">
-                <li><a href="sd_dash.html" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
-                <li><a href="sd_profile_view.html" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                <li><a href="{% url 'sd_dashboard' %}" class="menu-item"><i class="fas fa-border-all"></i><span>Dashboard</span></a></li>
+                <li><a href="{% url 'history:sd_profile' %}" class="menu-item"><i class="fas fa-user"></i><span>Profile</span></a></li>
                 <hr>
-                <li><a href="sd_appmanagement.html" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
-                <li><a href="sd_employeelist.html" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
-                <li><a href="sd_attendancemonitoring.html" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
+                <li><a href="{% url 'sd_application_overview' %}" class="menu-item"><i class="fas fa-file"></i><span>Application Management</span></a></li>
+                <li><a href="{% url 'employee_list' %}" class="menu-item"><i class="fas fa-database"></i><span>Employee Records</span></a></li>
+                <li><a href="{% url 'attendance:sd_attendance_monitoring' %}" class="menu-item"><i class="fas fa-calendar"></i><span>Attendance Monitoring</span></a></li>
                 <li><a href="{% url 'leaves:sd_leave_select' %}" class="menu-item active"><i class="fas fa-briefcase"></i><span>Leave Management</span></a></li>
                 <li><a href="#" class="menu-item"><i class="fas fa-star"></i><span>Performance Evaluation</span></a></li>
-                <li><a href="sd_reports.html" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
+                <li><a href="{% url 'sd_reports' %}" class="menu-item"><i class="fas fa-chart-line"></i><span>Reports / Analytics</span></a></li>
             </ul>
 
             <div class="bottom-section">
@@ -45,7 +45,7 @@
                 <h1>Leave Management</h1>
                 
                 <div class="form-body">
-                    <form id="leaveRequestForm">
+                    <form id="leaveRequestForm" data-history-url="{% url 'leaves:sd_leave_history' %}">
                         <label class="section-label">Select Leave</label>
                         <div class="leave-type-grid">
                             <button type="button" class="type-btn active">Sick Leave</button>
@@ -90,6 +90,6 @@
         </main>
     </div>
 
-    <script src="{% static 'js/sd/sd_applicationleave.js' %}"></script>
+    <script src="{% static 'js/sd/sd_applicationleave.js' %}?v=1.0"></script>
 </body>
 </html>

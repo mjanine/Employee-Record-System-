@@ -76,7 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 timer: 3500,
                 timerProgressBar: true
             }).then(() => {
-                window.location.href = 'sd_leaverequest.html';
+               const historyUrl = leaveForm.dataset.historyUrl || '/leaves/sd/history/';
+            window.location.href = historyUrl;
+
             });
         };
     }

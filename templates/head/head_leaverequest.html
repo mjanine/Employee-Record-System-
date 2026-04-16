@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="form-body">
-                    <table id="employeeTable">
+                    <table id="employeeTable" data-source-url="{% url 'leaves:head_leave_history' %}?format=json">
                         <thead>
                             <tr>
                                 <th>Date Filed</th>
@@ -109,6 +109,6 @@
             <td><span class="action-link">View Details</span></td>
         </tr>
     </template>
-    <script src="{% static 'js/head/head_leaverequest.js' %}"></script>
+    <script src="{% static 'js/head/head_leaverequest.js' %}?v=1.0"></script>
 </body>
 </html>

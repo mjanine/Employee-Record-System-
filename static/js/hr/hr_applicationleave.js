@@ -94,7 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 timerProgressBar: true
             }).then(() => {
                 // Redirecting without saving to LocalStorage
-                window.location.href = 'hr_leaverequest.html';
+                const historyUrl = leaveForm.dataset.historyUrl || '/leaves/hr/history/';
+                window.location.href = historyUrl;
+
             });
         };
     }

@@ -78,13 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     confirmButtonColor: '#4a1d1d'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = 'head_leaverequest.html';
+                        const historyUrl = leaveForm.dataset.historyUrl || '/leaves/head/history/';
+                        window.location.href = historyUrl;
                     }
                 });
             } else {
                 // Fallback if Swal is not loaded
                 alert(finalMessage);
-                window.location.href = 'head_leaverequest.html';
+                const historyUrl = leaveForm.dataset.historyUrl || '/leaves/head/history/';
+                window.location.href = historyUrl;
+
             }
         };
     }
