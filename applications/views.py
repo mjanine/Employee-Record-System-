@@ -62,6 +62,11 @@ def application_list(request):
         template_name = 'hr/hr_appmanagement.html'
     elif role == 'HEAD':
         template_name = 'head/head_appmanagement.html'
+        # A Head should only see applications targeting their own department.
+        if request.user.department:
+            applications = applications.filter(target_department=request.user.department)
+        else:
+            applications = applications.none() # If head has no department, show no applications.
     else:
         template_name = 'hr/hr_appmanagement.html'
 

@@ -100,47 +100,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Submit form ──
     if (positionForm) {
-        positionForm.addEventListener('submit', (event) => {
+        positionForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const empName = document.getElementById('empName').value.trim();
-            const empId = document.getElementById('empId').value.trim();
-            const currentPos = document.getElementById('currentPos').value.trim();
-            const currentDept = document.getElementById('currentDept').value.trim();
-            const requestedPos = document.getElementById('requestedPos').value;
-            const effectiveDate = document.getElementById('effectiveDate').value;
-            const reason = document.getElementById('reason').value.trim();
+            const formData = new FormData(positionForm);
 
-            if (!empName || !requestedPos || !effectiveDate || !reason) {
+            // Basic client-side validation based on your Django form fields
+            if (!formData.get('target_position') || !formData.get('target_department') || !formData.get('applicant_info')) {
                 showToast('Please fill in all required fields.');
                 return;
             }
 
-            const requestRecord = {
-                employeeName: empName,
-                employeeId: empId,
-                currentPosition: currentPos,
-                currentDepartment: currentDept,
-                requestedPosition: requestedPos,
-                effectiveDate,
-                reason,
-                submittedAt: new Date().toISOString(),
-                status: 'Pending'
-            };
-
             try {
-                const existingRecords = JSON.parse(localStorage.getItem('positionChangeRequests') || '[]');
-                existingRecords.unshift(requestRecord);
-                localStorage.setItem('positionChangeRequests', JSON.stringify(existingRecords));
+                // The form's 'action' attribute should point to the Django URL.
+                // The CSRF token should be in a hidden input within the form.
+                const response = await fetch(positionForm.action, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    showSuccessNotification('Your position change request has been successfully submitted.');
+                    // Reload the page after a short delay to see the success message from Django.
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showToast('An error occurred on the server. Please try again.');
+                    console.error('Server responded with an error:', response.statusText);
+                }
             } catch (error) {
-                console.warn('Unable to persist position change request locally.', error);
+                showToast('A network error occurred. Please check your connection.');
+                console.error('Fetch error:', error);
             }
-
-            showSuccessNotification(`${empName}'s position change request has been successfully submitted.`);
-
-            setTimeout(() => {
-                window.location.href = `${recordsPageUrl}?employee=${encodeURIComponent(empName)}`;
-            }, 1200);
         });
     }
 

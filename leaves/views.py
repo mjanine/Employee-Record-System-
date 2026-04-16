@@ -106,8 +106,14 @@ def head_apply_leave(request):
 @user_passes_test(is_head)
 def head_leave_history(request):
     """View for a Department Head to see their personal leave history."""
-    leave_requests = LeaveRequest.objects.filter(user=request.user).order_by('-created_at')
-    
+    # B-1: Heads should see requests from their entire department, not just their own.
+    if request.user.department:
+        leave_requests = LeaveRequest.objects.filter(user__department=request.user.department).select_related(
+            'user', 'leave_type'
+        ).order_by('-created_at')
+    else:
+        # Fallback for a Head with no department assigned: only show their own.
+        leave_requests = LeaveRequest.objects.filter(user=request.user).order_by('-created_at')
     # Return JSON if requested by the JavaScript fetch call
     if request.headers.get('Accept') == 'application/json' or request.GET.get('format') == 'json':
         history_data = list(leave_requests.values(
@@ -224,9 +230,8 @@ def sd_leave_overview(request):
             messages.error(request, "Invalid action submitted.")
         return redirect('leaves:sd_leave_overview')
 
-    leave_requests = LeaveRequest.objects.filter(
-        user__role__in=ADMINISTRATIVE_LEAVE_ROLES,
-    ).select_related(
+    # B-2: SD should see all leave requests, not just from administrative roles.
+    leave_requests = LeaveRequest.objects.all().select_related(
         'user', 'leave_type', 'reviewed_by_head', 'reviewed_by_hr', 'reviewed_by_sd'
     ).order_by('-created_at')
 
