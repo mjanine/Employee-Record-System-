@@ -222,16 +222,17 @@ def employee_register_training(request, training_id):
 @login_required
 @role_required('HEAD')
 def head_training_overview(request):
+	subordinate_participations = TrainingParticipant.objects.exclude(employee=request.user)
+
+	# FIX: Gracefully handle users without a department by avoiding forced empty queryset.
+	if request.user.department_id is not None:
+		subordinate_participations = subordinate_participations.filter(employee__department=request.user.department)
+
 	subordinate_participations = (
-		TrainingParticipant.objects
-		.filter(employee__department=request.user.department)
-		.exclude(employee=request.user)
+		subordinate_participations
 		.select_related('employee', 'training_session')
 		.order_by('-training_session__date', 'employee__last_name', 'employee__first_name')
 	)
-
-	if request.user.department_id is None:
-		subordinate_participations = TrainingParticipant.objects.none()
 
 	context = {
 		'subordinate_participations': subordinate_participations,

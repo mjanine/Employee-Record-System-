@@ -223,47 +223,7 @@
     </main>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var sidebar = document.getElementById('sidebar');
-        var logoToggle = document.getElementById('logoToggle');
-        var closeBtn = document.getElementById('closeBtn');
-        var tabNew = document.getElementById('tab-new');
-        var tabPosition = document.getElementById('tab-position');
-        var paneNew = document.getElementById('pane-new');
-        var panePosition = document.getElementById('pane-position');
-
-        document.querySelectorAll('.menu-item').forEach(function (item) {
-            var span = item.querySelector('span');
-            if (span) {
-                item.setAttribute('data-text', span.innerText);
-            }
-        });
-
-        if (closeBtn) {
-            closeBtn.onclick = function () {
-                sidebar.classList.add('collapsed');
-            };
-        }
-
-        if (logoToggle) {
-            logoToggle.onclick = function () {
-                sidebar.classList.toggle('collapsed');
-            };
-        }
-
-        function setTab(which) {
-            var showNew = which === 'new';
-            tabNew.classList.toggle('active', showNew);
-            tabPosition.classList.toggle('active', !showNew);
-            paneNew.classList.toggle('active', showNew);
-            panePosition.classList.toggle('active', !showNew);
-        }
-
-        tabNew.addEventListener('click', function () { setTab('new'); });
-        tabPosition.addEventListener('click', function () { setTab('position'); });
-    });
-</script>
+<script src="{% static 'js/sd/sd_appmanagement.js' %}"></script>
 
 </body>
 </html>

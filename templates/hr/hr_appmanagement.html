@@ -13,6 +13,9 @@
 
 <div class="background"></div>
 
+<!-- FIX: Expose CSRF token for JS fetch calls. -->
+<input type="hidden" id="csrf-token-value" value="{{ csrf_token }}">
+
 <div id="toast-container"></div>
 
 <div class="sidebar" id="sidebar">
@@ -62,12 +65,11 @@
                                     <span>Filter</span>
                                 </button>
                                 <div class="filter-menu" id="filterMenu" aria-hidden="true">
-                                    <button type="button" class="filter-option" data-filter-value="pending-hr">Status: Pending - HR Evaluator</button>
-                                    <button type="button" class="filter-option" data-filter-value="pending-head">Status: Pending - Dept. Head</button>
-                                    <button type="button" class="filter-option" data-filter-value="pending-hrhead">Status: Pending - HR Head</button>
-                                    <button type="button" class="filter-option" data-filter-value="pending-sd">Status: Pending - SD</button>
-                                    <button type="button" class="filter-option" data-filter-value="approved">Status: Approved</button>
-                                    <button type="button" class="filter-option" data-filter-value="rejected">Status: Rejected</button>
+                                    <button type="button" class="filter-option" data-filter-value="Pending">Status: Pending</button>
+                                    <button type="button" class="filter-option" data-filter-value="Head Approved">Status: Head Approved</button>
+                                    <button type="button" class="filter-option" data-filter-value="Pending SD">Status: Pending SD</button>
+                                    <button type="button" class="filter-option" data-filter-value="Approved">Status: Approved</button>
+                                    <button type="button" class="filter-option" data-filter-value="Rejected">Status: Rejected</button>
                                     <button type="button" class="filter-option clear-option" data-filter-clear="true">Clear Filter</button>
                                 </div>
                             </div>
@@ -104,16 +106,31 @@
                     </thead>
                     <tbody id="applicationTableBody">
                         {% for app in applications %}
-                        <tr>
-                            <td class="col-name">{{ app.applicant_name }}</td>
-                            <td class="col-type">{{ app.type }}</td>
-                            <td class="col-dept">{{ app.target_department.name|default:app.target_department }}</td>
+                        <tr data-application-id="{{ app.id }}" data-status="{{ app.status }}" data-application-type="{{ app.type }}" data-action-url="{% url 'process_application_action' app.id %}">
+                            <td class="col-name">
+                                {{ app.applicant_name }}
+                                <span class="col-id" hidden>{{ app.id }}</span>
+                            </td>
+                            <td class="col-type">
+                                {{ app.type }}
+                                <span class="col-position" hidden>{{ app.target_position|default:'' }}</span>
+                            </td>
+                            <td class="col-dept">
+                                {{ app.target_department.name|default:app.target_department }}
+                                <span class="col-progress" hidden>{{ app.status }}</span>
+                            </td>
                             <td class="col-submitted">{{ app.history.first.timestamp|date:"M d, Y"|default:"N/A" }}</td>
                             <td class="col-status">
                                 <span class="status-badge status-{{ app.status|slugify }}">{{ app.status }}</span>
                             </td>
                             <td class="col-actions">
                                 <a href="{% url 'application_detail' app.id %}" class="btn-view">View Details</a>
+                                {% if app.status == 'Pending' or app.status == 'Head Approved' %}
+                                    <!-- FIX: Wire review actions to backend endpoint instead of mock JS transitions. -->
+                                    <input type="text" class="js-remarks" placeholder="Remarks (optional)">
+                                    <button type="button" class="js-app-action" data-decision="Approve">Approve</button>
+                                    <button type="button" class="js-app-action" data-decision="Reject">Reject</button>
+                                {% endif %}
                             </td>
                         </tr>
                         {% empty %}
@@ -288,9 +305,10 @@
 
 <template id="appRowTemplate">
     <tr>
+        <td class="col-id"></td>
         <td class="col-name"></td>
-        <td class="col-type"></td>
-        <td class="col-dept"></td>
+        <td class="col-position"></td>
+        <td class="col-progress"></td>
         <td class="col-submitted"></td>
         <td class="col-status"></td>
         <td class="col-actions"></td>

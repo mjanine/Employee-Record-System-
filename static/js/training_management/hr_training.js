@@ -69,10 +69,12 @@ function renderTable() {
         clone.querySelector('.col-category').innerText = t.category;
         clone.querySelector('.col-date').innerText = t.date;
         clone.querySelector('.col-mode').innerText = t.mode;
-        clone.querySelector('.col-slots').innerText = t.slotsText;
+        // FIX: Align with backend serializer snake_case key.
+        clone.querySelector('.col-slots').innerText = t.slots_text;
         clone.querySelector('.col-progress').innerText = t.progress;
         clone.querySelector('.col-status').innerHTML =
-            '<span class="status-pill ' + t.status + '">' + t.statusLabel + '</span>';
+            // FIX: Align with backend serializer snake_case key.
+            '<span class="status-pill ' + t.status + '">' + t.status_label + '</span>';
 
         const actionsCell = clone.querySelector('.col-actions');
 
@@ -122,13 +124,15 @@ function openModal(id) {
     document.getElementById('modalDate').innerText = t.date;
     document.getElementById('modalCategory').innerText = t.category;
     document.getElementById('modalMode').innerText = t.mode;
-    document.getElementById('modalSlots').innerText = t.slotsText;
+    // FIX: Align with backend serializer snake_case key.
+    document.getElementById('modalSlots').innerText = t.slots_text;
     document.getElementById('modalProgress').innerText = t.progress;
     document.getElementById('modalRemarks').innerText = t.remarks;
     document.getElementById('modalCoordinatorText').innerHTML =
         '<small>Coordinator: ' + coordinatorName + '</small>';
     document.getElementById('modalStatusContainer').innerHTML =
-        '<span class="status-pill ' + t.status + '">' + t.statusLabel + '</span>';
+        // FIX: Align with backend serializer snake_case key.
+        '<span class="status-pill ' + t.status + '">' + t.status_label + '</span>';
 
     document.getElementById('modalActions').style.display =
         isFinalTrainingStatus(t.status) ? 'none' : 'flex';

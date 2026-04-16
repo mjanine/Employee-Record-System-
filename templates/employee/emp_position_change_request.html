@@ -53,15 +53,16 @@
                     </div>
 
                     <div id="newRequestContainer">
-                        <form class="position-form" id="positionForm">
+                        <form class="position-form" id="positionForm" method="POST" action="{% url 'create_position_change' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="empName">EMPLOYEE NAME</label>
-                                    <input type="text" id="empName" placeholder="e.g. Dela Cruz, Juan" required>
+                                    <input type="text" id="empName" value="{{ request.user.get_full_name|default:request.user.username }}" placeholder="e.g. Dela Cruz, Juan" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="empId">EMPLOYEE ID</label>
-                                    <input type="text" id="empId" placeholder="Auto-filled" disabled>
+                                    <input type="text" id="empId" value="{{ request.user.id }}" placeholder="Auto-filled" readonly>
                                 </div>
                             </div>
 
@@ -72,14 +73,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="currentDept">DEPARTMENT</label>
-                                    <input type="text" id="currentDept" placeholder="Auto-filled" disabled>
+                                    <input type="text" id="currentDept" value="{{ request.user.department.name|default:'N/A' }}" placeholder="Auto-filled" readonly>
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group full-width">
                                     <label for="requestedPos">REQUESTED POSITION</label>
-                                    <select id="requestedPos" required>
+                                    <select id="requestedPos" name="target_position" required>
                                         <option value="">Select position...</option>
                                         <option>Dean</option>
                                         <option>Department Head</option>
@@ -95,6 +96,19 @@
 
                             <div class="form-row">
                                 <div class="form-group full-width">
+                                    <label for="targetDepartment">TARGET DEPARTMENT</label>
+                                    <!-- FIX: Match PositionChangeRequestForm field name exactly. -->
+                                    <select id="targetDepartment" name="target_department" required>
+                                        <option value="">Select department...</option>
+                                        {% for department in form.target_department.field.queryset %}
+                                            <option value="{{ department.pk }}">{{ department.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
                                     <label for="effectiveDate">EFFECTIVE DATE</label>
                                     <input type="date" id="effectiveDate" required>
                                 </div>
@@ -103,7 +117,16 @@
                             <div class="form-row">
                                 <div class="form-group full-width">
                                     <label for="reason">REASON</label>
-                                    <textarea id="reason" placeholder="Input reason for position change..." rows="6" required></textarea>
+                                    <!-- FIX: Match PositionChangeRequestForm field name exactly. -->
+                                    <textarea id="reason" name="applicant_info" placeholder="Input reason for position change..." rows="6" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="attachedDocuments">ATTACH SUPPORTING DOCUMENTS</label>
+                                    <!-- FIX: Match PositionChangeRequestForm field name exactly. -->
+                                    <input type="file" id="attachedDocuments" name="attached_documents" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                 </div>
                             </div>
 
