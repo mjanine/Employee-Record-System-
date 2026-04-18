@@ -62,6 +62,7 @@ path('hr/employees/profile/<int:user_id>/self-upload/', views.update_employee_se
 path('hr/employees/edit/<int:user_id>/', views.edit_employee, name='edit_employee'),
 path('hr/employees/delete/<int:user_id>/', views.delete_employee, name='delete_employee'),
 path('hr/training/', views.hr_training, name='hr_training'),
+path('forgot-password/', views.forgot_password_page, name='forgot_password_page'),
 
     # Admin Security & Data Management
     path('security-settings/', views.security_settings_view, name='security_settings'),

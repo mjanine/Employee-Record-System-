@@ -1500,3 +1500,13 @@ def security_settings_view(request):
             return redirect('security_settings')
 
     return render(request, 'admin/security_settings.html', {'config': config})
+
+# Add this somewhere in your accounts/views.py
+def forgot_password_page(request):
+    """ Public page for users who forgot their password """
+    if request.method == 'POST':
+        # We will add the actual email-sending logic here later!
+        pass
+        
+    return render(request, 'login/forpass.html')
+

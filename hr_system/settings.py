@@ -119,3 +119,6 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Custom setting for failed login attempts
 MAX_FAILED_LOGIN_ATTEMPTS = 5
+
+# Output emails to the console instead of trying to send real ones
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
