@@ -42,7 +42,7 @@ class Application(models.Model):
         if is_new:
             ApplicationStatusHistory.objects.create(
                 application=self,
-                previous_status='Submitted',
+                previous_status=self.status,
                 new_status=self.status,
                 remarks='Application submitted.',
                 actor=None,
@@ -58,6 +58,9 @@ class ApplicationStatusHistory(models.Model):
     remarks = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     actor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['-timestamp']
 
     def __str__(self):
         return f"{self.application} status changed to {self.new_status}"

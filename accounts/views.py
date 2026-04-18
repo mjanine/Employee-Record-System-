@@ -232,7 +232,7 @@ def admin_dashboard(request):
             'export_report': reverse('audit_trails'),
         },
     }
-    return render(request, 'admin/dashboard.html', context)
+    return render(request, 'admin/admin_dash.html', context)
 
 from attendance.models import AttendanceLog
 from leaves.models import LeaveRequest
@@ -635,12 +635,12 @@ def _get_allowed_status_values(report_type):
         }
     if report_type == 'Leave Report':
         return {
-            LeaveRequest.Status.PENDING_HEAD_APPROVAL,
-            LeaveRequest.Status.PENDING_HR_APPROVAL,
-            LeaveRequest.Status.PENDING_SD_APPROVAL,
-            LeaveRequest.Status.APPROVED,
-            LeaveRequest.Status.REJECTED,
-            LeaveRequest.Status.CANCELLED,
+            'PENDING_HEAD',
+            'PENDING_HR',
+            'PENDING_SD',
+            'APPROVED',
+            'REJECTED',
+            'CANCELLED',
         }
     if report_type == 'Evaluation Summary':
         return {
@@ -714,7 +714,15 @@ def _build_report_queryset(report_type, start_date, end_date, department, status
         queryset = _apply_department_filter(queryset, department if institution_wide else None, 'user__department')
 
         if status:
-            queryset = queryset.filter(status=status)
+            status_mapping = {
+                'PENDING_HEAD': LeaveRequest.Status.PENDING_HEAD_APPROVAL,
+                'PENDING_HR': LeaveRequest.Status.PENDING_HR_APPROVAL,
+                'PENDING_SD': LeaveRequest.Status.PENDING_SD_APPROVAL,
+                'APPROVED': LeaveRequest.Status.APPROVED,
+                'REJECTED': LeaveRequest.Status.REJECTED,
+                'CANCELLED': LeaveRequest.Status.CANCELLED,
+            }
+            queryset = queryset.filter(status=status_mapping.get(status, status))
 
         if start_date:
             queryset = queryset.filter(start_date__gte=start_date)

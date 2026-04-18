@@ -15,7 +15,6 @@ class Notification(models.Model):
     NOTIFICATION_TYPES = (
         ('Leave Update', 'Leave Update'),
         ('Pending Approval', 'Pending Approval'),
-        ('Evaluation Reminder', 'Evaluation Reminder'),
         ('System Announcement', 'System Announcement'),
     )
 

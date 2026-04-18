@@ -25,6 +25,35 @@ def _redirect_to_origin(request, user, fallback=None):
     }
     return redirect(role_fallback.get(user.role, 'login'))
 
+
+def _can_access_document(user, document):
+    """Centralized access control for document view/download endpoints."""
+    role = (getattr(user, 'role', '') or '').upper()
+
+    if role in {'HR', 'ADMIN', 'SD'}:
+        return True
+
+    # Owner can always access their own document.
+    if document.employee.user_id == user.id:
+        return True
+
+    if role == 'HEAD':
+        target_department_id = getattr(document.employee.user, 'department_id', None)
+        if not target_department_id:
+            return False
+
+        scope_ids = set()
+        if getattr(user, 'department_id', None):
+            scope_ids.add(user.department_id)
+
+        headed_departments = getattr(user, 'headed_department', None)
+        if headed_departments is not None:
+            scope_ids.update(headed_departments.values_list('id', flat=True))
+
+        return target_department_id in scope_ids
+
+    return False
+
 @login_required
 def upload_document(request):
     user = request.user
@@ -50,7 +79,7 @@ def upload_document(request):
                 employee_id = request.POST.get('employee_id')
                 if not employee_id:
                     messages.error(request, "No employee target was provided for this upload.")
-                    return _redirect_to_origin(request, user, fallback='documents:view_documents')
+                    return _redirect_to_origin(request, user)
                 document.employee = get_object_or_404(EmployeeProfile, id=employee_id)
             else:
                 document.employee = user.profile
@@ -60,10 +89,10 @@ def upload_document(request):
             return _redirect_to_origin(request, user)
 
         messages.error(request, "Upload failed. Please check the selected file and fields.")
-        return _redirect_to_origin(request, user, fallback='documents:view_documents')
+        return _redirect_to_origin(request, user)
 
     messages.info(request, "Use the profile documents tab to upload files.")
-    return _redirect_to_origin(request, user, fallback='documents:view_documents')
+    return _redirect_to_origin(request, user)
 
 @login_required
 def view_documents(request):
@@ -100,8 +129,8 @@ def view_documents(request):
 def download_document(request, document_id):
     document = get_object_or_404(Document, id=document_id)
     
-    # Strict role-based access: HR can download any, others only their own
-    if request.user.role != 'HR' and document.employee.user != request.user:
+    # HR/ADMIN/SD can access any document. HEAD can access docs within department scope.
+    if not _can_access_document(request.user, document):
         raise PermissionDenied("You do not have permission to download this document.")
 
     if not document.file or not os.path.exists(document.file.path):
@@ -114,8 +143,8 @@ def download_document(request, document_id):
 def view_document_inline(request, document_id):
     document = get_object_or_404(Document, id=document_id)
     
-    # Strict role-based access: HR can view any, others only their own
-    if request.user.role != 'HR' and document.employee.user != request.user:
+    # HR/ADMIN/SD can access any document. HEAD can access docs within department scope.
+    if not _can_access_document(request.user, document):
         raise PermissionDenied("You do not have permission to view this document.")
 
     if not document.file or not os.path.exists(document.file.path):
@@ -140,7 +169,7 @@ def delete_document(request, document_id):
         referer = request.META.get('HTTP_REFERER')
         if referer:
             return redirect(referer)
-        return redirect('documents:view_documents')
+        return _redirect_to_origin(request, request.user)
 
     messages.error(request, "Invalid request method for document deletion.")
-    return _redirect_to_origin(request, request.user, fallback='documents:view_documents')
+    return _redirect_to_origin(request, request.user)
