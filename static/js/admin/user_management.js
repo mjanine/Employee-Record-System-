@@ -232,10 +232,11 @@ async function editUser(userId) {
         }
         const userData = await response.json();
 
-        if (document.getElementById('firstName')) document.getElementById('firstName').value = userData.first_name || '';
-        if (document.getElementById('lastName')) document.getElementById('lastName').value = userData.last_name || '';
-        if (document.getElementById('email')) document.getElementById('email').value = userData.email || '';
-        if (document.getElementById('username')) document.getElementById('username').value = userData.username || '';
+        // Change 'firstName' to 'id_first_name', etc.
+        if (document.getElementById('id_first_name')) document.getElementById('id_first_name').value = userData.first_name || '';
+        if (document.getElementById('id_last_name')) document.getElementById('id_last_name').value = userData.last_name || '';
+        if (document.getElementById('id_email')) document.getElementById('id_email').value = userData.email || '';
+        if (document.getElementById('id_username')) document.getElementById('id_username').value = userData.username || '';
         if (document.getElementById('role')) document.getElementById('role').value = userData.role || '';
         if (document.getElementById('userIdForEdit')) document.getElementById('userIdForEdit').value = userId;
 

@@ -81,7 +81,7 @@
                     </thead>
                     <tbody id="employeeTableBody">
                         {% for emp in employees %}
-                        <tr>
+                        <tr data-user-id="{{ emp.id }}">
                             <td class="emp-id">{{ emp.profile.employee_id|default:"---" }}</td>
                             <td class="emp-name">{{ emp.get_full_name }}</td>
                             <td>{{ emp.department.name|default:"Unassigned" }}</td>
