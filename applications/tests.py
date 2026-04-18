@@ -238,3 +238,94 @@ class HeadApplicationScopeTests(TestCase):
 		self.assertEqual(first_history.new_status, Application.Status.PENDING_HEAD)
 		self.assertEqual(first_history.remarks, 'Application submitted.')
 		self.assertIsNone(first_history.actor)
+
+
+class EmployeePositionChangeRecordsBackendTests(TestCase):
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		# Prevent unrelated audit login signal side-effects in application tests.
+		user_logged_in.disconnect(log_user_login)
+
+	@classmethod
+	def tearDownClass(cls):
+		user_logged_in.connect(log_user_login)
+		super().tearDownClass()
+
+	def setUp(self):
+		self.client.defaults['REMOTE_ADDR'] = '127.0.0.1'
+
+		self.department = Department.objects.create(name='IT')
+
+		self.emp_user = User.objects.create_user(
+			username='emp_records',
+			password='testpass123',
+			role='EMP',
+			must_change_password=False,
+		)
+		self.hr_user = User.objects.create_user(
+			username='hr_records',
+			password='testpass123',
+			role='HR',
+			must_change_password=False,
+		)
+
+		self.own_position_change = Application.objects.create(
+			type=Application.Type.POSITION_CHANGE,
+			applicant_name=self.emp_user.username,
+			target_position='Senior Instructor',
+			target_department=self.department,
+			status=Application.Status.PENDING_HEAD,
+			applicant_info='Promotion track request',
+		)
+
+		self.other_position_change = Application.objects.create(
+			type=Application.Type.POSITION_CHANGE,
+			applicant_name='someone_else',
+			target_position='Professor',
+			target_department=self.department,
+			status=Application.Status.PENDING_SD,
+		)
+
+		Application.objects.create(
+			type=Application.Type.NEW_EMPLOYEE,
+			applicant_name=self.emp_user.username,
+			target_position='Instructor',
+			target_department=self.department,
+			status=Application.Status.PENDING_HEAD,
+		)
+
+	def test_create_position_change_context_contains_only_own_position_change_records(self):
+		self.client.force_login(self.emp_user)
+
+		response = self.client.get(reverse('create_position_change'))
+
+		self.assertEqual(response.status_code, 200)
+		records = response.context['position_change_records']
+		self.assertEqual(response.context['position_change_records_count'], 1)
+		self.assertEqual(len(records), 1)
+		self.assertEqual(records[0]['id'], self.own_position_change.id)
+		self.assertEqual(records[0]['status'], Application.Status.PENDING_HEAD)
+		self.assertEqual(records[0]['status_label'], 'Pending Head')
+
+	def test_employee_records_api_returns_database_backed_records(self):
+		self.client.force_login(self.emp_user)
+
+		response = self.client.get(reverse('employee_position_change_records_api'))
+
+		self.assertEqual(response.status_code, 200)
+		payload = response.json()
+		self.assertEqual(payload['total_count'], 1)
+		self.assertEqual(payload['pending_count'], 1)
+		self.assertEqual(len(payload['records']), 1)
+		self.assertEqual(payload['records'][0]['id'], self.own_position_change.id)
+		self.assertEqual(payload['records'][0]['target_department'], self.department.name)
+		self.assertTrue(payload['records'][0]['submitted_at'])
+
+	def test_employee_records_api_rejects_non_employee_roles(self):
+		self.client.force_login(self.hr_user)
+
+		response = self.client.get(reverse('employee_position_change_records_api'))
+
+		self.assertEqual(response.status_code, 403)
+		self.assertEqual(response.json()['detail'], 'Only employees can access this endpoint.')

@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Min
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -100,6 +102,45 @@ def _record_status_change(application, actor, new_status, remarks=''):
         remarks=(remarks or '').strip(),
         actor=actor,
     )
+
+
+def _get_position_change_records_for_user(user):
+    """Return DB-backed position change requests owned by the given employee user."""
+    applicant_identifiers = {user.username}
+    full_name = (user.get_full_name() or '').strip()
+    if full_name:
+        applicant_identifiers.add(full_name)
+
+    return (
+        Application.objects
+        .filter(
+            type=Application.Type.POSITION_CHANGE,
+            applicant_name__in=applicant_identifiers,
+        )
+        .select_related('target_department')
+        .annotate(submitted_at=Min('history__timestamp'))
+        .order_by('-submitted_at', '-id')
+    )
+
+
+def _serialize_position_change_records(queryset):
+    """Normalize application rows for template context and JSON API responses."""
+    records = []
+    for application in queryset:
+        records.append(
+            {
+                'id': application.id,
+                'applicant_name': application.applicant_name,
+                'target_position': application.target_position,
+                'target_department': application.target_department.name if application.target_department else None,
+                'status': application.status,
+                'status_label': application.get_status_display(),
+                'applicant_info': application.applicant_info or '',
+                'has_attached_documents': bool(application.attached_documents),
+                'submitted_at': application.submitted_at.isoformat() if application.submitted_at else None,
+            }
+        )
+    return records
 
 
 @login_required
@@ -288,4 +329,37 @@ def create_position_change(request):
     else:
         form = PositionChangeRequestForm()
 
-    return render(request, 'employee/emp_position_change_request.html', {'form': form})
+    records = _serialize_position_change_records(_get_position_change_records_for_user(request.user))
+    return render(
+        request,
+        'employee/emp_position_change_request.html',
+        {
+            'form': form,
+            'position_change_records': records,
+            'position_change_records_count': len(records),
+        },
+    )
+
+
+@login_required
+def employee_position_change_records_api(request):
+    """Return the authenticated employee's position change requests from the database."""
+    role = (request.user.role or '').upper()
+    if role != 'EMP':
+        return JsonResponse({'detail': 'Only employees can access this endpoint.'}, status=403)
+
+    records = _serialize_position_change_records(_get_position_change_records_for_user(request.user))
+    pending_statuses = {
+        Application.Status.PENDING_HEAD,
+        Application.Status.PENDING_HR,
+        Application.Status.PENDING_SD,
+    }
+    pending_count = sum(1 for record in records if record['status'] in pending_statuses)
+
+    return JsonResponse(
+        {
+            'records': records,
+            'total_count': len(records),
+            'pending_count': pending_count,
+        }
+    )
