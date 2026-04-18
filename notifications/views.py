@@ -8,7 +8,15 @@ from .models import Notification, NotificationPreference
 @login_required
 def notification_list(request):
     notifications = Notification.objects.filter(user=request.user)
-    return render(request, 'notifications/notification_list.html', {'notifications': notifications})
+    preference, _ = NotificationPreference.objects.get_or_create(user=request.user)
+    return render(
+        request,
+        'notifications/notification_list.html',
+        {
+            'notifications': notifications,
+            'preference': preference,
+        },
+    )
 
 @login_required
 @require_POST

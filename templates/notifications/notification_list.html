@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications | Employee Portal{% endblock %}
+
+{% block content %}
+<div style="padding: 18px 22px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+    <div>
+      <h2 style="margin: 0; color: #2f2f2f;">All Notifications</h2>
+      <p style="margin: 6px 0 0 0; color: #6b6b6b; font-size: 0.95rem;">
+        Manage notification preferences and mark notifications as read.
+      </p>
+    </div>
+    <button type="button" id="mark-all-read-btn" style="border: none; background: #800000; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+      Mark All as Read
+    </button>
+  </div>
+
+  <section style="background: #ffffff; border-radius: 12px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06); margin-bottom: 16px;">
+    <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 1.05rem;">Notification Preferences</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 14px;">
+      <label style="display: flex; gap: 8px; align-items: center; color: #333;">
+        <input type="checkbox" class="notif-pref-toggle" data-key="receive_leave_updates" {% if preference.receive_leave_updates %}checked{% endif %}>
+        Leave updates
+      </label>
+      <label style="display: flex; gap: 8px; align-items: center; color: #333;">
+        <input type="checkbox" class="notif-pref-toggle" data-key="receive_approvals" {% if preference.receive_approvals %}checked{% endif %}>
+        Pending approvals
+      </label>
+      <label style="display: flex; gap: 8px; align-items: center; color: #333;">
+        <input type="checkbox" class="notif-pref-toggle" data-key="receive_evaluation_reminders" {% if preference.receive_evaluation_reminders %}checked{% endif %}>
+        Evaluation reminders
+      </label>
+      <label style="display: flex; gap: 8px; align-items: center; color: #333;">
+        <input type="checkbox" class="notif-pref-toggle" data-key="receive_system_announcements" {% if preference.receive_system_announcements %}checked{% endif %}>
+        System announcements
+      </label>
+    </div>
+    <p id="preferences-status" style="margin: 10px 0 0 0; min-height: 1.1em; color: #555; font-size: 0.9rem;"></p>
+  </section>
+
+  <section style="background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);">
+    <div id="all-notification-list" style="max-height: 62vh; overflow-y: auto;">
+      {% for notif in notifications %}
+      <article id="notif-row-{{ notif.id }}" class="notif-row {% if not notif.is_read %}notif-row-unread{% endif %}" style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; gap: 12px;">
+        <div>
+          <div style="margin-bottom: 6px;">
+            <span style="display: inline-block; font-size: 0.78rem; background: #f2f2f2; color: #333; border-radius: 999px; padding: 3px 10px;">{{ notif.notification_type }}</span>
+            {% if not notif.is_read %}
+            <span style="display: inline-block; font-size: 0.72rem; background: #fff0f0; color: #800000; border-radius: 999px; padding: 3px 8px; margin-left: 6px;">Unread</span>
+            {% endif %}
+          </div>
+          <p style="margin: 0 0 6px 0; color: #242424;">{{ notif.message }}</p>
+          <small style="color: #7a7a7a;">{{ notif.created_at|date:"M d, Y H:i" }}</small>
+        </div>
+        <div>
+          {% if not notif.is_read %}
+          <button type="button" class="mark-read-btn" data-id="{{ notif.id }}" style="border: 1px solid #800000; background: #fff; color: #800000; padding: 6px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap;">
+            Mark as Read
+          </button>
+          {% endif %}
+        </div>
+      </article>
+      {% empty %}
+      <div style="padding: 18px; color: #6f6f6f;">No notifications yet.</div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    const markReadUrlTemplate = "{% url 'notifications:mark_as_read' 0 %}";
+    const markAllReadUrl = "{% url 'notifications:mark_all_as_read' %}";
+    const unreadCountUrl = "{% url 'notifications:unread_count' %}";
+    const updatePreferencesUrl = "{% url 'notifications:update_preferences' %}";
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    function updateBadge(newCount) {
+      const badge = document.getElementById('notification-badge');
+      if (!badge) return;
+      if (newCount > 0) {
+        badge.textContent = newCount;
+        badge.classList.remove('d-none');
+      } else {
+        badge.textContent = '0';
+        badge.classList.add('d-none');
+      }
+    }
+
+    function refreshUnreadCount() {
+      fetch(unreadCountUrl)
+        .then((response) => response.json())
+        .then((data) => updateBadge(data.count))
+        .catch(() => {});
+    }
+
+    function markSingleAsRead(id) {
+      const url = markReadUrlTemplate.replace('/0/', `/${id}/`);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status !== 'success') return;
+          const row = document.getElementById(`notif-row-${id}`);
+          if (!row) return;
+          row.classList.remove('notif-row-unread');
+          const button = row.querySelector('.mark-read-btn');
+          if (button) button.remove();
+          refreshUnreadCount();
+        })
+        .catch(() => {});
+    }
+
+    const markAllButton = document.getElementById('mark-all-read-btn');
+    if (markAllButton) {
+      markAllButton.addEventListener('click', function () {
+        fetch(markAllReadUrl, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+          }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status !== 'success') return;
+            const rows = document.querySelectorAll('#all-notification-list .notif-row-unread');
+            rows.forEach((row) => {
+              row.classList.remove('notif-row-unread');
+              const button = row.querySelector('.mark-read-btn');
+              if (button) button.remove();
+            });
+            refreshUnreadCount();
+          })
+          .catch(() => {});
+      });
+    }
+
+    document.querySelectorAll('.mark-read-btn').forEach((button) => {
+      button.addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        if (!id) return;
+        markSingleAsRead(id);
+      });
+    });
+
+    const preferencesStatus = document.getElementById('preferences-status');
+    document.querySelectorAll('.notif-pref-toggle').forEach((toggle) => {
+      toggle.addEventListener('change', function () {
+        const key = this.getAttribute('data-key');
+        if (!key) return;
+
+        fetch(updatePreferencesUrl, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ [key]: this.checked })
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === 'success') {
+              if (preferencesStatus) {
+                preferencesStatus.textContent = 'Preference updated.';
+                preferencesStatus.style.color = '#2e7d32';
+              }
+            } else if (preferencesStatus) {
+              preferencesStatus.textContent = data.message || 'Failed to update preference.';
+              preferencesStatus.style.color = '#b00020';
+            }
+          })
+          .catch(() => {
+            if (preferencesStatus) {
+              preferencesStatus.textContent = 'Failed to update preference.';
+              preferencesStatus.style.color = '#b00020';
+            }
+          });
+      });
+    });
+  })();
+</script>
+{% endblock %}

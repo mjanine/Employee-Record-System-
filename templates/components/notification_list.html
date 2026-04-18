@@ -16,7 +16,7 @@
           </div>
           {% if not notif.is_read %}
             <button class="btn btn-sm btn-outline-primary ms-2 rounded-circle border-0" onclick="markAsRead({{ notif.id }})" title="Mark as read">
-              <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+              <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
             </button>
           {% endif %}
         </div>
@@ -49,6 +49,9 @@
   }
 
   const csrftoken = getCookie('csrftoken');
+  const markReadUrlTemplate = "{% url 'notifications:mark_as_read' 0 %}";
+  const markAllReadUrl = "{% url 'notifications:mark_all_as_read' %}";
+  const unreadCountUrl = "{% url 'notifications:unread_count' %}";
 
   function updateBadge(newCount) {
     const badge = document.getElementById('notification-badge');
@@ -64,7 +67,8 @@
   }
 
   function markAsRead(id) {
-    fetch(`/notifications/mark-read/${id}/`, {
+    const url = markReadUrlTemplate.replace('/0/', `/${id}/`);
+    fetch(url, {
       method: 'POST',
       headers: {
         'X-CSRFToken': csrftoken,
@@ -82,7 +86,7 @@
         }
         
         // Optionally update the badge count by fetching the unread count
-        fetch('/notifications/unread-count/')
+        fetch(unreadCountUrl)
           .then(res => res.json())
           .then(countData => {
             updateBadge(countData.count);
@@ -93,7 +97,7 @@
   }
 
   function markAllAsRead() {
-    fetch('/notifications/mark-all-read/', {
+    fetch(markAllReadUrl, {
       method: 'POST',
       headers: {
         'X-CSRFToken': csrftoken,

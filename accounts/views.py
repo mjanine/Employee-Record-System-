@@ -43,8 +43,7 @@ def is_head(user):
     return user.is_authenticated and user.role == 'HEAD'
 
 def is_sd(user):
-    # Allow ADMIN privileges to access SD views to match other apps
-    return user.is_authenticated and user.role in ['SD', 'ADMIN']
+    return user.is_authenticated and user.role == 'SD'
 
 
 def is_sd_only(user):
@@ -171,8 +170,10 @@ def admin_dashboard(request):
 
     login_logs_qs = LoginLog.objects.order_by('-datetime')
     recent_login_activity = login_logs_qs.select_related('user')[:7]
+    successful_login_today = login_logs_qs.filter(status='Success', datetime__date=today).count()
     failed_login_count = login_logs_qs.filter(status='Failed').count()
     failed_login_today = login_logs_qs.filter(status='Failed', datetime__date=today).count()
+    pending_actions = locked_users + failed_login_today
 
     login_chart_labels = []
     login_chart_success = []
@@ -187,6 +188,11 @@ def admin_dashboard(request):
 
     context = {
         'welcome_name': request.user.first_name or request.user.username,
+        'stats': {
+            'total_users': total_users,
+            'active_users': active_users,
+            'total_departments': total_departments,
+        },
         'system_overview': {
             'total_users': total_users,
             'total_departments': total_departments,
@@ -202,6 +208,8 @@ def admin_dashboard(request):
         'recent_login_activity': recent_login_activity,
         'failed_login_count': failed_login_count,
         'failed_login_today': failed_login_today,
+        'successful_login_today': successful_login_today,
+        'pending_actions': pending_actions,
         'system_notifications': system_notifications,
         'login_chart_data': {
             'labels': login_chart_labels,

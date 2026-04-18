@@ -48,6 +48,7 @@
     </div>
 
     <main class="main-content">
+        {% include 'components/navbar.html' %}
         <div class="content-wrapper">
             <!-- Left Content Area -->
             <div class="dashboard-container">
@@ -55,7 +56,7 @@
                 <div class="dashboard-header">
                     <h1 class="dashboard-title">Dashboard</h1>
                     <p class="dashboard-greeting">Hello, <span id="userName">{{ welcome_name }}</span>! 👋</p>
-                    <p class="daily-quote" id="dailyQuote">Success is the sum of small efforts repeated day in and day out.</p>
+                    <p class="daily-quote" id="dailyQuote">{{ global_quote|default:"Success is the sum of small efforts repeated day in and day out." }}</p>
                 </div>
 
                 <!-- KPI Cards Section -->
@@ -143,9 +144,15 @@
                 <section class="support-section">
                     <h2 class="section-title">Need Help?</h2>
                     <div class="support-content">
-                        <p class="support-text">Our support team is here to help. Contact us anytime for assistance with HR processes.</p>
-                        <a href="mailto:support@company.com" class="support-link">
-                            <i class="fas fa-envelope"></i> support@company.com
+                        <p class="support-text">Our support team is here to help. Use the FAQ for quick guidance, then contact HR or ITS.</p>
+                        <a href="{% url 'audit_trails' %}" class="support-link">
+                            <i class="fas fa-circle-question"></i> FAQ / Help Center
+                        </a>
+                        <a href="mailto:hr@uph.edu" class="support-link">
+                            <i class="fas fa-user-tie"></i> HR: hr@uph.edu
+                        </a>
+                        <a href="mailto:its@uph.edu" class="support-link">
+                            <i class="fas fa-laptop-code"></i> ITS: its@uph.edu
                         </a>
                     </div>
                 </section>
@@ -155,7 +162,7 @@
             <aside class="notification-panel">
                 <div class="notification-header">
                     <h3>Notifications</h3>
-                    <button class="notification-clear" title="Clear all">
+                    <button class="notification-clear" title="Clear all" data-mark-all-url="{% url 'notifications:mark_all_as_read' %}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
@@ -185,6 +192,7 @@
     </main>
 
     <script id="sdAttendanceData" type="application/json">{{ attendance_data|safe }}</script>
+    <script src="{% static 'js/charts.js' %}"></script>
     <script src="{% static 'js/sd/sd_dash.js' %}"></script>
 </body>
 </html>

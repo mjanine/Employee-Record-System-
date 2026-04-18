@@ -119,12 +119,15 @@
     <div class="dashboard-viewport">
     <main class="main-content dashboard-main">
         <div class="form-card dashboard-card">
+            {% include 'components/navbar.html' %}
             <div class="form-body dashboard-body">
                 <div class="admin-dashboard">
                     <div class="admin-header">
                         <div>
                             <h1>Admin Dashboard</h1>
                             <p class="subtitle">System Overview &amp; Management</p>
+                            <p class="subtitle">Hello, {{ welcome_name }}.</p>
+                            <p class="subtitle">{{ global_quote|default:"Success is the sum of small efforts repeated day in and day out." }}</p>
                         </div>
                     </div>
 
@@ -157,7 +160,7 @@
                             </div>
                             <div class="stat-content">
                                 <p class="stat-label">System Activity</p>
-                                <h2 class="stat-number">47</h2>
+                                <h2 class="stat-number">{{ successful_login_today }}</h2>
                                 <span class="stat-change">Logins Today</span>
                             </div>
                         </div>
@@ -168,7 +171,7 @@
                             </div>
                             <div class="stat-content">
                                 <p class="stat-label">Pending Actions</p>
-                                <h2 class="stat-number">3</h2>
+                                <h2 class="stat-number">{{ pending_actions }}</h2>
                                 <span class="stat-change warning">Require Attention</span>
                             </div>
                         </div>
@@ -192,57 +195,47 @@
                         <div class="section">
                             <h2 class="section-title">Recent System Activity</h2>
                             <div class="activity-feed">
+                                {% for log in recent_login_activity %}
                                 <div class="activity-item">
                                     <div class="activity-icon">
                                         <i class="fas fa-sign-in-alt"></i>
                                     </div>
                                     <div class="activity-details">
-                                        <p class="activity-action">John Doe logged in</p>
-                                        <p class="activity-user">by Admin</p>
+                                        <p class="activity-action">{{ log.username }} login {{ log.status|lower }}</p>
+                                        <p class="activity-user">{{ log.ip_address }}</p>
                                     </div>
-                                    <p class="activity-time">10 mins ago</p>
+                                    <p class="activity-time">{{ log.datetime|timesince }} ago</p>
                                 </div>
-
+                                {% empty %}
                                 <div class="activity-item">
                                     <div class="activity-icon">
-                                        <i class="fas fa-user-plus"></i>
+                                        <i class="fas fa-info-circle"></i>
                                     </div>
                                     <div class="activity-details">
-                                        <p class="activity-action">New user Sarah Smith created</p>
-                                        <p class="activity-user">by Admin User</p>
+                                        <p class="activity-action">No recent login activity.</p>
                                     </div>
-                                    <p class="activity-time">25 mins ago</p>
+                                    <p class="activity-time">-</p>
                                 </div>
-
-                                <div class="activity-item">
-                                    <div class="activity-icon">
-                                        <i class="fas fa-user-tie"></i>
-                                    </div>
-                                    <div class="activity-details">
-                                        <p class="activity-action">Role changed for Mike Johnson to HR</p>
-                                        <p class="activity-user">by Admin</p>
-                                    </div>
-                                    <p class="activity-time">1 hour ago</p>
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
 
                         <div class="section">
                             <h2 class="section-title">Quick Actions</h2>
                             <div class="quick-actions">
-                                <a href="user_management.html" class="action-btn primary">
+                                <a href="{{ quick_action_urls.manage_users }}" class="action-btn primary">
                                     <i class="fas fa-user-plus"></i>
                                     <span>Manage Users</span>
                                 </a>
-                                <a href="department_management.html" class="action-btn secondary">
+                                <a href="{{ quick_action_urls.manage_departments }}" class="action-btn secondary">
                                     <i class="fas fa-sitemap"></i>
                                     <span>Manage Departments</span>
                                 </a>
-                                <a href="audit_trails.html" class="action-btn secondary">
+                                <a href="{{ quick_action_urls.audit_trails }}" class="action-btn secondary">
                                     <i class="fas fa-history"></i>
                                     <span>View Audit Trails</span>
                                 </a>
-                                <a href="#" class="action-btn secondary">
+                                <a href="{{ quick_action_urls.export_report }}" class="action-btn secondary">
                                     <i class="fas fa-file-export"></i>
                                     <span>Export Report</span>
                                 </a>
@@ -250,24 +243,74 @@
                         </div>
 
                         <div class="section">
-                            <h2 class="section-title">System Status</h2>
+                            <h2 class="section-title">User Account Summary</h2>
                             <div class="status-list">
                                 <div class="status-item">
-                                    <span class="status-label">Database</span>
-                                    <span class="status-badge success">Connected</span>
+                                    <span class="status-label">Active Users</span>
+                                    <span class="status-badge success">{{ user_account_summary.active_users }}</span>
                                 </div>
                                 <div class="status-item">
-                                    <span class="status-label">Email Service</span>
-                                    <span class="status-badge success">Active</span>
+                                    <span class="status-label">Inactive Users</span>
+                                    <span class="status-badge warning">{{ user_account_summary.inactive_users }}</span>
                                 </div>
                                 <div class="status-item">
-                                    <span class="status-label">File Storage</span>
-                                    <span class="status-badge success">Available</span>
+                                    <span class="status-label">Locked Users</span>
+                                    <span class="status-badge warning">{{ user_account_summary.locked_users }}</span>
                                 </div>
                                 <div class="status-item">
-                                    <span class="status-label">Backup</span>
-                                    <span class="status-badge warning">Scheduled</span>
+                                    <span class="status-label">Failed Logins (Total)</span>
+                                    <span class="status-badge warning">{{ failed_login_count }}</span>
                                 </div>
+                                <div class="status-item">
+                                    <span class="status-label">Failed Logins (Today)</span>
+                                    <span class="status-badge warning">{{ failed_login_today }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2 class="section-title">System Notifications</h2>
+                            <div class="activity-feed">
+                                {% for note in system_notifications %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p class="activity-action">{{ note.message }}</p>
+                                        <p class="activity-user">{{ note.notification_type }}</p>
+                                    </div>
+                                    <p class="activity-time">{{ note.created_at|timesince }} ago</p>
+                                </div>
+                                {% empty %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <p class="activity-action">No system notifications.</p>
+                                    </div>
+                                    <p class="activity-time">-</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2 class="section-title">Need Help?</h2>
+                            <div class="quick-actions">
+                                <a href="{% url 'audit_trails' %}" class="action-btn secondary">
+                                    <i class="fas fa-circle-question"></i>
+                                    <span>FAQ / Help Center</span>
+                                </a>
+                                <a href="mailto:hr@uph.edu" class="action-btn secondary">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>HR: hr@uph.edu</span>
+                                </a>
+                                <a href="mailto:its@uph.edu" class="action-btn secondary">
+                                    <i class="fas fa-laptop-code"></i>
+                                    <span>ITS: its@uph.edu</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -277,6 +320,7 @@
     </main>
     </div>
 
+    {{ dashboard_payload|json_script:"adminDashboardData" }}
     <script src="{% static 'js/admin/sidebar.js' %}"></script>
     <script src="{% static 'js/admin/dashboard.js' %}"></script>
 </body>

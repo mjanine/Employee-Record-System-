@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -9,6 +10,7 @@ from django.db import transaction
 from .models import LeaveRequest, LeaveBalance
 from .forms import LeaveRequestForm, LeaveActionForm
 from accounts.models import Department
+from notifications.utils import send_notification
 from utils.decorators import sd_elevated_required
 
 # Create your views here.
@@ -21,6 +23,53 @@ def is_hr(user):
     return user.is_authenticated and user.role == 'HR'
 
 ADMINISTRATIVE_LEAVE_ROLES = {'ADMIN', 'HR', 'HEAD', 'SD', 'EMP'}
+User = get_user_model()
+
+
+def _notify_recipients(recipients, message, notification_type):
+    for recipient in recipients:
+        if recipient and recipient.is_active:
+            send_notification(recipient, message, notification_type)
+
+
+def _notify_pending_leave_approval(leave_request):
+    requester_name = leave_request.user.get_full_name() or leave_request.user.username
+    leave_label = leave_request.leave_type.name
+    message = f"Pending approval: {requester_name} requested {leave_label} leave."
+
+    if leave_request.status == LeaveRequest.Status.PENDING_HEAD_APPROVAL:
+        department = getattr(leave_request.user, 'department', None)
+        head_user = getattr(department, 'head', None) if department else None
+        if head_user and head_user != leave_request.user:
+            _notify_recipients([head_user], message, 'Pending Approval')
+            return
+        hr_users = User.objects.filter(role='HR', is_active=True)
+        _notify_recipients(hr_users, message, 'Pending Approval')
+        return
+
+    if leave_request.status == LeaveRequest.Status.PENDING_HR_APPROVAL:
+        hr_users = User.objects.filter(role='HR', is_active=True)
+        _notify_recipients(hr_users, message, 'Pending Approval')
+        return
+
+    if leave_request.status == LeaveRequest.Status.PENDING_SD_APPROVAL:
+        sd_users = User.objects.filter(role='SD', is_active=True)
+        _notify_recipients(sd_users, message, 'Pending Approval')
+
+
+def _notify_leave_status_update(leave_request):
+    if leave_request.status == LeaveRequest.Status.APPROVED:
+        send_notification(
+            leave_request.user,
+            f"Your leave request ({leave_request.leave_type.name}) has been approved.",
+            'Leave Update',
+        )
+    elif leave_request.status == LeaveRequest.Status.REJECTED:
+        send_notification(
+            leave_request.user,
+            f"Your leave request ({leave_request.leave_type.name}) has been rejected.",
+            'Leave Update',
+        )
 
 
 def _requires_sd_final_review(leave_request):
@@ -56,6 +105,7 @@ def apply_leave(request):
             leave_request.user = request.user
             leave_request.days_requested = form.cleaned_data['days_requested']
             leave_request.save()
+            _notify_pending_leave_approval(leave_request)
             messages.success(request, "Your leave request has been submitted successfully.")
             return redirect('leaves:leave_history') 
     else:
@@ -107,6 +157,7 @@ def head_apply_leave(request):
             leave_request.user = request.user
             leave_request.days_requested = form.cleaned_data['days_requested']
             leave_request.save()
+            _notify_pending_leave_approval(leave_request)
             messages.success(request, "Your leave request has been submitted successfully.")
             return redirect('leaves:head_leave_history') 
     else:
@@ -168,6 +219,7 @@ def hr_apply_leave(request):
             leave_request.user = request.user
             leave_request.days_requested = form.cleaned_data['days_requested']
             leave_request.save()
+            _notify_pending_leave_approval(leave_request)
             messages.success(request, "Your leave request has been submitted successfully.")
             return redirect('leaves:hr_leave_history') 
     else:
@@ -203,6 +255,7 @@ def sd_apply_leave(request):
             leave_request.user = request.user
             leave_request.days_requested = form.cleaned_data['days_requested']
             leave_request.save()
+            _notify_pending_leave_approval(leave_request)
             messages.success(request, "Your leave request has been submitted successfully.")
             return redirect('leaves:sd_leave_history') 
     else:
@@ -242,6 +295,7 @@ def sd_leave_overview(request):
                 else LeaveRequest.Status.REJECTED
             )
             leave_request.save()
+            _notify_leave_status_update(leave_request)
             messages.success(
                 request,
                 f"Leave request for {leave_request.user.get_full_name()} was {'approved' if action == 'APPROVE' else 'rejected'} by SD.",
@@ -275,6 +329,7 @@ def sd_forward_leave(request, request_id):
     leave_request = get_object_or_404(LeaveRequest, id=request_id)
     leave_request.status = LeaveRequest.Status.PENDING_SD_APPROVAL
     leave_request.save()
+    _notify_pending_leave_approval(leave_request)
     messages.success(request, f"Leave request for {leave_request.user.get_full_name()} has been forwarded.")
     return redirect('leaves:sd_leave_overview')
 
@@ -293,6 +348,10 @@ def head_approve(request, request_id):
         leave_request.head_remarks = form.cleaned_data['remarks']
         leave_request.status = LeaveRequest.Status.PENDING_HR_APPROVAL if action == 'APPROVE' else LeaveRequest.Status.REJECTED
         leave_request.save()
+        if action == 'APPROVE':
+            _notify_pending_leave_approval(leave_request)
+        else:
+            _notify_leave_status_update(leave_request)
     return redirect('leaves:head_leave_history')
 
 
@@ -317,6 +376,10 @@ def hr_final_approve(request, request_id):
         else:
             leave_request.status = LeaveRequest.Status.REJECTED
         leave_request.save() # This triggers the post_save signal
+        if leave_request.status in {LeaveRequest.Status.PENDING_SD_APPROVAL, LeaveRequest.Status.PENDING_HR_APPROVAL, LeaveRequest.Status.PENDING_HEAD_APPROVAL}:
+            _notify_pending_leave_approval(leave_request)
+        else:
+            _notify_leave_status_update(leave_request)
     return redirect('leaves:hr_leave_history')
 
 

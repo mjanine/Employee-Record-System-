@@ -88,6 +88,7 @@
     </div>
 
     <main class="main-content">
+        {% include 'components/navbar.html' %}
         <div class="content-wrapper">
             <!-- Left Content Area -->
             <div class="dashboard-container">
@@ -174,7 +175,7 @@
                 <div class="notification-header">
                     <h3>Approvals &amp; Reminders</h3>
                     <span class="notification-time">Pending: {{ pending_leave_count }}</span>
-                    <button class="notification-clear" title="Clear all">
+                    <button class="notification-clear" title="Clear all" data-mark-all-url="{% url 'notifications:mark_all_as_read' %}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>

@@ -75,14 +75,57 @@ function setupNotificationPanel() {
     }
 }
 
-function clearAllNotifications() {
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i += 1) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === `${name}=`) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+async function clearAllNotifications() {
     const notificationsList = document.querySelector('.notifications-list');
+    const clearBtn = document.querySelector('.notification-clear');
+    const markAllUrl = clearBtn?.dataset.markAllUrl;
+
+    if (markAllUrl) {
+        try {
+            const response = await fetch(markAllUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                credentials: 'same-origin',
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed with status ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Unable to clear notifications on server.', error);
+            window.alert('Unable to clear notifications right now. Please try again.');
+            return;
+        }
+    }
+
     if (notificationsList) {
         notificationsList.innerHTML = '';
         const emptyMessage = document.createElement('div');
         emptyMessage.style.cssText = 'padding: 2rem 1.5rem; text-align: center; color: var(--hr-text-light); font-size: 0.9rem;';
         emptyMessage.innerText = 'No notifications';
         notificationsList.appendChild(emptyMessage);
+    }
+
+    const pendingEl = document.querySelector('.notification-time');
+    if (pendingEl && pendingEl.textContent.includes('Pending:')) {
+        pendingEl.textContent = 'Pending: 0';
     }
 }
 

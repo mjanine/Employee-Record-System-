@@ -1,3 +1,21 @@
+<style>
+  .notification-dropdown {
+    position: relative;
+  }
+
+  .notification-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 1200;
+  }
+
+  .notification-dropdown-menu.show {
+    display: block;
+  }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" href="#">ERS-HCI</a>
@@ -15,7 +33,7 @@
       </span>
       {% endif %}
 
-      <div class="dropdown">
+      <div class="dropdown notification-dropdown">
         <a class="nav-link dropdown-toggle position-relative" href="#" role="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="fas fa-bell"></i> {% if global_unread_count > 0 %}
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-badge" style="font-size: 0.6rem;">
@@ -29,10 +47,40 @@
             </span>
           {% endif %}
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown" style="width: 350px;">
+        <div class="dropdown-menu dropdown-menu-end p-0 notification-dropdown-menu" aria-labelledby="notificationDropdown" style="width: 350px;">
           {% include 'components/notification_list.html' %}
         </div>
       </div>
     </div>
   </div>
 </nav>
+
+<script>
+  (function () {
+    const toggle = document.getElementById('notificationDropdown');
+    if (!toggle || toggle.dataset.boundNotificationDropdown === '1') {
+      return;
+    }
+
+    const container = toggle.closest('.notification-dropdown');
+    const menu = container ? container.querySelector('.notification-dropdown-menu') : null;
+    if (!container || !menu) {
+      return;
+    }
+
+    toggle.dataset.boundNotificationDropdown = '1';
+
+    toggle.addEventListener('click', function (event) {
+      event.preventDefault();
+      menu.classList.toggle('show');
+      toggle.setAttribute('aria-expanded', menu.classList.contains('show') ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!container.contains(event.target)) {
+        menu.classList.remove('show');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+</script>

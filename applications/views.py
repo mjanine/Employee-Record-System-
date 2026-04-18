@@ -1,8 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
+from notifications.utils import send_notification
 from .forms import ApplicationActionForm, PositionChangeRequestForm
 from .models import Application, ApplicationStatusHistory
 
@@ -15,6 +17,36 @@ DASHBOARD_BY_ROLE = {
     'SD': 'sd_dashboard',
     'EMP': 'employee_dashboard',
 }
+User = get_user_model()
+
+
+def _notify_recipients(recipients, message, notification_type):
+    for recipient in recipients:
+        if recipient and recipient.is_active:
+            send_notification(recipient, message, notification_type)
+
+
+def _notify_application_pending_approval(application):
+    message = f"Pending approval: Application #{application.id} ({application.type}) submitted by {application.applicant_name}."
+
+    if application.status == Application.Status.PENDING_HEAD:
+        department = application.target_department
+        head_user = getattr(department, 'head', None) if department else None
+        if head_user:
+            _notify_recipients([head_user], message, 'Pending Approval')
+            return
+        hr_users = User.objects.filter(role='HR', is_active=True)
+        _notify_recipients(hr_users, message, 'Pending Approval')
+        return
+
+    if application.status == Application.Status.PENDING_HR:
+        hr_users = User.objects.filter(role='HR', is_active=True)
+        _notify_recipients(hr_users, message, 'Pending Approval')
+        return
+
+    if application.status == Application.Status.PENDING_SD:
+        sd_users = User.objects.filter(role='SD', is_active=True)
+        _notify_recipients(sd_users, message, 'Pending Approval')
 
 
 def _get_head_department_scope_ids(user):
@@ -225,6 +257,7 @@ def process_application_action(request, pk):
         )
 
     _record_status_change(application, request.user, new_status, remarks)
+    _notify_application_pending_approval(application)
 
     if role in {'SD', 'ADMIN'}:
         messages.success(request, f'Application #{application.id} marked as {new_status}.')
@@ -245,6 +278,7 @@ def create_position_change(request):
             position_change.applicant_name = request.user.get_full_name() or request.user.username
             position_change.status = Application.Status.PENDING_HEAD
             position_change.save()
+            _notify_application_pending_approval(position_change)
             messages.success(request, 'Position change request submitted.')
             return redirect('create_position_change')
     else:
