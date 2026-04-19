@@ -3,9 +3,8 @@
     <div class="top-section">
         <div class="logo-wrapper" id="logoToggle">
             <img src="{% static 'img/general/uph.png' %}" class="logo" alt="Logo">
-            <div class="open-icon"><i class="fas fa-chevron-right"></i></div>
         </div>
-        <button class="close-btn" id="closeBtn"><i class="fas fa-chevron-left"></i></button>
+        <button class="close-btn" id="closeBtn" type="button" aria-label="Collapse sidebar"><i class="fas fa-chevron-left"></i></button>
     </div>
 
     <ul class="menu">
@@ -182,6 +181,7 @@
     </ul>
 
     <div class="bottom-section">
+        <hr class="menu-divider">
         <form action="{% url 'logout' %}" method="post" id="logout-form" style="display:none;">
             {% csrf_token %}
         </form>

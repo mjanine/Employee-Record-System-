@@ -34,32 +34,56 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
     transition: width 0.35s ease-in-out;
     z-index: 1000;
-    overflow: visible; /* Required for tooltips to show */
+    overflow: hidden;
 }
 
 .sidebar.collapsed {
-    width: 80px;
+    width: 90px;
 }
 
 .sidebar .top-section {
-    padding: 1.5rem;
+    padding: 0 0 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 80px;
+    min-height: 52px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .sidebar .logo-wrapper {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
     cursor: pointer;
 }
 
 .sidebar .logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.sidebar .close-btn {
     width: 40px;
     height: 40px;
-    object-fit: contain;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.sidebar .close-btn:hover {
+    background: rgba(255, 255, 255, 0.24);
 }
 
 .sidebar.collapsed .logo-wrapper span,
@@ -69,42 +93,54 @@
 
 .sidebar .menu {
     list-style: none;
-    padding: 1rem 0;
+    margin-top: 1rem;
+    padding: 0;
     flex: 1;
 }
 
 .sidebar .menu-item {
     display: flex;
     align-items: center;
-    padding: 14px 1.5rem;
-    color: rgba(255, 255, 255, 0.7);
+    min-height: 46px;
+    padding: 0 0.75rem;
+    color: rgba(255, 255, 255, 0.92);
     text-decoration: none;
     transition: all 0.3s ease;
-    gap: 1rem;
+    gap: 0.7rem;
     white-space: nowrap;
-    border-left: 4px solid transparent;
+    border-radius: 999px;
+    margin-bottom: 0.35rem;
 }
 
 .sidebar .menu-item:hover, 
 .sidebar .menu-item.active {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.22);
     color: white;
-    border-left-color: var(--admin-warning);
 }
 
 .sidebar .menu-item i {
-    width: 20px;
+    width: 32px;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .sidebar.collapsed .menu-item span {
     display: none;
 }
 
+.sidebar.collapsed .menu-item {
+    justify-content: center;
+    padding: 0;
+}
+
 .sidebar .bottom-section {
-    padding: 1.5rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.8rem;
+}
+
+.sidebar .menu-divider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 0 0 0.75rem;
 }
 
 .sidebar .menu-item.logout:hover {
