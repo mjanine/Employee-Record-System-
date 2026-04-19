@@ -193,6 +193,7 @@
             <span class="close-modal" id="closeHistoryModal">&times;</span>
         </div>
         <div class="modal-body">
+            <input type="hidden" id="historyEmployeeId" value="{{ target_employee.id }}">
             <div class="form-group"><label>Year</label><input type="text" id="eventDate" placeholder="2026"></div>
             <div class="form-group"><label>Title</label><input type="text" id="eventTitle" placeholder="e.g., Promotion"></div>
             <div class="form-group"><label>Description</label><textarea id="eventDesc" rows="3"></textarea></div>

@@ -142,6 +142,7 @@ class SystemConfig(models.Model):
     require_complexity = models.BooleanField(default=True)
     session_timeout = models.IntegerField(default=30)  # minutes
     force_password_change = models.BooleanField(default=False)
+    max_failed_login_attempts = models.IntegerField(default=5)
 
     last_backup_date = models.DateTimeField(null=True, blank=True)
 

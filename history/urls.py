@@ -6,6 +6,7 @@ app_name = 'history'
 urlpatterns = [
     path('timeline/', views.employee_timeline, name='my_timeline'),
     path('timeline/<int:employee_id>/', views.employee_timeline, name='employee_timeline'),
+    path('timeline/add-event/', views.add_timeline_event, name='add_timeline_event'),
     path('profile/employee/', views.employee_profile, name='employee_profile'),
     path('profile/hr/', views.hr_profile, name='hr_profile'),
     path('profile/head/', views.head_profile, name='head_profile'),

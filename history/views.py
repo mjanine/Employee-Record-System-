@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.http import require_POST
 from accounts.models import User, EmployeeProfile
 from .models import EmploymentHistory
 from documents.models import Document
@@ -128,3 +129,27 @@ def sd_employment_history(request):
         'history_entries': history_entries,
     }
     return render(request, 'sd/sd_employment_history.html', context)
+
+
+@login_required
+@user_passes_test(lambda u: u.role in ['HR', 'ADMIN'])
+@require_POST
+def add_timeline_event(request):
+    employee_id = request.POST.get('employee_id')
+    event_year = (request.POST.get('event_year') or '').strip()
+    event_title = (request.POST.get('event_title') or '').strip()
+    event_description = (request.POST.get('event_description') or '').strip()
+
+    if not (employee_id and event_year and event_title and event_description):
+        return JsonResponse({'status': 'error', 'message': 'All timeline fields are required.'}, status=400)
+
+    target_employee = get_object_or_404(User, id=employee_id)
+    EmploymentHistory.objects.create(
+        employee=target_employee,
+        change_type=event_title,
+        from_value='',
+        to_value=event_description,
+        date=f'{event_year}-01-01',
+        recorded_by=request.user,
+    )
+    return JsonResponse({'status': 'success', 'message': 'Timeline event saved.'})

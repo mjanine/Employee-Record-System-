@@ -57,6 +57,31 @@
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" name="search" id="searchInput" placeholder="Search by Name or ID..." value="{{ request.GET.search }}">
                         </div>
+
+                        <select id="filterPosition" name="role" style="padding: 10px; border: 1px solid #d5dbe3; border-radius: 10px;">
+                            <option value="">All Roles</option>
+                            <option value="EMP" {% if filters.role == 'EMP' %}selected{% endif %}>Employee</option>
+                            <option value="HEAD" {% if filters.role == 'HEAD' %}selected{% endif %}>Department Head</option>
+                            <option value="HR" {% if filters.role == 'HR' %}selected{% endif %}>HR</option>
+                            <option value="SD" {% if filters.role == 'SD' %}selected{% endif %}>Software Developer</option>
+                        </select>
+
+                        <select id="filterStatus" name="status" style="padding: 10px; border: 1px solid #d5dbe3; border-radius: 10px;">
+                            <option value="">All Status</option>
+                            <option value="active" {% if filters.status == 'active' %}selected{% endif %}>Active</option>
+                            <option value="inactive" {% if filters.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                        </select>
+
+                        <select id="filterEmploymentType" name="employment_type" style="padding: 10px; border: 1px solid #d5dbe3; border-radius: 10px;">
+                            <option value="">All Employment Types</option>
+                            <option value="REG" {% if filters.employment_type == 'REG' %}selected{% endif %}>Regular</option>
+                            <option value="PROB" {% if filters.employment_type == 'PROB' %}selected{% endif %}>Probationary</option>
+                            <option value="CONT" {% if filters.employment_type == 'CONT' %}selected{% endif %}>Contractual</option>
+                        </select>
+
+                        <button type="submit" class="add-btn" style="background:#334155;">
+                            <i class="fas fa-filter"></i> Apply
+                        </button>
                         
                         {% if request.user.role == 'ADMIN' or request.user.role == 'HR' %}
                         <a href="{% url 'add_employee' %}" style="text-decoration: none;">
@@ -81,7 +106,7 @@
                     </thead>
                     <tbody id="employeeTableBody">
                         {% for emp in employees %}
-                        <tr data-user-id="{{ emp.id }}">
+                        <tr data-user-id="{{ emp.id }}" data-employment-type="{{ emp.profile.employment_type|default:'' }}">
                             <td class="emp-id">{{ emp.profile.employee_id|default:"---" }}</td>
                             <td class="emp-name">{{ emp.get_full_name }}</td>
                             <td>{{ emp.department.name|default:"Unassigned" }}</td>
@@ -109,10 +134,10 @@
                                                 <i class="fas fa-pen"></i> Edit Record
                                             </a>
 
-                                            <form action="{% url 'delete_employee' emp.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete {{ emp.get_full_name }}? This action cannot be undone.');">
+                                            <form action="{% url 'delete_employee' emp.id %}" method="POST" onsubmit="return confirm('Deactivate {{ emp.get_full_name }}? This preserves records but blocks account access.');">
                                                 {% csrf_token %}
                                                 <button type="submit" class="dropdown-item delete">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                    <i class="fas fa-user-slash"></i> Deactivate
                                                 </button>
                                             </form>
                                         {% endif %}

@@ -102,34 +102,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i += 1) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === `${name}=`) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     // Save Event Logic
     if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
+        saveBtn.addEventListener('click', async () => {
             const dateVal = document.getElementById('eventDate').value;
             const titleVal = document.getElementById('eventTitle').value;
             const descVal = document.getElementById('eventDesc').value;
+            const employeeId = document.getElementById('historyEmployeeId')?.value;
 
             if (dateVal && titleVal && descVal) {
-                const timeline = document.getElementById('timelineContainer');
-                
-                const newItem = document.createElement('div');
-                newItem.classList.add('timeline-item');
-                
-                newItem.innerHTML = `
-                    <div class="timeline-date">${dateVal}</div>
-                    <div class="timeline-content">
-                        <h4>${titleVal}</h4>
-                        <p>${descVal}</p>
-                    </div>
-                `;
+                const formData = new FormData();
+                formData.append('employee_id', employeeId || '');
+                formData.append('event_year', dateVal);
+                formData.append('event_title', titleVal);
+                formData.append('event_description', descVal);
 
-                timeline.prepend(newItem);
+                try {
+                    const response = await fetch('/history/timeline/add-event/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: formData,
+                    });
 
-                // Reset and Close
-                modal.style.display = "none";
-                document.getElementById('eventDate').value = "";
-                document.getElementById('eventTitle').value = "";
-                document.getElementById('eventDesc').value = "";
+                    if (!response.ok) {
+                        throw new Error('Failed to save timeline event.');
+                    }
+
+                    window.location.reload();
+                } catch (error) {
+                    alert('Unable to save timeline event. Please try again.');
+                }
             } else {
                 alert("Please fill in all fields before saving.");
             }

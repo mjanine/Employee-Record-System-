@@ -10,7 +10,10 @@ class EnforcePasswordChangeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_authenticated and getattr(request.user, 'must_change_password', False):
+        config = SystemConfig.objects.first()
+        enforce_password_change = bool(config.force_password_change) if config else False
+
+        if request.user.is_authenticated and enforce_password_change and getattr(request.user, 'must_change_password', False):
             allowed_paths = [reverse('password_change'), reverse('logout')]
             # Allow them to navigate to the password change view, logout, or load static media
             if request.path not in allowed_paths and not request.path.startswith('/static/') and not request.path.startswith('/media/'):

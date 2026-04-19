@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_POST
-from django.conf import settings
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 import json 
@@ -59,6 +58,11 @@ def is_hr_or_admin(user):
 
 def is_hr_admin_or_head(user):
     return user.is_authenticated and user.role in ['HR', 'ADMIN', 'HEAD']
+
+
+def _get_security_config():
+    config, _ = SystemConfig.objects.get_or_create(pk=1)
+    return config
 
 def login_view(request):
     # If a user is already logged in, redirect them from the login page.
@@ -126,7 +130,8 @@ def login_view(request):
             else:
                 # Increment failed login attempts
                 user.failed_login_attempts += 1
-                if user.failed_login_attempts >= getattr(settings, 'MAX_FAILED_LOGIN_ATTEMPTS', 5):
+                config = _get_security_config()
+                if user.failed_login_attempts >= config.max_failed_login_attempts:
                     user.is_locked = True
                     messages.error(request, "Too many failed login attempts. Your account has been locked.")
                 else:
@@ -297,7 +302,7 @@ def hr_dashboard(request):
 
 
 @login_required
-@user_passes_test(is_hr)
+@user_passes_test(is_hr_or_admin)
 def hr_reports_page_view(request):
     departments = Department.objects.filter(is_active=True).order_by('name')
     return render(
@@ -861,7 +866,7 @@ def _export_excel_for_sd(request):
 
 
 @login_required
-@user_passes_test(is_hr)
+@user_passes_test(is_hr_or_admin)
 def hr_export_pdf_view(request):
     try:
         return _export_pdf_for_hr(request)
@@ -870,7 +875,7 @@ def hr_export_pdf_view(request):
 
 
 @login_required
-@user_passes_test(is_hr)
+@user_passes_test(is_hr_or_admin)
 def hr_export_excel_view(request):
     try:
         return _export_excel_for_hr(request)
@@ -1202,12 +1207,16 @@ def password_change(request):
 def department_management(request):
     # Using annotate is perfect for keeping the database query efficient
     departments = Department.objects.all().annotate(employee_count=Count('user')).order_by('-is_active', 'name')
-    # Pass a list of users to populate the searchable dropdown
     users = User.objects.all().order_by('last_name')
+    assigned_head_ids = Department.objects.filter(head__isnull=False).values_list('head_id', flat=True)
+    eligible_head_users = users.exclude(id__in=assigned_head_ids)
     
     context = {
         'departments': departments,
         'users': users,
+        'eligible_head_users': eligible_head_users,
+        'total_user_count': users.count(),
+        'eligible_head_count': eligible_head_users.count(),
     }
     return render(request, 'admin/department_management.html', context)
 
@@ -1296,6 +1305,9 @@ def deactivate_department(request, dept_id):
 def employee_list(request):
     user = request.user
     search_term = (request.GET.get('search') or '').strip()
+    role_filter = (request.GET.get('role') or '').strip().upper()
+    employment_type_filter = (request.GET.get('employment_type') or '').strip().upper()
+    status_filter = (request.GET.get('status') or '').strip().lower()
     
     # 1. If Admin or HR: See everyone
     if user.role in ['ADMIN', 'HR']:
@@ -1326,11 +1338,34 @@ def employee_list(request):
             | Q(department__name__icontains=search_term)
         )
 
+    if role_filter and role_filter in dict(User.ROLE_CHOICES):
+        employees = employees.filter(role=role_filter)
+
+    if employment_type_filter in ['REG', 'PROB', 'CONT']:
+        employees = employees.filter(profile__employment_type=employment_type_filter)
+
+    if status_filter == 'active':
+        employees = employees.filter(is_active=True, is_locked=False, profile__is_active=True)
+    elif status_filter == 'inactive':
+        employees = employees.filter(Q(is_active=False) | Q(is_locked=True) | Q(profile__is_active=False))
+
     employees = list(employees)
     for employee in employees:
         EmployeeProfile.objects.get_or_create(user=employee)
 
-    return render(request, template_name, {'employees': employees, 'search_term': search_term})
+    return render(
+        request,
+        template_name,
+        {
+            'employees': employees,
+            'search_term': search_term,
+            'filters': {
+                'role': role_filter,
+                'employment_type': employment_type_filter,
+                'status': status_filter,
+            },
+        },
+    )
 
 
 @login_required
@@ -1539,8 +1574,15 @@ def edit_employee(request, user_id):
 def delete_employee(request, user_id):
     employee = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        employee.delete()
-        messages.success(request, "Employee record deleted successfully.")
+        employee.is_active = False
+        employee.is_locked = True
+        employee.save(update_fields=['is_active', 'is_locked'])
+
+        profile, _ = EmployeeProfile.objects.get_or_create(user=employee)
+        profile.is_active = False
+        profile.save(update_fields=['is_active'])
+
+        messages.success(request, "Employee record deactivated successfully.")
         return redirect('employee_list')
     return redirect('employee_profile_view', user_id=user_id)
 
@@ -1552,18 +1594,38 @@ def hr_training(request):
 @login_required
 @user_passes_test(is_admin)
 def security_settings_view(request):
-    config, created = SystemConfig.objects.get_or_create(pk=1)
+    config = _get_security_config()
 
     if request.method == 'POST':
-        new_timeout = request.POST.get('timeout')
-        
-        if new_timeout:
-            config.session_timeout = int(new_timeout)
-            config.save()
-            messages.success(request, "Security policies updated successfully!")
+        try:
+            min_password_length = int(request.POST.get('min_password_length', config.min_password_length))
+            session_timeout = int(request.POST.get('session_timeout', config.session_timeout))
+            max_failed_attempts = int(request.POST.get('max_failed_login_attempts', config.max_failed_login_attempts))
+        except (TypeError, ValueError):
+            messages.error(request, "Numeric fields contain invalid values.")
             return redirect('security_settings')
 
-    return render(request, 'admin/security_settings.html', {'config': config})
+        config.min_password_length = max(6, min_password_length)
+        config.session_timeout = max(1, session_timeout)
+        config.max_failed_login_attempts = max(1, max_failed_attempts)
+        config.require_complexity = request.POST.get('require_complexity') == 'on'
+        config.force_password_change = request.POST.get('force_password_change') == 'on'
+        config.save()
+
+        if config.force_password_change:
+            User.objects.exclude(role='ADMIN').update(must_change_password=True)
+
+        messages.success(request, "Security policies updated successfully!")
+        return redirect('security_settings')
+
+    return render(
+        request,
+        'admin/security_settings.html',
+        {
+            'config': config,
+            'current_timeout': config.session_timeout,
+        },
+    )
 
 # Add this somewhere in your accounts/views.py
 def forgot_password_page(request):

@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from .models import LoginLog, ActivityLog
 from django.utils.dateparse import parse_date
 from django.db.models import Q
 
 @login_required
 def audit_trail_view(request):
+    if getattr(request.user, 'role', None) != 'ADMIN':
+        return HttpResponseForbidden('Only admins can access audit trails.')
+
     # Fetch all logs, newest first
     login_logs = LoginLog.objects.all().order_by('-datetime')
     activity_logs = ActivityLog.objects.all().order_by('-timestamp')

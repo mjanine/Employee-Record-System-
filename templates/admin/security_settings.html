@@ -175,9 +175,37 @@
                             {% csrf_token %}
                             
                             <div class="form-group">
+                                <label>Minimum Password Length</label>
+                                <input type="number" name="min_password_length" class="form-control" value="{{ config.min_password_length|default:'8' }}" min="6" required>
+                                <span class="help-text">Users must set passwords at least this many characters long.</span>
+                            </div>
+
+                            <div class="form-group">
                                 <label>Session Timeout Duration (Minutes)</label>
-                                <input type="number" name="session_timeout" class="form-control" value="{{ current_timeout|default:'30' }}" min="1" required>
+                                <input type="number" name="session_timeout" class="form-control" value="{{ config.session_timeout|default:'30' }}" min="1" required>
                                 <span class="help-text">Recommended: 30-60 minutes for production.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Max Failed Login Attempts</label>
+                                <input type="number" name="max_failed_login_attempts" class="form-control" value="{{ config.max_failed_login_attempts|default:'5' }}" min="1" required>
+                                <span class="help-text">Accounts will be locked after this many failed attempts.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                                    <input type="checkbox" name="require_complexity" {% if config.require_complexity %}checked{% endif %}>
+                                    Require Password Complexity
+                                </label>
+                                <span class="help-text">Require uppercase, lowercase, digit, and special characters.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                                    <input type="checkbox" name="force_password_change" {% if config.force_password_change %}checked{% endif %}>
+                                    Force Password Change on Next Login
+                                </label>
+                                <span class="help-text">When enabled, users with the flag set will be redirected to change password.</span>
                             </div>
 
                             <button type="submit" class="btn-submit">

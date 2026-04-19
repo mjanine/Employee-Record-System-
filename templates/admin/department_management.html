@@ -51,6 +51,8 @@
         
         .department-card .card-header .dropdown-menu { right: 0; top: calc(100% + 0.5rem); }
         .action-cell.open .dropdown-menu, .department-card.open .dropdown-menu { display: block; }
+        .head-availability-visible { display: block; color: #f8d7da; }
+        .head-availability-hidden { display: none; color: #f8d7da; }
 
         @media (max-width: 1100px) {
             .main-content.department-main { margin-left: 110px; }
@@ -269,14 +271,27 @@
                 </label>
             </div>
 
-            <div class="form-group" id="headGroup">
+            <div class="form-group" id="headGroup" data-total-users="{{ total_user_count|default:0 }}" data-eligible-users="{{ eligible_head_count|default:0 }}">
                 <label for="deptHead">Department Head</label>
                 <select id="deptHead" name="head" class="form-control glass-input">
                     <option value="">-- Select Department Head --</option>
-                    {% for user in users %}
-                        <option value="{{ user.id }}">{{ user.get_full_name|default:user.username }}</option>
-                    {% endfor %}
+                    {% if total_user_count == 0 %}
+                        <option value="" disabled>No users are available yet.</option>
+                    {% elif eligible_head_count == 0 %}
+                        <option value="" disabled>All eligible users are already assigned as heads.</option>
+                    {% else %}
+                        {% for user in eligible_head_users %}
+                            <option value="{{ user.id }}">{{ user.get_full_name|default:user.username }}</option>
+                        {% endfor %}
+                    {% endif %}
                 </select>
+                <small id="deptHeadAvailabilityInfo" class="{% if eligible_head_count == 0 %}head-availability-visible{% else %}head-availability-hidden{% endif %}">
+                    {% if total_user_count == 0 %}
+                        No users are available to assign as Department Head yet.
+                    {% elif eligible_head_count == 0 %}
+                        All eligible users are already assigned as Department Head.
+                    {% endif %}
+                </small>
             </div>
             
             <div class="form-actions">

@@ -128,8 +128,39 @@ function openDepartmentModal() {
     document.getElementById('deptId').value = '';
     form.reset();
     currentEditingDeptId = null;
+    updateDepartmentHeadAvailabilityInfo();
     
     modal.classList.add('show');
+}
+
+function updateDepartmentHeadAvailabilityInfo() {
+    const headGroup = document.getElementById('headGroup');
+    const headSelect = document.getElementById('deptHead');
+    const infoElement = document.getElementById('deptHeadAvailabilityInfo');
+
+    if (!headGroup || !headSelect || !infoElement) {
+        return;
+    }
+
+    const totalUsers = Number(headGroup.dataset.totalUsers || 0);
+    const eligibleUsers = Number(headGroup.dataset.eligibleUsers || 0);
+    const availableHeads = Math.max(
+        eligibleUsers,
+        Array.from(headSelect.options).filter(option => option.value).length,
+    );
+
+    if (availableHeads > 0) {
+        infoElement.style.display = 'none';
+        infoElement.textContent = '';
+        return;
+    }
+
+    if (totalUsers === 0) {
+        infoElement.textContent = 'No users are available to assign as Department Head yet.';
+    } else {
+        infoElement.textContent = 'All eligible users are already assigned as Department Head.';
+    }
+    infoElement.style.display = 'block';
 }
 
 function closeDepartmentModal() {
@@ -164,7 +195,17 @@ async function editDepartment(deptId) {
         if (collegeField) collegeField.value = data.college || '';
         
         const headField = document.getElementById('deptHead');
-        if (headField) headField.value = data.head_id || '';
+        if (headField) {
+            if (data.head_id && !Array.from(headField.options).some(option => option.value === String(data.head_id))) {
+                const preserved = document.createElement('option');
+                preserved.value = data.head_id;
+                preserved.textContent = 'Current head (already assigned)';
+                headField.appendChild(preserved);
+            }
+            headField.value = data.head_id || '';
+        }
+
+        updateDepartmentHeadAvailabilityInfo();
 
         document.getElementById('departmentModal').classList.add('show');
         

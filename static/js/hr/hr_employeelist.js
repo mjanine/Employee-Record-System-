@@ -26,26 +26,46 @@ document.addEventListener('DOMContentLoaded', function () {
     const filterStatus = document.getElementById('filterStatus');
     const tableBody = document.getElementById('employeeTableBody');
 
+    const filterEmploymentType = document.getElementById('filterEmploymentType');
+
     function filterTable() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const selectedPosition = filterPosition.value;
-        const selectedStatus = filterStatus.value;
+        const searchTerm = (searchInput?.value || '').toLowerCase();
+        const selectedPosition = filterPosition?.value || '';
+        const selectedStatus = filterStatus?.value || '';
+        const selectedEmploymentType = filterEmploymentType?.value || '';
+
+        if (!tableBody) {
+            return;
+        }
 
         Array.from(tableBody.rows).forEach(row => {
             const cells = row.cells;
             const rowText = row.textContent.toLowerCase();
-            const rowPosition = cells[3].textContent.trim();
-            const rowStatus = cells[4].textContent.trim();
+            const rowPosition = cells[3] ? cells[3].textContent.trim() : '';
+            const rowStatus = cells[4] ? cells[4].textContent.trim() : '';
+            const rowEmploymentType = row.dataset.employmentType || '';
+
+            const roleMap = {
+                'Admin': 'ADMIN',
+                'HR Staff': 'HR',
+                'Department Head': 'HEAD',
+                'Employee': 'EMP',
+                'Software Developer': 'SD',
+            };
+            const rowRoleCode = roleMap[rowPosition] || rowPosition.toUpperCase();
+            const rowStatusValue = rowStatus.toLowerCase();
 
             const matchesSearch = rowText.includes(searchTerm);
-            const matchesPosition = selectedPosition === "" || rowPosition === selectedPosition;
-            const matchesStatus = selectedStatus === "" || rowStatus === selectedStatus;
+            const matchesPosition = selectedPosition === "" || rowRoleCode === selectedPosition;
+            const matchesStatus = selectedStatus === "" || rowStatusValue === selectedStatus;
+            const matchesEmploymentType = selectedEmploymentType === "" || rowEmploymentType === selectedEmploymentType;
 
-            row.style.display = (matchesSearch && matchesPosition && matchesStatus) ? "" : "none";
+            row.style.display = (matchesSearch && matchesPosition && matchesStatus && matchesEmploymentType) ? "" : "none";
         });
     }
 
-    searchInput.addEventListener('input', filterTable);
-    filterPosition.addEventListener('change', filterTable);
-    filterStatus.addEventListener('change', filterTable);
+    searchInput?.addEventListener('input', filterTable);
+    filterPosition?.addEventListener('change', filterTable);
+    filterStatus?.addEventListener('change', filterTable);
+    filterEmploymentType?.addEventListener('change', filterTable);
 });
