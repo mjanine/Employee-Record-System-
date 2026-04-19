@@ -38,6 +38,8 @@
     </div>
 
     <div class="dashboard-viewport">
+        <!-- Hidden CSRF token for JavaScript POST actions -->
+        {% csrf_token %}
         <main class="main-content">
             <div class="leave-card">
                 <div class="header">
@@ -55,7 +57,7 @@
                     <table id="employeeTable" data-source-url="{% url 'leaves:head_leave_history' %}?format=json">
                         <thead>
                             <tr>
-                                <th>Date Filed</th>
+                                <th>Employee</th>
                                 <th>Leave Type</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
@@ -78,7 +80,14 @@
                 <h3>Leave Application Detail</h3>
             </div>
             <div class="modal-grid">
-                <div class="info-panel">
+                <div class="document-panel" style="padding: 20px; border-right: 1px solid #eee; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div class="pdf-placeholder" style="text-align: center; color: #888;">
+                        <i class="fas fa-file-pdf" style="font-size: 48px; color: #dc3545; margin-bottom: 10px;"></i>
+                        <p style="margin: 0; font-weight: bold;">Attached Document</p>
+                        <small id="modalFileName">No Document Attached</small>
+                    </div>
+                </div>
+                <div class="info-panel" style="padding: 20px; width: 100%;">
                     <div class="info-item">
                         <label>Application Status</label>
                         <div id="modalStatusContainer"></div>
@@ -91,22 +100,33 @@
                         <label>Reason for Leave</label>
                         <p id="modalReason" class="modal-text-unified">---</p>
                     </div>
-                    <button class="modal-close-btn" onclick="closeViewModal()">Close Preview</button>
+                    <div class="info-item">
+                        <label>Review Remarks</label>
+                        <p id="modalRemarks" class="modal-text-unified">---</p>
+                    </div>
+                    <div class="info-item" id="modalReviewerText" style="margin-bottom: 15px;"></div>
+                    
+                    <div class="modal-actions" id="modalActions" style="display: none; gap: 10px; margin-top: 15px;">
+                        <button class="btn-approve" onclick="processHeadRequest('Approved')" style="background-color: #28a745; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; flex: 1;">Approve</button>
+                        <button class="btn-reject" onclick="processHeadRequest('Rejected')" style="background-color: #dc3545; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; flex: 1;">Reject</button>
+                    </div>
+
+                    <button class="modal-close-btn" onclick="closeViewModal()" style="margin-top: 15px; width: 100%; padding: 10px; cursor: pointer;">Close Preview</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <template id="leaveRowTemplate">
+    <template id="headRowTemplate">
         <tr>
-            <td class="col-filed"></td>
+            <td class="col-emp"></td>
             <td class="col-type"></td>
             <td class="col-start"></td>
             <td class="col-end"></td>
             <td class="col-days"></td>
             <td class="col-status"></td>
             <td class="col-reviewer"></td>
-            <td><span class="action-link">View Details</span></td>
+            <td><span class="action-link" style="cursor:pointer; color:blue; text-decoration:underline;">View Details</span></td>
         </tr>
     </template>
     <script src="{% static 'js/head/head_leaverequest.js' %}?v=1.0"></script>

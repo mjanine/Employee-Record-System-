@@ -144,17 +144,29 @@ def leave_history(request):
     """View for an employee to see their leave history."""
     leave_requests = LeaveRequest.objects.filter(user=request.user).order_by('-created_at')
     
-    # Support JSON response if requested by frontend JS API calls
-    if request.headers.get('Accept') == 'application/json' or request.GET.get('format') == 'json':
+    is_json = (
+        'application/json' in request.headers.get('Accept', '') or
+        request.GET.get('format') == 'json' or
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    )
+    if is_json:
         history_data = list(leave_requests.values(
-            'id', 'leave_type__name', 'start_date', 'end_date', 'days_requested', 'status', 'reason', 'created_at'
+            'id', 'user__id', 'user__username', 'user__first_name', 'user__last_name', 'user__role', 'leave_type__name', 
+            'start_date', 'end_date', 'days_requested', 'status', 'reason', 'created_at', 'attachment',
+            'reviewed_by_head__first_name', 'reviewed_by_head__last_name', 'head_remarks',
+            'reviewed_by_hr__first_name', 'reviewed_by_hr__last_name', 'hr_remarks',
+            'reviewed_by_sd__first_name', 'reviewed_by_sd__last_name', 'sd_remarks'
         ))
         for item in history_data:
             if item.get('created_at'):
                 local_dt = localtime(item['created_at'])
                 item['dateFiled'] = local_dt.strftime('%B %d, %Y')
                 item['submitTime'] = local_dt.strftime('%I:%M %p')
-        return JsonResponse({'history': history_data})
+            fname = item.get('user__first_name', '') or ''
+            lname = item.get('user__last_name', '') or ''
+            full_name = f"{fname.strip()} {lname.strip()}".strip()
+            item['name'] = full_name if full_name else item.get('user__username', 'Unknown')
+        return JsonResponse({'history': history_data, 'current_user_id': request.user.id})
         
     return render(request, 'employee/emp_leaverequest.html', {'leave_requests': leave_requests})
 
@@ -219,12 +231,18 @@ def head_leave_history(request):
             status=LeaveRequest.Status.PENDING_HEAD_APPROVAL
         ).exclude(user=request.user)
 
-    # Return JSON if requested by the JavaScript fetch call
-    if request.headers.get('Accept') == 'application/json' or request.GET.get('format') == 'json':
+    is_json = (
+        'application/json' in request.headers.get('Accept', '') or
+        request.GET.get('format') == 'json' or
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    )
+    if is_json:
         history_data = list(leave_requests.values(
             'id', 'user__id', 'user__username', 'user__first_name', 'user__last_name', 'user__role', 'leave_type__name', 
             'start_date', 'end_date', 'days_requested', 'status', 'reason', 'created_at', 'attachment',
-            'reviewed_by_head__first_name', 'reviewed_by_head__last_name', 'head_remarks'
+            'reviewed_by_head__first_name', 'reviewed_by_head__last_name', 'head_remarks',
+            'reviewed_by_hr__first_name', 'reviewed_by_hr__last_name', 'hr_remarks',
+            'reviewed_by_sd__first_name', 'reviewed_by_sd__last_name', 'sd_remarks'
         ))
         for item in history_data:
             if item.get('created_at'):
@@ -232,9 +250,9 @@ def head_leave_history(request):
                 item['dateFiled'] = local_dt.strftime('%B %d, %Y')
                 item['submitTime'] = local_dt.strftime('%I:%M %p')
                 
-            fname = item.get('user__first_name', '').strip()
-            lname = item.get('user__last_name', '').strip()
-            full_name = f"{fname} {lname}".strip()
+            fname = item.get('user__first_name', '') or ''
+            lname = item.get('user__last_name', '') or ''
+            full_name = f"{fname.strip()} {lname.strip()}".strip()
             item['name'] = full_name if full_name else item.get('user__username', 'Unknown')
         return JsonResponse({'history': history_data, 'current_user_id': request.user.id})
 
@@ -279,12 +297,18 @@ def hr_leave_history(request):
     """View for HR to see all leave requests for approval and history."""
     leave_requests = LeaveRequest.objects.all().select_related('user', 'leave_type').order_by('-created_at')
     
-    # Return JSON if requested by the JavaScript fetch call
-    if request.headers.get('Accept') == 'application/json' or request.GET.get('format') == 'json':
+    is_json = (
+        'application/json' in request.headers.get('Accept', '') or
+        request.GET.get('format') == 'json' or
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    )
+    if is_json:
         history_data = list(leave_requests.values(
             'id', 'user__id', 'user__username', 'user__first_name', 'user__last_name', 'user__role', 'leave_type__name', 
             'start_date', 'end_date', 'days_requested', 'status', 'reason', 'created_at', 'attachment',
-            'reviewed_by_hr__first_name', 'reviewed_by_hr__last_name', 'hr_remarks'
+            'reviewed_by_head__first_name', 'reviewed_by_head__last_name', 'head_remarks',
+            'reviewed_by_hr__first_name', 'reviewed_by_hr__last_name', 'hr_remarks',
+            'reviewed_by_sd__first_name', 'reviewed_by_sd__last_name', 'sd_remarks'
         ))
         for item in history_data:
             if item.get('created_at'):
@@ -292,9 +316,9 @@ def hr_leave_history(request):
                 item['dateFiled'] = local_dt.strftime('%B %d, %Y')
                 item['submitTime'] = local_dt.strftime('%I:%M %p')
                 
-            fname = item.get('user__first_name', '').strip()
-            lname = item.get('user__last_name', '').strip()
-            full_name = f"{fname} {lname}".strip()
+            fname = item.get('user__first_name', '') or ''
+            lname = item.get('user__last_name', '') or ''
+            full_name = f"{fname.strip()} {lname.strip()}".strip()
             item['name'] = full_name if full_name else item.get('user__username', 'Unknown')
         return JsonResponse({'history': history_data, 'current_user_id': request.user.id})
 
@@ -343,41 +367,36 @@ def sd_leave_history(request):
 @sd_elevated_required
 def sd_leave_overview(request):
     """SD final-approval queue for leave requests from administrative roles."""
-    if request.method == 'POST':
-        request_id = request.POST.get('request_id')
-        leave_request = get_object_or_404(
-            LeaveRequest,
-            id=request_id,
-            status=LeaveRequest.Status.PENDING_SD_APPROVAL,
-        )
-        form = LeaveActionForm(request.POST)
-        if form.is_valid():
-            if not _requires_sd_final_review(leave_request):
-                messages.error(request, "This leave request does not require SD final approval.")
-                return redirect('leaves:sd_leave_overview')
-
-            action = form.cleaned_data['action']
-            leave_request.reviewed_by_sd = request.user
-            leave_request.sd_remarks = form.cleaned_data['remarks']
-            leave_request.status = (
-                LeaveRequest.Status.APPROVED
-                if action == 'APPROVE'
-                else LeaveRequest.Status.REJECTED
-            )
-            leave_request.save()
-            _notify_leave_status_update(leave_request)
-            messages.success(
-                request,
-                f"Leave request for {leave_request.user.get_full_name()} was {'approved' if action == 'APPROVE' else 'rejected'} by SD.",
-            )
-        else:
-            messages.error(request, "Invalid action submitted.")
-        return redirect('leaves:sd_leave_overview')
 
     # B-2: SD should see all leave requests, not just from administrative roles.
     leave_requests = LeaveRequest.objects.all().select_related(
         'user', 'leave_type', 'reviewed_by_head', 'reviewed_by_hr', 'reviewed_by_sd'
     ).order_by('-created_at')
+
+    is_json = (
+        'application/json' in request.headers.get('Accept', '') or
+        request.GET.get('format') == 'json' or
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    )
+    if is_json:
+        history_data = list(leave_requests.values(
+            'id', 'user__id', 'user__username', 'user__first_name', 'user__last_name', 'user__role', 'leave_type__name', 
+            'start_date', 'end_date', 'days_requested', 'status', 'reason', 'created_at', 'attachment',
+            'reviewed_by_head__first_name', 'reviewed_by_head__last_name', 'head_remarks',
+            'reviewed_by_hr__first_name', 'reviewed_by_hr__last_name', 'hr_remarks',
+            'reviewed_by_sd__first_name', 'reviewed_by_sd__last_name', 'sd_remarks'
+        ))
+        for item in history_data:
+            if item.get('created_at'):
+                local_dt = localtime(item['created_at'])
+                item['dateFiled'] = local_dt.strftime('%B %d, %Y')
+                item['submitTime'] = local_dt.strftime('%I:%M %p')
+                
+            fname = item.get('user__first_name', '') or ''
+            lname = item.get('user__last_name', '') or ''
+            full_name = f"{fname.strip()} {lname.strip()}".strip()
+            item['name'] = full_name if full_name else item.get('user__username', 'Unknown')
+        return JsonResponse({'history': history_data, 'current_user_id': request.user.id})
 
     pending_requests = leave_requests.filter(status=LeaveRequest.Status.PENDING_SD_APPROVAL)
     reviewed_requests = leave_requests.exclude(status=LeaveRequest.Status.PENDING_SD_APPROVAL)
@@ -411,7 +430,13 @@ def sd_forward_leave(request, request_id):
 @transaction.atomic
 def head_approve(request, request_id):
     """View for a Department Head to approve or reject a leave request."""
-    leave_request = get_object_or_404(LeaveRequest, id=request_id, status=LeaveRequest.Status.PENDING_HEAD_APPROVAL)
+    department_scope_ids = _get_head_department_scope_ids(request.user)
+    leave_request = get_object_or_404(
+        LeaveRequest, 
+        id=request_id, 
+        status=LeaveRequest.Status.PENDING_HEAD_APPROVAL,
+        user__department_id__in=department_scope_ids
+    )
     form = LeaveActionForm(request.POST)
     if form.is_valid():
         action = form.cleaned_data['action']
@@ -464,9 +489,42 @@ def hr_final_approve(request, request_id):
         else:
             _notify_leave_status_update(leave_request)
     else:
-        messages.error(request, "Failed to process request: Invalid action submitted.")
+        # Surface exact form errors so HR knows if a field (like remarks) was missing
+        messages.error(request, f"Failed to process request: {form.errors.as_text()}")
     return redirect('leaves:hr_leave_history')
 
+
+# --- SD Approve View ---
+@login_required
+@sd_elevated_required
+@require_POST
+@transaction.atomic
+def sd_approve(request, request_id):
+    """View for the School Director to approve or reject a leave request."""
+    leave_request = get_object_or_404(
+        LeaveRequest,
+        id=request_id,
+        status=LeaveRequest.Status.PENDING_SD_APPROVAL,
+    )
+    form = LeaveActionForm(request.POST)
+    if form.is_valid():
+        action = form.cleaned_data['action']
+        leave_request.reviewed_by_sd = request.user
+        leave_request.sd_remarks = form.cleaned_data['remarks']
+        leave_request.status = (
+            LeaveRequest.Status.APPROVED
+            if action == 'APPROVE'
+            else LeaveRequest.Status.REJECTED
+        )
+        leave_request.save()
+        _notify_leave_status_update(leave_request)
+        messages.success(
+            request,
+            f"Leave request for {leave_request.user.get_full_name()} was {'approved' if action == 'APPROVE' else 'rejected'} by SD.",
+        )
+    else:
+        messages.error(request, "Invalid action submitted.")
+    return redirect('leaves:sd_leave_overview')
 
 # --- SD View ---
 @login_required

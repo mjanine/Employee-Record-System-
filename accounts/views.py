@@ -315,7 +315,15 @@ def hr_reports_page_view(request):
 @user_passes_test(is_head)
 def head_dashboard(request):
     today = timezone.now().date()
-    department = request.user.department
+    
+    # Broaden department scope to include explicitly assigned headed departments 
+    # to fix visibility gaps when user.department is None or out of sync
+    department_scope_ids = set()
+    if getattr(request.user, 'department_id', None):
+        department_scope_ids.add(request.user.department_id)
+    department_scope_ids.update(Department.objects.filter(head=request.user).values_list('id', flat=True))
+
+    primary_department = request.user.department or Department.objects.filter(head=request.user).first()
 
     def safe_reverse(name, fallback='#'):
         try:
@@ -323,12 +331,12 @@ def head_dashboard(request):
         except NoReverseMatch:
             return fallback
 
-    department_employees = User.objects.filter(department=department).exclude(role__in=['ADMIN', 'HR', 'SD'])
+    department_employees = User.objects.filter(department_id__in=department_scope_ids).exclude(role__in=['ADMIN', 'HR', 'SD'])
     total_department_employees = department_employees.count()
     active_department_employees = department_employees.filter(is_active=True, is_locked=False).count()
 
     department_attendance = AttendanceLog.objects.filter(
-        employee__department=department,
+        employee__department_id__in=department_scope_ids,
         date=today,
     )
 
@@ -338,16 +346,16 @@ def head_dashboard(request):
     ).values('employee').distinct().count()
     attendance_counts['absent'] = department_attendance.filter(status=AttendanceLog.Status.ABSENT).values('employee').distinct().count()
     attendance_counts['on_leave'] = LeaveRequest.objects.filter(
-        user__department=department,
+        user__department_id__in=department_scope_ids,
         status=LeaveRequest.Status.APPROVED,
         start_date__lte=today,
         end_date__gte=today,
     ).values('user').distinct().count()
 
     pending_leave_approvals = LeaveRequest.objects.filter(
-        user__department=department,
+        user__department_id__in=department_scope_ids,
         status=LeaveRequest.Status.PENDING_HEAD_APPROVAL,
-    ).select_related('user', 'leave_type').order_by('-created_at')[:5]
+    ).exclude(user=request.user).select_related('user', 'leave_type').order_by('-created_at')[:5]
 
     evaluation_reminders = Notification.objects.filter(
         user=request.user,
@@ -361,7 +369,7 @@ def head_dashboard(request):
 
     context = {
         'welcome_name': request.user.first_name or request.user.username,
-        'department_name': department.name if department else 'No Department',
+        'department_name': primary_department.name if primary_department else 'No Department',
         'total_department_employees': total_department_employees,
         'active_department_employees': active_department_employees,
         'pending_leave_count': pending_leave_approvals.count(),
@@ -1407,7 +1415,7 @@ def employee_profile_view(request, user_id):
     viewer = request.user
 
     # 2. ROLE-BASED SECURITY CHECK
-    if viewer.role in ['ADMIN', 'HR']:
+    if viewer.role in ['ADMIN', 'HR', 'SD']:
         pass # Allow access to see anyone
         
     elif viewer.role == 'HEAD' or viewer.role == 'Department Head':

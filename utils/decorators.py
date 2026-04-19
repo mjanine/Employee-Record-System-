@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 
 # SD-only access for executive approver endpoints.
-SD_ELEVATED_APPROVER_ROLES = ('SD',)
+SD_ELEVATED_APPROVER_ROLES = ('SD', 'ADMIN')
 
 def role_required(*allowed_roles):
     """

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const table = document.getElementById('employeeTable');
     const dataSourceUrl = table && table.dataset.sourceUrl ? table.dataset.sourceUrl : '/leaves/head/history/?format=json';
 
-    fetch(dataSourceUrl, { headers: { 'Accept': 'application/json' } })
+    fetch(dataSourceUrl, { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
         .then(response => response.json())
         .then(data => {
             if (data.current_user_id) {
@@ -42,19 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             // Map Django's JSON format to match our table logic
             headSampleData = (data.history || []).map(item => {
+                let rawStatusUpper = (item.status || "").toUpperCase();
                 let displayStatus = item.status;
-                if (item.status === 'APPROVED') displayStatus = 'Approved';
-                else if (item.status === 'REJECTED') displayStatus = 'Rejected';
-                else if (item.status === 'CANCELLED') displayStatus = 'Cancelled';
-                else if (item.status && item.status.includes('PENDING_HR')) displayStatus = 'Pending HR Approval';
-                else if (item.status && item.status.includes('PENDING_SD')) displayStatus = 'Pending SD Approval';
+                
+                if (rawStatusUpper === 'APPROVED') displayStatus = 'Approved';
+                else if (rawStatusUpper === 'REJECTED') displayStatus = 'Rejected';
+                else if (rawStatusUpper === 'CANCELLED') displayStatus = 'Cancelled';
+                else if (rawStatusUpper.includes('PENDING_HR')) displayStatus = 'Pending HR Approval';
+                else if (rawStatusUpper.includes('PENDING_SD')) displayStatus = 'Pending SD Approval';
+                else if (rawStatusUpper.includes('PENDING_HEAD')) displayStatus = 'Pending Head Approval';
                 else displayStatus = 'Pending';
                 
                 let dynamicRemarks = item.head_remarks;
                 if (!dynamicRemarks) {
-                    if (item.status && item.status.includes('PENDING_HEAD')) dynamicRemarks = "Awaiting Department Head review";
-                    else if (item.status && item.status.includes('PENDING_HR')) dynamicRemarks = "Awaiting HR review";
-                    else if (item.status && item.status.includes('PENDING_SD')) dynamicRemarks = "Awaiting School Director review";
+                    if (rawStatusUpper.includes('PENDING_HEAD')) dynamicRemarks = "Awaiting Department Head review";
+                    else if (rawStatusUpper.includes('PENDING_HR')) dynamicRemarks = "Awaiting HR review";
+                    else if (rawStatusUpper.includes('PENDING_SD')) dynamicRemarks = "Awaiting School Director review";
                     else dynamicRemarks = "Awaiting response";
                 }
                 
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     endDate: item.end_date,
                     numDays: item.days_requested,
                     status: displayStatus,
-                    rawStatus: item.status,
+                    rawStatus: rawStatusUpper,
                     reviewedBy: item.reviewed_by_head__first_name ? `${item.reviewed_by_head__first_name} ${item.reviewed_by_head__last_name}` : "---",
                     reason: item.reason,
                     fileName: item.attachment ? "Document Attached" : "No Document Attached",
@@ -88,6 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderHeadTable(mode) {
     const body = document.getElementById('leaveTableBody');
     const template = document.getElementById('headRowTemplate');
+
+    if (!body || !template) {
+        console.error("Critical rendering error: Required HTML structure is missing.");
+        return;
+    }
+
     body.innerHTML = "";
 
     headSampleData.forEach((leave) => {
@@ -111,6 +120,10 @@ function renderHeadTable(mode) {
             body.appendChild(clone);
         }
     });
+
+    if (body.innerHTML === "") {
+        body.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#888; padding:40px;">No leave records found.</td></tr>`;
+    }
 }
 
 function openHeadModal(id) {
