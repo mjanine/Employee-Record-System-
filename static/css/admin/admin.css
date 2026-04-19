@@ -114,7 +114,6 @@
 
 body {
     /* 300px sidebar + 40px gap for that floating look */
-    padding-left: 340px; 
     transition: padding-left 0.3s ease;
     
     /* REMOVE the solid background color so the image shows through */
